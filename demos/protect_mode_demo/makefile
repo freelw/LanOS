@@ -5,7 +5,7 @@ boot:
 lan_main:
 	gcc -c lan_main.c
 loader:
-	nasm -o loader.bin loader.asm -l loader.lst
+	nasm -o loader.bin loader.s -l loader.lst
 clean:
-	rm lan_main lan_main.o boot.o loader.bin loader.lst
+	rm lan_os lan_main.o boot.o loader.bin loader.lst
 
