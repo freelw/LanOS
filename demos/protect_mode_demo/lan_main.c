@@ -5,4 +5,5 @@ void lan_main()
 	write_char('O');
 	write_char('V');
 	write_char('E');
+	while(1);
 }

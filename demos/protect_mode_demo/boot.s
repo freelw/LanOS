@@ -53,7 +53,7 @@ write_char:
     mov bx, [src_loc]
     shl ebx, 1
     push dword eax
-    mov eax, [esp+4]
+    mov eax, edi
     mov byte [gs:ebx], al
     pop dword eax
     shr ebx, 1
