@@ -47,7 +47,7 @@
 ## 正式开始
 ### 1. 简单汇编demo
 
-代码在asm_int_80目录下
+代码在`asm_int_80`目录下
 	
 	global _start
 	_start:
@@ -74,7 +74,7 @@
 
 ### 2. 汇编调用C代码
 
-代码在asm_call_c目录下
+代码在`asm_call_c`目录下
 首先是asm_int_80.s文件
 
 	global _start, write
@@ -161,7 +161,260 @@
 
 这里我们实际上时想让_start在执行时和存储是都在0x0地址上，但是这里显示在执行时的地址是0x4000ec（注意这个符号现在存储的地址我们还不知道，但应该也不是0x0）
 
-这时候我们需要在链接器链接
+这个布局其实是在链接阶段确定的，如果我们能够在这时控制链接器的行为，我们就能够控制布局
+
+### 使用链接脚本
+
+我们可以使用一个lds文件来告诉ld我们的布局需求，lds被称作链接脚本，有兴趣请自行查询其规则，这里先简单列出我们使用的n.lds 
+
+代码在`lds_test`目录下
+	
+	SECTIONS
+	{
+	. = 0x0;
+	.text : { *(.text) }
+	}
+
+大概的意思是把代码段放在0x0处
+
+这时我们再来看内存布局
+
+	wangli@wangli-LC1:~/project/LanOS/demos/lds_test$ objdump -S asm_int_80
+	asm_int_80:     file format elf64-x86-64
+	Disassembly of section .text:
+	0000000000000000 <_start>:	
+	0:	ba 0d 00 00 00       	mov    $0xd,%edx
+	0000000000000022 <message>:
+	...
+
+这时发现_start在加载后的位置正确了	
+	
+那这时我们要看一下存储的位置，也就是在文件中的位置，是不是也是在0x0处，这个对我们非常重要，我们必须知道_start存储的其实地址，或者把它强制放在文件的0地址处，我们才能写代码将它正确的加载到内存的0地址处
+
+	od -h asm_int_80 | head
+	0000000 457f 464c 0102 0001 0000 0000 0000 0000
+	0000020 0002 003e 0001 0000 0000 0000 0000 0000
+	0000040 0040 0000 0000 0000 00e8 0020 0000 0000
+	0000060 0000 0000 0040 0038 0001 0040 0005 0004
+	0000100 0001 0000 0005 0000 0000 0020 0000 0000
+	0000120 0000 0000 0000 0000 0000 0000 0000 0000
+	0000140 002f 0000 0000 0000 002f 0000 0000 0000
+	0000160 0000 0020 0000 0000 0000 0000 0000 0000
+	0000200 0000 0000 0000 0000 0000 0000 0000 0000
+
+使用od命令看一下文件的头部的二进制，发现和_start位置的二进制完全不同，这是因为我们编译出来的文件是一个elf文件，头部有很多信息描述自己的结构，我们现在需要把头砍掉，直接找到.text段，强制放到0地址处
+
+	wangli@wangli-LC1:~/project/LanOS/demos/lds_test$ readelf -l asm_int_80
+
+	Elf file type is EXEC (Executable file)
+	Entry point 0x0
+	There is 1 program header, starting at offset 64
+	
+	Program Headers:
+	  Type           Offset             VirtAddr           PhysAddr
+	                 FileSiz            MemSiz              Flags  Align
+	  LOAD           0x0000000000200000 0x0000000000000000 0x0000000000000000
+	                 0x000000000000002f 0x000000000000002f  R E    0x200000
+	
+	 Section to Segment mapping:
+	  Segment Sections...
+	   00     .text
+	
+使用`readelf -l`命令查看.text段段偏移，发现偏移了0x200000,如果按照512为一个扇区的话，一共偏移了刚好4096个扇区，所以在下一个例子中会看到，makefile中最后会砍掉这个文件的前4096个扇区
+
+### 最终demo
+	
+
+代码在`protect_mode_demo`目录中呢
+
+这个demo重写了《linux内核完全剖析》第四章的汇编代码
+
+第四章的汇编代码主要分为两个部分
+
+1.引导扇区，负责从文件中把第一个扇区到第18个扇区到数据通过bios提供的读磁盘功能放到内存0x0处，并构造一个临时gdt，进入保护模式，跳转到 8:0处
+2.第二个汇编代码的在磁盘上的起始地址是512,运行时在内存中的地址是0x0,这段代码的功能是再次初始化好gdt和idt，手动构建两个任务，iret到用户态，使用时中中断来切换两个任务
+
+我们把第二个代码的多任务部分去掉，修改为ret到一个名为`lan_main`的c函数中，在c函数中调用一个汇编函数write_char，打印"LOVE",并最终在此死循环
+
+以下是引导扇区代码loader.s
+
+	[BITS 16]
+	ORG 07c00h
+	SYSSEG equ 01000h
+	SYSLEN equ 17
+	jmp 07c0h:(load_system-$)
+	
+	load_system:
+	    mov dx, 00000h
+	    mov cx, 00002h
+	    mov ax, SYSSEG
+	    mov es, ax              ;es:bx 01000h:0h bios读取磁盘写入内存的目标位置
+	    xor bx, bx
+	    mov ax, 0200h+SYSLEN    ;ah 读扇区功能号2 al读扇区数量 17
+	    int 013h
+	    jnc ok_load
+	    jmp $
+	
+	ok_load:
+	    cli
+	    mov ax, SYSSEG          ;开始把010000h位置的数据拷贝到0h处
+	    mov ds, ax              ;注意这时bios的代码就会被冲掉，无法再使用int 10h
+	    xor ax, ax
+	    mov es, ax
+	    mov cx, 0x1000
+	    sub si, si
+	    sub di, di
+	    cld                     ;df = 0 rep movsw是正向的
+	    rep movsw
+	    mov ax, 0x0           ;重新恢复ds指向0x0
+	    mov ds, ax
+	    lgdt [gdt_48]           ;ds+gdt_48 因为第一句话ORG 07c00h 所以此时gdt_48这个常量是：07c00h+到文件首的偏移
+	    mov ax, 0x0001
+	    lmsw ax
+	    jmp dword 8:0
+	gdt:
+	    dw 0, 0, 0, 0           ;第一个描述符，没有用
+	    dw 0x07ff               ;代码段 从0地址开始
+	    dw 0x0000
+	    dw 0x9a00
+	    dw 0x00c0
+	    dw 0x07ff               ;数据段 从0地址开始
+	    dw 0x0000
+	    dw 0x9200
+	    dw 0x00c0
+	
+	
+	gdt_48:
+	    dw 0x7ff                ;2048/8=256个描述符
+	    dw gdt, 0        ;基地址是从0x7c00开始的gdt位置
+	
+	;----------注意！所有的有效语句要写在这之前，并且总长出小于等于510字节----------
+	    times 510 - ($-$$) db 0
+	    dw 0xaa55
+
+上面的代码会将下面两个文件链接的结果加载到0x0地址处，并跳转到这里以保护模式开始执行
+
+我们看一下boot.s
+	
+	[BITS 32]
+	
+	LATCH equ 11930
+	SCRN_SEL equ 0x18
+	TSS0_SEL equ 0x20
+	LDT0_SEL equ 0x28
+	TSS1_SEL equ 0x30
+	LDT1_SEL equ 0x38
+	global write_char
+	extern lan_main
+	start_up32:
+	    mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
+	    mov ds, ax
+	    lss esp, [init_stack];接下来要使用call指令，所以这里要初始化好栈
+	    call setup_gdt
+	    call setup_idt
+	
+	    mov eax, 0x10   ;加载完gdt之后重新加载所有的段寄存器，因为要更新段寄存器中段描述符的缓存（不可见部分）参见《linux内核完全剖析》94页
+	    mov ds, ax
+	    mov es, ax
+	    mov fs, ax
+	    mov gs, ax
+	
+	    lss esp, [init_stack];因为ds可能更新了（这个例子中实际上没有），所以要重新加载ss
+	    push dword lan_main
+	    ret
+	
+	setup_gdt:
+	    lgdt [lgdt_48]
+	    ret
+	
+	setup_idt:
+	    lea edx, [ignore_int]
+	    mov eax, dword 0x00080000
+	    mov ax, dx
+	    mov dx, 0x8e00
+	    lea edi, [idt]
+	    mov ecx, 256
+	rp_idt:
+	    mov dword [edi], eax
+	    mov dword [edi+4], edx
+	    add dword edi, 8
+	    dec ecx
+	    jne rp_idt
+	    lidt [lidt_48]
+	    ret
+	
+	write_char:
+	    push gs
+	    push dword ebx
+	    mov ebx, SCRN_SEL
+	    mov gs, bx
+	    mov bx, [src_loc]
+	    shl ebx, 1
+	    push dword eax
+	    mov eax, edi
+	    mov byte [gs:ebx], al
+	    pop dword eax
+	    shr ebx, 1
+	    inc dword ebx
+	    cmp dword ebx, 2000
+	    jb not_equ          ;jb : jump if below
+	    mov dword ebx, 0
+	not_equ:
+	    mov dword [src_loc], ebx
+	    pop dword ebx
+	    pop gs
+	    ret
+	
+	align 4
+	ignore_int:
+	    iret
+	
+	current: dd 0
+	src_loc: dd 0
+	
+	align 4
+	lidt_48:
+	    dw 256*8-1
+	    dd idt
+	lgdt_48:
+	    dw end_gdt-gdt-1
+	    dd gdt
+	
+	align 8
+	idt:
+	    times 256 dq 0
+	gdt:
+	    dq 0x0000000000000000
+	    dq 0x00c09a00000007ff   ;0x08 这两个段描述符和loader.asm中的代码段数据段是一样的
+	    dq 0x00c09200000007ff   ;0x10
+	    dq 0x00c0920b80000002   ;0x18 显存数据段
+	end_gdt:
+	
+	    times 128 dd 0
+	init_stack:         ;从这里开始是一个48位操作数
+	    dd init_stack   ;32位代表初始的esp
+	    dw 0x10         ;16位栈的段选择符，lss之后会加载到ss中
+
+最后看一下c代码lan_main.c
+
+	extern void write_char(char ch);
+	void lan_main()
+	{
+		write_char('L');
+		write_char('O');
+		write_char('V');
+		write_char('E');
+		while(1);
+	}
+	
+##总结
+
+	是不是觉得很快就从汇编转入了c的世界呢，这样是不是觉得对内核代码的把控更有信心了呢，“原来这样就能用c开始编写内核代码了啊！”，如果你有这样的感慨，并且会有稍稍不再畏惧翻阅0.12代码的心情，那么本文的目的就达到了。
+
+
+
+
+
 
 
 
