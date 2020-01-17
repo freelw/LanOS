@@ -406,6 +406,75 @@
 		write_char('E');
 		while(1);
 	}
+
+这段代码甚至可以用c++重写，见`protect_mode_cpp_demo`
+
+文件lan_main.cpp
+	
+	extern "C" void write_char(char ch);
+	class L
+	{
+	public:
+		L() {
+		    write_char('L');
+		}
+	};
+	class O: public L
+	{
+	public:
+		O() {
+		    write_char('O');
+		}
+	};
+	
+	class V: public O
+	{
+	public:
+		V() {
+		    write_char('V');
+		}
+	};
+	
+	class E: public V
+	{
+	public:
+		E() {
+		    write_char('E');
+		}
+	};
+	
+	extern "C" void lan_main()
+	{
+		E e;
+		while(1);
+	}
+
+编译的结果
+
+	wangli@wangli-LC1:~/project/LanOS/demos/protect_mode_cpp_demo$ make
+	nasm -felf64 -o boot.o boot.s
+	gcc -c lan_main.cpp
+	nasm -o loader.bin loader.s -l loader.lst
+	ld -T n.lds -o lan_os boot.o lan_main.o
+	dd if=loader.bin of=a.img bs=512 count=1 conv=notrunc
+	1+0 records in
+	1+0 records out
+	512 bytes copied, 0.000231116 s, 2.2 MB/s
+	dd if=lan_os of=a.img bs=512 count=17 skip=4096 seek=1 conv=notrunc
+	10+1 records in
+	10+1 records out
+	5248 bytes (5.2 kB, 5.1 KiB) copied, 0.000285108 s, 18.4 MB/s
+	head -c 1474560 /dev/zero > a.vfd
+	dd if=a.img of=a.vfd bs=512 count=18 conv=notrunc
+	11+1 records in
+	11+1 records out
+	5760 bytes (5.8 kB, 5.6 KiB) copied, 0.000273321 s, 21.1 MB/s
+
+执行结果
+
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/cpp.png)
+
+有意思吧
 	
 ## 总结
 
