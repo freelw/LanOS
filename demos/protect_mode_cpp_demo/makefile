@@ -8,7 +8,7 @@ link: boot lan_main loader
 boot:
 	nasm -felf64 -o boot.o boot.s 
 lan_main:
-	gcc -c lan_main.c
+	gcc -c lan_main.cpp
 loader:
 	nasm -o loader.bin loader.s -l loader.lst
 clean:
