@@ -9,4 +9,4 @@ _start:
 	mov dword eax, 1
 	int 0x80
 message:
-        db      "Hello, World", 10 
+	db      "Hello, World", 10 
