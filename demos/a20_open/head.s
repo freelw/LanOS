@@ -6,7 +6,7 @@ TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 TSS1_SEL equ 0x30
 LDT1_SEL equ 0x38
-global write_char
+global write_char, open_a20
 extern lan_main
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
