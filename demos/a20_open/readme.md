@@ -123,7 +123,7 @@
 * 在A20被打开时
 ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/opena20.png)
 * 如果我们注视掉`open_a20();`这句话
-* ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/a20notopen.png)
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/a20notopen.png)
 
 			
 	
