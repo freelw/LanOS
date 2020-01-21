@@ -113,7 +113,7 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 	这4步的顺序是不能颠倒的。我们现在来看一下4个如图3.40所示的ICW的格式。
 ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/orange3.png)
 
-### 扣代码的过程：
+### 抠代码的过程：
 	
 首先我们将书中的初始化8259A的部分扣出来，到我们的`head.s`中，在`init_8259a`目录下
 	
@@ -227,6 +227,91 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 2. init_8259A(); 初始化8259A，这里按照《ORANGE'S:一个操作系统的实现》，把硬件中断放到了从0x20开始（linux也是从这里开始的）
 3. set_intr_gate(0x20, &timer_interrupt); 把第一个硬件中断0x20的处理函数设置为timer_interrupt
 4. set_sti(); 使用sti指令开启中断
+
+其中`set_intr_gate`是从linux0.12的`system.h`文件中抠出来的宏，是几段嵌入汇编，把它放在了`gate_tool.h`头文件中
+
+	#ifndef GATE_TOOL_H
+	#define GATE_TOOL_H
+	
+	typedef struct desc_struct {
+		unsigned long a,b;
+	} desc_table[256];
+	
+	extern desc_table idt;
+	
+	#define _set_gate(gate_addr,type,dpl,addr) \
+	__asm__ ("movw %%dx,%%ax\n\t" \
+		"movw %0,%%dx\n\t" \
+		"movl %%eax,%1\n\t" \
+		"movl %%edx,%2" \
+		: \
+		: "i" ((short) (0x8000+(dpl<<13)+(type<<8))), \
+		"o" (*((char *) (gate_addr))), \
+		"o" (*(4+(char *) (gate_addr))), \
+		"d" ((char *) (addr)),"a" (0x00080000))
+	
+	#define set_intr_gate(n,addr) \
+		_set_gate(&idt[n],14,0,addr)
+	
+	#define set_trap_gate(n,addr) \
+		_set_gate(&idt[n],15,0,addr)
+	
+	#define set_system_gate(n,addr) \
+		_set_gate(&idt[n],15,3,addr)
+	#endif
+
+### 关于sti指令的一个疑点
+
+我们从boot.s开始初始化系统的时候执行了cli指令，用来将cpu的eflags寄存器中的是否允许中断标志位置空，
+从而屏蔽外部中断
+现在我们初始化好了中断相关的环境了，需要开启中断，但是在《linux源码剖析》的第四章中我们看到
+
+	48 pushfl
+	49 andl $0xffffbfff, (%esp)
+	50 popfl
+	51 movl $TSS0_SEL, %eax
+	52 ltr %ax
+	53 movl $LDT0_SEL, %eax
+	54 lldt %ax
+	55 movl $0, current
+	56 sti
+	57 pushl $0x17
+	58 pushl $init_stack
+	59 pushfl
+	60 pushl $0x0f
+	61 pushl $task0
+	62 iret
+
+这样的代码
+这段代码大概的意思是：已手动构造好了两个用户态任务的tss和堆栈，现在准备通过iret指令跳转到一个任务中
+并且使用sti开启已经设置好的时钟中断，在时钟中断处理函数中来自动的调度两个任务
+这里面的疑惑是：
+	如果在sti之后iret之前时钟中断就来的话，逻辑不就有问题？因为现在的代码不在任何一个任务中，而切换
+	任务的前提是已经在一个用户态任务中。
+	另外我们又不能先iret到一个用户态程序中再使用sti开启中断，因为，第一这不是这个任务该做的事情，第二
+	用户态程序也不能执行sti指令
+
+我们在intel的开发文档中找到了[答案](https://www.felixcloutier.com/x86/sti)：
+	
+	 The delayed effect of this instruction is provided to allow interrupts to be enabled
+	 just before returning from a procedure or subroutine. For instance, if an STI 
+	 instruction is followed by an RET instruction, the RET instruction is allowed to 
+	 execute before external interrupts are recognized. No interrupts can be recognized 
+	 if an execution of CLI immediately follow such an execution of STI.
+	
+翻译过来
+	
+	提供此指令的延迟效果是为了允许正好在从过程或子例程返回之前启用中断。例如，如果STI指令后跟RET指令，
+	则允许在识别外部中断之前执行RET指令。如果在这样的STI执行之后立即执行CLI，则不能识别任何中断。
+
+就是说如果有一个ret指令在sti之后，则必定是先执行这个ret指令（或者iret），再可能触发中断。
+
+### 运行效果
+	
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/init_8259a_succ.png)
+
+	
+	
 
 
 
