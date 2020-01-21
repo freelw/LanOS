@@ -6,7 +6,7 @@ TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 TSS1_SEL equ 0x30
 LDT1_SEL equ 0x38
-global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt
+global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, set_sti
 extern lan_main, do_timer
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
@@ -53,7 +53,7 @@ write_char:
     mov bx, [src_loc]
     shl ebx, 1
     push dword eax
-    mov eax, edi
+    mov eax, [esp+16]
     mov byte [gs:ebx], al
     pop dword eax
     shr ebx, 1
@@ -139,6 +139,10 @@ timer_interrupt:
     out 0x20, al
     call do_timer
     iret
+
+set_sti:
+	sti
+    ret
 
 align 4
 ignore_int:

@@ -3,6 +3,7 @@ extern void open_a20();
 extern void init_8259A();
 extern void timer_interrupt();
 extern void init_latch();
+extern void set_sti();
 
 #include "gate_tool.h"
 
@@ -32,6 +33,7 @@ void lan_main()
 	init_latch();
 	init_8259A();
 	set_intr_gate(0x20, &timer_interrupt);
+    set_sti();
 	while(1);
 }
 
