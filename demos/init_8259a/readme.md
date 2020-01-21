@@ -34,7 +34,7 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 
 `mov eax, [esp+16]`
 
-## cpu于8259A的连接方式
+## cpu与8259A的连接方式
 
 	(笔者解读)从下图可以看到主板上的物理连接关系，每片8259A有8根输入线，可以连接8个硬件设备
 	
@@ -78,4 +78,117 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 	控制器8259A建立起来的。如果你是第一次听说8259A，那么你可以认为它是
 	中断机制中所有外围设备的一个代理，这个代理不但可以根据优先级在同时
 	发生中断的设备中选择应该处
+
+## 8259A的初始化
+
+### 为什么要初始化：
+1.Intel x86异常机制
+	
+	cpu除了能够从intr引脚和nmi引脚接收中断请求从而进入到相应的处理函数
+	之外，还能够在自己发生特殊故障的时候以类似的方式进入故障处理逻辑，这就是
+	异常机制，《ORANGE'S:一个操作系统的实现》书中的表3.8（上图）展示了各种
+	可能出现的异常和对应的向量号
+	异常处理函数和硬件中断处理函数需要排布在同一张表中，按照一个互相不冲突的
+	顺序排列，这样cpu在收到中断或者是异常的时候会以类似的方式处理。
+	
+2.IBM 初始化了8259A
+
+	IBM的bios在启动的时候初始化了`0x8-0xf`这几个号码作为8个硬件中断，这就
+	与x86的内部异常号冲突了，所以我们如果想要正常使用cpu的功能的话，就必须
+	对8259A重新初始化，做的事情很简单，就是把所有的硬件中断号制定到intel的
+	保留中断号之后，也就是从32号开始。
+
+### 如何初始化8259A：
+以下内容摘自《ORANGE'S:一个操作系统的实现》
+
+	还好，8259A是可编程中断控制器，对它的设置并不复杂，是通过向相应的端口写入
+	特定的ICW（InitializationCommandWord）来实现的。主8259A对应的端口地址
+	是20h和21h，从8259A对应的端口地址是A0h和A1h。ICW共有4个，每一个都是具
+	有特定格式的字节。为了先对初始化8259A的过程有一个概括的了解，我们过一会儿
+	再来关注每一个ICW的格式，现在，先来看一下初始化过程：
+	1.往端口20h（主片）或A0h（从片）写入ICW1。
+	2.往端口21h（主片）或A1h（从片）写入ICW2。
+	3.往端口21h（主片）或A1h（从片）写入ICW3。
+	4.往端口21h（主片）或A1h（从片）写入ICW4。
+	这4步的顺序是不能颠倒的。我们现在来看一下4个如图3.40所示的ICW的格式。
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/orange3.png)
+
+### 扣代码的过程：
+	
+首先我们将书中的初始化8259A的部分扣出来，到我们的`head.s`中，在`init_8259a`目录下
+	
+	init_8259A:
+	    mov al, 0x11
+	    out 0x20, al
+	    call io_delay
+	    out 0xa0, al
+	    call io_delay
+	    mov al, 0x20
+	    out 0x21, al
+	    call io_delay
+	    mov al, 0x28
+	    out 0xa1, al
+	    call io_delay
+	    mov al, 0x4
+	    out 0x21, al
+	    call io_delay
+	    mov al, 0x2
+	    out 0xa1, al
+	    call io_delay
+	    mov al, 0x1
+	    out 0x21, al
+	    call io_delay
+	    out 0xa1, al
+	    call io_delay
+	    mov al, 0xfe
+	    out 0x21, al
+	    call io_delay
+	    mov al, 0xff
+	    out 0xa1, al
+	    call io_delay
+	    ret
+	
+	io_delay:
+	    nop
+	    nop
+	    nop
+	    nop
+	    ret
+	    
+然后把`init_8259A`这个函数暴露给c代码
+
+	global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, set_sti
+
+这里面除了`init_8259A`相比于上一次还多暴露了
+
+1. init_latch （从linux0.12代码中搬过来，初始化时钟芯片100ms发送一个中断请求）
+2. timer_interrupt （时钟中断的处理函数地址）
+3. set_sti （给c代码暴露一个函数用来执行sti指令）
+
+我们看一下这三个函数的实现
+
+	init_latch:
+	    ;设置频率100Hz
+	    mov byte al, 0x36
+	    mov dword edx, 0x43
+	    out dx, al
+	    mov dword eax, LATCH
+	    mov dword edx, 0x40
+	    out dx, al
+	    mov al, ah
+	    out dx, al
+	    
+	timer_interrupt:
+	    mov al, 0x20
+	    out 0x20, al
+	    call do_timer
+	    iret
+
+	set_sti:
+		sti
+		ret
+	
+其中timer_interrupt又调到了c代码中的`do_timer`函数去打印字符
+
+
 
