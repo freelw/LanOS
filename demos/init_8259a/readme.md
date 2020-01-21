@@ -190,5 +190,46 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 	
 其中timer_interrupt又调到了c代码中的`do_timer`函数去打印字符
 
+在c代码`lan_main.c`中
+
+	extern void write_char(char ch);
+	extern void open_a20();
+	extern void init_8259A();
+	extern void timer_interrupt();
+	extern void init_latch();
+	extern void set_sti();
+
+	#include "gate_tool.h"
+
+	...
+
+	void lan_main()
+	{
+		write_char('L');
+		write_char('O');
+		write_char('V');
+		write_char('E');
+		open_a20();
+		check_a20_valid();
+		init_latch();
+		init_8259A();
+		set_intr_gate(0x20, &timer_interrupt);
+		set_sti();
+		while(1);
+	}
+	
+	...
+
+上次a20地址线的demo中我们的lan_main函数只写到了`check_a20_valid()`就结束了，
+这次我们继续往下，分别执行了
+
+1. init_latch(); 初始化时钟
+2. init_8259A(); 初始化8259A，这里按照《ORANGE'S:一个操作系统的实现》，把硬件中断放到了从0x20开始（linux也是从这里开始的）
+3. set_intr_gate(0x20, &timer_interrupt); 把第一个硬件中断0x20的处理函数设置为timer_interrupt
+4. set_sti(); 使用sti指令开启中断
+
+
+
+
 
 
