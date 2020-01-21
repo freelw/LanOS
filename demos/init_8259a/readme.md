@@ -36,6 +36,6 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 ## cpu于8259A的连接方式
 
 以下内容摘自《ORANGE'S:一个操作系统的实现》
-[](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/orange0.png)
+[](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/orange1.png)
 
     
