@@ -37,9 +37,9 @@ void lan_main()
 
 void do_timer()
 {
-	write('T');
-	write('I');
-	write('M');
-	write('E');
-	write('R');
+	write_char('T');
+	write_char('I');
+	write_char('M');
+	write_char('E');
+	write_char('R');
 }
