@@ -309,12 +309,3 @@ write_char取传入参数不再从edi寄存器去，而是从`[esp+16]`这个地
 ### 运行效果
 	
 ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/init_8259a_succ.png)
-
-	
-	
-
-
-
-
-
-
