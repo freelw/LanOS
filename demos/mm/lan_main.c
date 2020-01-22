@@ -46,6 +46,8 @@ void lan_main()
 	write_char('O');
 	write_char('V');
 	write_char('E');
+	write_char('M');
+	write_char('M');
 	open_a20();
 	check_a20_valid();
 	setup_paging();
