@@ -7,7 +7,7 @@ LDT0_SEL equ 0x28
 TSS1_SEL equ 0x30
 LDT1_SEL equ 0x38
 global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, set_sti
-global pg_dir, pg0, pg1, pg2, pg3, assign_cr3_cr0
+global assign_cr3_cr0
 extern lan_main, do_timer
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
@@ -146,7 +146,7 @@ set_sti:
     ret
 
 assign_cr3_cr0:
-    mov dword eax, pg_dir
+    mov dword eax, [esp+4]
     mov dword cr3, eax
     mov dword eax, cr0
     or dword eax, 0x80000000
@@ -182,15 +182,3 @@ end_gdt:
 init_stack:         ;从这里开始是一个48位操作数
     dd init_stack   ;32位代表初始的esp
     dw 0x10         ;16位栈的段选择符，lss之后会加载到ss中
-
-align 4096
-pg_dir:
-    times 4096 db 0
-pg0:
-    times 4096 db 0
-pg1:
-    times 4096 db 0
-pg2:
-    times 4096 db 0
-pg3:
-    times 4096 db 0
