@@ -28,9 +28,9 @@ void setup_paging()
 {
 	unsigned long *pg_dir = 0x8000; //lan_os最多不能超过8k
 	unsigned long *pg0 = (unsigned long)(pg_dir) + 4096;
-	unsigned long *pg1 = (unsigned long)(pg_dir) + 4096;
-	unsigned long *pg2 = (unsigned long)(pg_dir) + 4096;
-	unsigned long *pg3 = (unsigned long)(pg_dir) + 4096;
+	unsigned long *pg1 = (unsigned long)(pg0) + 4096;
+	unsigned long *pg2 = (unsigned long)(pg1) + 4096;
+	unsigned long *pg3 = (unsigned long)(pg2) + 4096;
 	pg_dir[0] = (unsigned long)(pg0) + 7;
 	pg_dir[1] = (unsigned long)(pg1) + 7;
 	pg_dir[2] = (unsigned long)(pg2) + 7;
