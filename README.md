@@ -14,6 +14,7 @@
 
 ## 知识点目录
 
+* [如何编译和运行demo](https://github.com/freelw/LanOS/blob/master/doc/how_to_build.md)
 * [梳理linux0.12知识点系列 之 让汇编到C不再遥远](https://github.com/freelw/LanOS/tree/master/demos/protect_mode_demo)
 * [梳理linux0.12知识点系列 之 a20地址线](https://github.com/freelw/LanOS/tree/master/demos/a20_open)
 * [梳理linux0.12知识点系列 之 8259A的初始化和时钟中断](https://github.com/freelw/LanOS/tree/master/demos/init_8259a)
