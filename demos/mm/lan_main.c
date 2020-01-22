@@ -24,18 +24,18 @@ void check_a20_valid()
 }
 
 extern unsigned long pg_dir[1024];
-extern unsigned long pg_0[1024];
-extern unsigned long pg_1[1024];
-extern unsigned long pg_2[1024];
-extern unsigned long pg_3[1024];
+extern unsigned long pg0[1024];
+extern unsigned long pg1[1024];
+extern unsigned long pg2[1024];
+extern unsigned long pg3[1024];
 void setup_paging()
 {
-	pg_dir[0] = (unsigned long)(pg_0) + 7;
-	pg_dir[1] = (unsigned long)(pg_1) + 7;
-	pg_dir[2] = (unsigned long)(pg_2) + 7;
-	pg_dir[3] = (unsigned long)(pg_3) + 7;
+	pg_dir[0] = (unsigned long)(pg0) + 7;
+	pg_dir[1] = (unsigned long)(pg1) + 7;
+	pg_dir[2] = (unsigned long)(pg2) + 7;
+	pg_dir[3] = (unsigned long)(pg3) + 7;
 	for (int i = 0; i < 4096; ++ i) {
-		pg_0[i] = (i << 10) + 7;
+		pg0[i] = (i << 10) + 7;
 	}
 	assign_cr3_cr0();
 }

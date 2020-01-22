@@ -7,7 +7,7 @@ LDT0_SEL equ 0x28
 TSS1_SEL equ 0x30
 LDT1_SEL equ 0x38
 global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, set_sti
-global pg_dir, pg0, pg1, pg2, pg3
+global pg_dir, pg0, pg1, pg2, pg3, assign_cr3_cr0
 extern lan_main, do_timer
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
@@ -146,9 +146,10 @@ set_sti:
     ret
 
 assign_cr3_cr0:
-    mov dword pg_dir, cr3
+    mov dword eax, pg_dir
+    mov dword cr3, eax
     mov dword eax, cr0
-    orl eax, 0x80000000
+    or dword eax, 0x80000000
     mov dword cr0, eax
     ret
 
