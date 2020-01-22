@@ -145,6 +145,13 @@ set_sti:
 	sti
     ret
 
+assign_cr3_cr0:
+    mov dword pg_dir, cr3
+    mov dword eax, cr0
+    orl eax, 0x80000000
+    mov dword cr0, eax
+    ret
+
 align 4
 ignore_int:
     iret

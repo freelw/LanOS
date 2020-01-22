@@ -4,6 +4,7 @@ extern void init_8259A();
 extern void timer_interrupt();
 extern void init_latch();
 extern void set_sti();
+extern void assign_cr3_cr0();
 
 #include "gate_tool.h"
 
@@ -22,6 +23,23 @@ void check_a20_valid()
 	}
 }
 
+extern unsigned long pg_dir[1024];
+extern unsigned long pg_0[1024];
+extern unsigned long pg_1[1024];
+extern unsigned long pg_2[1024];
+extern unsigned long pg_3[1024];
+void setup_paging()
+{
+	pg_dir[0] = (unsigned long)(pg_0) + 7;
+	pg_dir[1] = (unsigned long)(pg_1) + 7;
+	pg_dir[2] = (unsigned long)(pg_2) + 7;
+	pg_dir[3] = (unsigned long)(pg_3) + 7;
+	for (int i = 0; i < 4096; ++ i) {
+		pg_0[i] = (i << 10) + 7;
+	}
+	assign_cr3_cr0();
+}
+
 void lan_main()
 {
 	write_char('L');
@@ -30,6 +48,7 @@ void lan_main()
 	write_char('E');
 	open_a20();
 	check_a20_valid();
+	setup_paging();
 	init_latch();
 	init_8259A();
 	set_intr_gate(0x20, &timer_interrupt);
