@@ -1,0 +1,2 @@
+alias lan_make=`pwd`/tool/makeall.sh
+alias lan_clean=`pwd`/tool/makeclean.sh
