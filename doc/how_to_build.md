@@ -11,11 +11,11 @@
 	
 		git clone https://github.com/freelw/LanOS.git
 
-2.加载`lan_os_rc`
+2. 加载`lan_os_rc`
 
 		source lan_os_rc
 		
-3.进入一个demo编译，这里以`protect_mode_demo`为例，执行`lan_make`首次执行编译会拉取编译镜像
+3. 进入一个demo编译，这里以`protect_mode_demo`为例，执行`lan_make`首次执行编译会拉取编译镜像
 
 		$ cd demos/protect_mode_demo/
 		$ lan_make 
