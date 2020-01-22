@@ -23,7 +23,6 @@ void check_a20_valid()
 	}
 }
 
-
 void setup_paging()
 {
 	unsigned long *pg_dir = 0x8000; //lan_os最多不能超过8k
