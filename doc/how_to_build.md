@@ -47,7 +47,7 @@
 		9+1 records out
 		4816 bytes (4.8 kB, 4.7 KiB) copied, 0.00466217 s, 1.0 MB/s
 
-4.清理编译结果的方法，执行`lan_clean`，同样首次执行会拉取镜像
+4. 清理编译结果的方法，执行`lan_clean`，同样首次执行会拉取镜像
 
 		$ lan_clean 
 		Unable to find image 'freelw/lan_clean:latest' locally
