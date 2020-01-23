@@ -12,6 +12,11 @@
 
 感谢赵炯博士，感谢于渊老师，并致以最高的敬意！
 
+## 本教程的特点
+
+* 大量参考linux0.12的设计思路建立demo，有助于之后阅读linux源码
+* 将尽可能多的linux中汇编实现的代码用c实现，提高可读性，降低学习成本
+
 ## 知识点目录
 
 * [如何编译和运行demo](https://github.com/freelw/LanOS/blob/master/doc/how_to_build.md)
