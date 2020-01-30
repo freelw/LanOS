@@ -43,8 +43,7 @@ void setup_paging()
 
 void lan_main()
 {
-	init_8259A();
-	/*write_char('L');
+	write_char('L');
 	write_char('O');
 	write_char('V');
 	write_char('E');
@@ -56,9 +55,9 @@ void lan_main()
 	check_a20_valid();
 	setup_paging();
 	init_latch();
-	
+	init_8259A();
 	set_intr_gate(0x20, &timer_interrupt);
-	set_trap_gate(14, &page_fault);*/
+	set_trap_gate(14, &page_fault);
 	sti();
 	move_to_user_mode();
 	while(1);

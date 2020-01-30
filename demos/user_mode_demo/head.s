@@ -2,7 +2,8 @@
 
 LATCH equ 11930
 SCRN_SEL equ 0x18
-LDT0_SEL equ 0x20
+TSS0_SEL equ 0x20
+LDT0_SEL equ 0x28
 
 global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, page_fault
 global assign_cr3_cr0
@@ -21,6 +22,8 @@ start_up32:
     mov gs, ax
 
     lss esp, [init_stack];因为ds可能更新了（这个例子中实际上没有），所以要重新加载ss
+    mov dword eax, TSS0_SEL
+    ltr ax
     mov dword eax, LDT0_SEL
     lldt ax
     push dword lan_main
@@ -175,6 +178,7 @@ gdt:
     dq 0x00c09a00000007ff   ;0x08 这两个段描述符和loader.asm中的代码段数据段是一样的
     dq 0x00c09200000007ff   ;0x10
     dq 0x00c0920b80000002   ;0x18 显存数据段
+    dw 0x68, tss0, 0xe900, 0x0
     dw 0x40, ldt0, 0xe200, 0x0
 end_gdt:
 
@@ -182,6 +186,18 @@ ldt0:
     dq 0x0000000000000000
     dq 0x00c0fa00000003ff
     dq 0x00c0f200000003ff
+
+tss0:
+    dd 0
+    dd krn_stk0, 0x10
+    dd 0, 0, 0, 0, 0
+    dd 0, 0, 0, 0, 0
+    dd 0, 0, 0, 0, 0
+    dd 0, 0, 0, 0, 0, 0
+    dd LDT0_SEL, 0x8000000
+
+    times 128 dd 0
+krn_stk0:
 
     times 128 dd 0
 init_stack:         ;从这里开始是一个48位操作数
