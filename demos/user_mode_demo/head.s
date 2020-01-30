@@ -6,8 +6,12 @@ TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 
 global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, page_fault
-global assign_cr3_cr0
-extern lan_main, do_timer
+global assign_cr3_cr0, system_call
+extern lan_main, do_timer, sys_call_table
+
+global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
+extern e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16
+
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
     mov ds, ax
@@ -139,9 +143,28 @@ io_delay:
     ret
 
 timer_interrupt:
-    mov al, 0x20
-    out 0x20, al
+    push byte ds
+    push byte es
+    push byte fs
+    push dword eax
+    push dword edx
+    push dword ecx
+    push dword ebx
+    mov dword edx, 0x10
+    mov ds, dx
+    mov es, dx
+    mov dword edx, 0x17
+    mov fs, dx
+    mov byte al, 0x20
+    out byte 0x20, al
     call do_timer
+    pop dword ebx
+    pop dword ecx
+    pop dword edx
+    pop dword eax
+    pop byte fs
+    pop byte es
+    pop byte ds
     iret
 
 assign_cr3_cr0:
@@ -153,6 +176,31 @@ assign_cr3_cr0:
     ret
 
 page_fault:
+    iret
+
+system_call:
+    push byte ds
+    push byte es
+    push byte fs
+    push dword eax
+    push dword edx
+    push dword ecx
+    push dword ebx
+    mov dword edx, 0x10
+    mov ds, dx
+    mov es, dx
+    mov dword edx, 0x17
+    mov fs, dx
+    call [sys_call_table+eax*4]
+    push dword eax
+    pop dword eax
+    pop dword ebx
+    pop dword ecx
+    pop dword edx
+    add dword esp, 4
+    pop byte fs
+    pop byte es
+    pop byte ds
     iret
 
 align 4
@@ -203,3 +251,59 @@ krn_stk0:
 init_stack:         ;从这里开始是一个48位操作数
     dd init_stack   ;32位代表初始的esp
     dw 0x10         ;16位栈的段选择符，lss之后会加载到ss中
+
+
+_e0:
+    call e0
+    iret
+_e1:
+    call e1
+    iret
+_e2:
+    call e2
+    iret
+
+_e3:
+    call e3
+    iret
+
+_e4:
+    call e4
+    iret
+_e5:
+    call e5
+    iret
+_e6:
+    call e6
+    iret
+_e7:
+    call e7
+    iret
+_e8:
+    call e8
+    iret
+_e9:
+    call e9
+    iret
+_e10:
+    call e10
+    iret
+_e11:
+    call e11
+    iret
+_e12:
+    call e12
+    iret
+_e13:
+    call e13
+    iret
+_e14:
+    call e14
+    iret
+
+_e15:
+    call e15
+    iret
+_e16:
+    call e16
+    iret
