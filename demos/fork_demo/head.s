@@ -5,8 +5,8 @@ SCRN_SEL equ 0x18
 TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 
-global write_char, open_a20, idt, init_latch, init_8259A, timer_interrupt, page_fault
-global assign_cr3_cr0, system_call
+global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault
+global assign_cr3_cr0, system_call, set_ldt_desc
 extern lan_main, do_timer, sys_call_table
 
 global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
@@ -28,8 +28,8 @@ start_up32:
     lss esp, [init_stack];因为ds可能更新了（这个例子中实际上没有），所以要重新加载ss
     mov dword eax, TSS0_SEL
     ltr ax
-    mov dword eax, LDT0_SEL
-    lldt ax
+    ;mov dword eax, LDT0_SEL
+    ;lldt ax
     push dword lan_main
     ret
 
@@ -203,6 +203,22 @@ system_call:
     pop byte ds
     iret
 
+set_ldt_desc:   ; set_tss_desc(n,addr)
+    push dword eax
+    push dword ebx
+    mov ebx, [esp+4] ; n
+    mov eax, [esp+8] ; addr
+    mov word [ebx], 104
+    mov word [ebx+2], ax
+    ror dword eax, 16
+    mov byte [ebx+4], al
+    mov byte [ebx+5], 0x82
+    mov byte [ebx+6], 0x0
+    mov byte [ebx+7], ah
+    pop dword ebx
+    pop dword eax
+    ret
+
 align 4
 ignore_int:
     iret
@@ -227,7 +243,8 @@ gdt:
     dq 0x00c09200000007ff   ;0x10
     dq 0x00c0920b80000002   ;0x18 显存数据段
     dw 0x68, tss0, 0xe900, 0x0
-    dw 0x40, ldt0, 0xe200, 0x0
+    ;dw 0x40, ldt0, 0xe200, 0x0
+    times 64 dq 0
 end_gdt:
 
 ldt0:

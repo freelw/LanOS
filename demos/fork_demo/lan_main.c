@@ -26,6 +26,7 @@ extern void _e16();
 
 #define PAGE_DIR 0x8000
 
+#include "sched.h"
 #include "gate_tool.h"
 #include "move_to_user_mode.h"
 
@@ -100,7 +101,7 @@ void lan_main()
 	set_trap_gate(14,&_e14);
 	set_trap_gate(15,&_e15);
 	set_trap_gate(16,&_e16);
-
+	sched_init();
 	sti();
 	move_to_user_mode();
 	while(1) {
