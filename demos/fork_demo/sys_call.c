@@ -2,7 +2,7 @@ extern void write_char(char ch);
 typedef int (*sys_call)();
 
 int _test_sys_call() {
-    write_char('t');
+    write_char('f');
     return 0;
 }
 
