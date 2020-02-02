@@ -206,13 +206,13 @@ system_call:
 set_ldt_desc:   ; set_tss_desc(n,addr)
     push dword eax
     push dword ebx
-    mov ebx, [esp+4] ; n
-    mov eax, [esp+8] ; addr
+    mov ebx, [esp+12] ; n
+    mov eax, [esp+16] ; addr
     mov word [ebx], 104
     mov word [ebx+2], ax
     ror dword eax, 16
     mov byte [ebx+4], al
-    mov byte [ebx+5], 0x82
+    mov byte [ebx+5], 0xe2
     mov byte [ebx+6], 0x0
     mov byte [ebx+7], ah
     pop dword ebx

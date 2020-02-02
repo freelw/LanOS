@@ -84,7 +84,7 @@ __asm__ ("movw $104,%1\n\t" \
 
 #define FIRST_TSS_ENTRY 4
 #define FIRST_LDT_ENTRY (FIRST_TSS_ENTRY+1)
-#define _LDT(n) (((unsigned long)n+FIRST_LDT_ENTRY)<<3)
+#define _LDT(n) (((unsigned long)n+FIRST_LDT_ENTRY) << 3)
 #define lldt(n) __asm__("lldt %%ax"::"a" (_LDT(n)))
 
 extern void sched_init();
