@@ -6,6 +6,8 @@ int _test_sys_call() {
     return 0;
 }
 
+extern void sys_fork();
+
 extern sys_call sys_call_table[] = {
-    _test_sys_call
+    _test_sys_call, sys_fork
 };
