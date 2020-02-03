@@ -4,7 +4,7 @@
 #define PAGE_DIR 0x8000
 #define PG_NUM 16
 
-#define LOW_ADDR 0x100000
+#define LOW_MEM 0x100000
 
 extern void mm_init();
 extern unsigned long get_free_page();

@@ -1,5 +1,10 @@
 #include "mm.h"
 
+#define PAGEING_PAGES (63*1024*1024)/(4*1024)
+
+unsigned char mem_map[PAGEING_PAGES];
+#define RESERVE_PAGES 896
+
 extern void assign_cr3_cr0(unsigned long);
 
 void setup_paging()
@@ -19,12 +24,29 @@ void setup_paging()
 	assign_cr3_cr0(pg_dir);
 }
 
+void init_mem_map()
+{
+    for (int i = 0; i < PAGEING_PAGES; ++ i) {
+        mem_map[i] = 0;
+    }
+    for (int i = 0; i < RESERVE_PAGES; ++ i) {
+        mem_map[i] = 100;
+    }
+}
+
 void mm_init()
 {
+    init_mem_map();
     setup_paging();
 }
 
 unsigned long get_free_page()
 {
-
+    for (int i = PAGEING_PAGES-1; i >= 0; -- i) {
+        if (0 == mem_map[i]) {
+            mem_map[i] = 1;
+            return LOW_MEM+i*4096;
+        }
+    }
+    return 0;
 }
