@@ -87,7 +87,10 @@ __asm__ ("movw $104,%1\n\t" \
 #define _LDT(n) (((unsigned long)n+FIRST_LDT_ENTRY) << 3)
 #define lldt(n) __asm__("lldt %%ax"::"a" (_LDT(n)))
 
-extern struct task_struct * task[NR_TASKS];
+extern struct task_struct *task[NR_TASKS];
+extern struct task_struct *current;
+extern long last_pid;
 extern void sched_init();
+extern void set_ldt_desc(char* n, char* addr);
 
 #endif
