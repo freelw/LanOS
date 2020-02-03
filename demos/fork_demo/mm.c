@@ -24,7 +24,7 @@ void mm_init()
     setup_paging();
 }
 
-void *get_free_page()
+unsigned long get_free_page()
 {
-    
+
 }
