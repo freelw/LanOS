@@ -9,5 +9,6 @@
 
 extern void mm_init();
 extern unsigned long get_free_page();
+extern int copy_page_tables(unsigned long from,unsigned long to,long size);
 
 #endif

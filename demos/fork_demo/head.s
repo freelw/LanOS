@@ -6,7 +6,7 @@ TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 
 global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault
-global assign_cr3_cr0, system_call, set_ldt_desc, sys_fork
+global assign_cr3_cr0, system_call, set_ldt_desc, set_base, sys_fork
 extern lan_main, do_timer, sys_call_table, copy_process
 
 global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
@@ -211,6 +211,7 @@ sys_fork:
     call copy_process
     add dword esp, 16
     ret
+
 set_ldt_desc:   ; set_tss_desc(n,addr)
     push dword eax
     push dword ebx
@@ -223,6 +224,19 @@ set_ldt_desc:   ; set_tss_desc(n,addr)
     mov byte [ebx+5], 0xe2
     mov byte [ebx+6], 0x0
     mov byte [ebx+7], ah
+    pop dword ebx
+    pop dword eax
+    ret
+
+set_base:   ; set_base(n,addr)
+    push dword eax
+    push dword ebx
+    mov ebx, [esp+12] ; n
+    mov eax, [esp+16] ; addr
+    mov word [ebx+2], ax
+    ror dword eax, 16
+    mov byte [edx+4], al
+    mov byte [edx+7], ah
     pop dword ebx
     pop dword eax
     ret

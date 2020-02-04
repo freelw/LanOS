@@ -50,3 +50,8 @@ unsigned long get_free_page()
     }
     return 0;
 }
+
+int copy_page_tables(unsigned long from,unsigned long to,long size)
+{
+    return 0;
+}
