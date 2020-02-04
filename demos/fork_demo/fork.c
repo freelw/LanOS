@@ -10,7 +10,7 @@ int copy_mem(int nr,struct task_struct * p)
 	data_limit=get_limit(0x17);
 	old_code_base = get_base(current->ldt[1]);
 	old_data_base = get_base(current->ldt[2]);
-	new_data_base = new_code_base = nr * TASK_SIZE;
+	new_data_base = new_code_base = nr * TASK_SIZE + PG_NUM*4*1024*1024;
 	p->start_code = new_code_base;
 	set_base(&(p->ldt[1]),new_code_base);
 	set_base(&(p->ldt[2]),new_data_base);

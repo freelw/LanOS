@@ -53,5 +53,38 @@ unsigned long get_free_page()
 
 int copy_page_tables(unsigned long from,unsigned long to,long size)
 {
-    return 0;
+    unsigned long * from_page_table;
+	unsigned long * to_page_table;
+	unsigned long this_page;
+	unsigned long * from_dir, * to_dir;
+	unsigned long new_page;
+	unsigned long nr;
+
+	if ((from&0x3fffff) || (to&0x3fffff)) {
+        //todo panic
+    }
+	from_dir = (unsigned long *) ((from>>20) & 0xffc); /* _pg_dir = 0 */
+	to_dir = (unsigned long *) ((to>>20) & 0xffc);
+	size = ((unsigned) (size+0x3fffff)) >> 22;
+	for( ; size-->0 ; from_dir++,to_dir++) {
+		from_page_table = (unsigned long *) (0xfffff000 & *from_dir);
+		if (!(to_page_table = (unsigned long *) get_free_page())) {
+            //todo panic
+        }
+		*to_dir = ((unsigned long) to_page_table) | 7;
+		nr = 1024;
+		for ( ; nr-- > 0 ; from_page_table++,to_page_table++) {
+			this_page = *from_page_table;
+			this_page &= ~2;
+			*to_page_table = this_page;
+			if (this_page > LOW_MEM) {
+				*from_page_table = this_page;
+				this_page -= LOW_MEM;
+				this_page >>= 12;
+				mem_map[this_page]++;
+			}
+		}
+	}
+	invalidate();
+	return 0;
 }
