@@ -18,6 +18,7 @@ void sched_init()
     set_ldt_desc(gdt+0+FIRST_LDT_ENTRY, &(init_task.ldt));
     task[0] = &init_task;
     lldt(0);
+    init_task.state = TASK_RUNNING;
 }
 
 

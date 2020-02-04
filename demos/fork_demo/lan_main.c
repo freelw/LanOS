@@ -29,7 +29,9 @@ extern void _e16();
 #include "move_to_user_mode.h"
 
 #define __NR_test_sys_call 0
-_syscall0(void, test_sys_call)
+#define __NR_fork 1
+_syscall0(int, test_sys_call)
+_syscall0(int, fork)
 
 void check_a20_valid()
 {
@@ -85,9 +87,12 @@ void lan_main()
 	sched_init();
 	sti();
 	move_to_user_mode();
-	while(1) {
-		//for (int i = 0; i < 1000000; ++ i);
-		test_sys_call();		
+	if (fork()) {	
+		while(1) {
+			test_sys_call();		
+		}
+	} else {
+		
 	}
 }
 

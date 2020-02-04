@@ -62,5 +62,6 @@ int copy_process(long ebp,long edi,long esi,long gs,long none,
 		//abort
 	}
 	set_ldt_desc(gdt+last_pid+FIRST_LDT_ENTRY, &(p->ldt));
+	p->state = TASK_RUNNING;
     return 0;
 }

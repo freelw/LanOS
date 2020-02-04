@@ -1,7 +1,7 @@
 #ifndef SCHED_H
 #define SCHED_H
 
-#define NR_TASKS 16
+#define NR_TASKS 8
 #define TASK_SIZE 4*1024*1024 //每个进程4M，总共64M，16个进程
 
 typedef struct desc_struct {
