@@ -261,8 +261,8 @@ idt:
     times 256 dq 0
 gdt:
     dq 0x0000000000000000
-    dq 0x00c09a00000007ff   ;0x08 这两个段描述符和loader.asm中的代码段数据段是一样的
-    dq 0x00c09200000007ff   ;0x10
+    dq 0x00c09a0000003fff   ;0x08 这两个段描述符和loader.asm中的代码段数据段是一样的
+    dq 0x00c0920000003fff   ;0x10
     dq 0x00c0920b80000002   ;0x18 显存数据段
     dw 0x68, tss0, 0xe900, 0x0
     ;dw 0x40, ldt0, 0xe200, 0x0

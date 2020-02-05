@@ -92,7 +92,9 @@ void lan_main()
 			test_sys_call();		
 		}
 	} else {
-		
+		while (1) {
+			/* code */
+		}
 	}
 }
 

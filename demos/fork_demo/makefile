@@ -8,7 +8,7 @@ link: head lan_main boot
 head:
 	nasm -felf32 -o head.o head.s 
 lan_main:
-	gcc -m32  -fno-stack-protector -fno-pie -c lan_main.c sys_call.c intel_err_handle.c sched.c fork.c mm.c
+	gcc -m32 -g -fno-stack-protector -fno-pie -c lan_main.c sys_call.c intel_err_handle.c sched.c fork.c mm.c
 boot:
 	nasm -o boot.bin boot.s -l boot.lst
 clean:

@@ -9,7 +9,7 @@ extern void assign_cr3_cr0(unsigned long);
 
 void setup_paging()
 {
-	unsigned long *pg_dir = PAGE_DIR; //lan_os最多不能超过8k
+	unsigned long *pg_dir = PAGE_DIR; //lan_os最多不能超过0x8000 64个扇区
 	unsigned long *pg[PG_NUM]; //虚拟机必须给64M以上的物理内存
 	pg[0] = (unsigned long)(pg_dir) + 0x1000;
 	for (int i = 1; i < PG_NUM; ++ i) {
@@ -63,8 +63,8 @@ int copy_page_tables(unsigned long from,unsigned long to,long size)
 	if ((from&0x3fffff) || (to&0x3fffff)) {
         //todo panic
     }
-	from_dir = (unsigned long *) ((from>>20) & 0xffc); /* _pg_dir = 0 */
-	to_dir = (unsigned long *) ((to>>20) & 0xffc);
+	from_dir = (unsigned long *) (((from>>20) & 0xffc)+PAGE_DIR); /* _pg_dir 和linux0.12定义不同，我们是从0x8000开始 */
+	to_dir = (unsigned long *) (((to>>20) & 0xffc)+PAGE_DIR);
 	size = ((unsigned) (size+0x3fffff)) >> 22;
 	for( ; size-->0 ; from_dir++,to_dir++) {
 		from_page_table = (unsigned long *) (0xfffff000 & *from_dir);

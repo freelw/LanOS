@@ -1,7 +1,7 @@
 [BITS 16]
 ORG 07c00h
 SYSSEG equ 01000h
-SYSLEN equ 17
+SYSLEN equ 30
 jmp 07c0h:(load_system-$)
 
 load_system:
@@ -21,7 +21,7 @@ ok_load:
     mov ds, ax              ;注意这时bios的代码就会被冲掉，无法再使用int 10h
     xor ax, ax
     mov es, ax
-    mov cx, 0x1000
+    mov cx, 0x2000          ;这时拷贝 0x2000*2(字节)/512=32(扇区)
     sub si, si
     sub di, di
     cld                     ;df = 0 rep movsw是正向的

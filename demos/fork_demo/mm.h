@@ -7,7 +7,7 @@
 
 #define LOW_MEM 0x100000
 #define invalidate() \
-__asm__("movl %%eax,%%cr3"::"a" (0))
+__asm__("movl %%eax,%%cr3"::"a" (PAGE_DIR))
 
 extern void mm_init();
 extern unsigned long get_free_page();
