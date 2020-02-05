@@ -87,9 +87,10 @@ void lan_main()
 	sched_init();
 	sti();
 	move_to_user_mode();
-	if (fork()) {	
+	if (({long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_fork):);__res;})) {	
 		while(1) {
-			test_sys_call();		
+			//test_sys_call();
+			{long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_test_sys_call):);__res;}
 		}
 	} else {
 		while (1) {
