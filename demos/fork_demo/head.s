@@ -5,7 +5,7 @@ SCRN_SEL equ 0x18
 TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 
-global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault
+global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault, set_tss0_esp0
 global assign_cr3_cr0, system_call, set_ldt_desc, set_base, sys_fork
 extern lan_main, do_timer, sys_call_table, copy_process
 
@@ -157,7 +157,10 @@ timer_interrupt:
     mov fs, dx
     mov byte al, 0x20
     out byte 0x20, al
+    mov dword eax, [esp+32] ; 取栈上的CS
+    push dword eax
     call do_timer
+    pop dword eax
     pop dword ebx
     pop dword ecx
     pop dword edx
@@ -238,6 +241,12 @@ set_base:   ; set_base(n,addr)
     mov byte [edx+4], al
     mov byte [edx+7], ah
     pop dword ebx
+    pop dword eax
+    ret
+
+set_tss0_esp0:
+    push dword eax
+    mov eax, [tss0+4]
     pop dword eax
     ret
 

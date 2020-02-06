@@ -34,7 +34,7 @@ int copy_process(long ebp,long edi,long esi,long gs,long none,
 	*p = *current;
 	p->state = TASK_UNINTERRUPTIBLE;
 	p->pid = ++ last_pid;
-	p->tss.esp0 = PAGE_SIZE + (long)(p);
+	/*p->tss.esp0 = PAGE_SIZE + (long)(p);
 	p->tss.ss0 = 0x10;
 	p->tss.eip = eip;
 	p->tss.eflags = eflags;
@@ -51,7 +51,8 @@ int copy_process(long ebp,long edi,long esi,long gs,long none,
 	p->tss.ss = ss & 0xffff;
 	p->tss.ds = ds & 0xffff;
 	p->tss.fs = fs & 0xffff;
-	p->tss.gs = gs & 0xffff;
+	p->tss.gs = gs & 0xffff;*/
+	p->kernel_stack = PAGE_SIZE + (long)(p);
 	task[last_pid] = p;
 
 	//todo: 

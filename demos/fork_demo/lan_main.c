@@ -89,7 +89,7 @@ void lan_main()
 	move_to_user_mode();
 	if (({long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_fork):);__res;})) {	
 		while(1) {
-			//test_sys_call();
+			//for (int i = 0; i < 10000; ++ i);
 			{long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_test_sys_call):);__res;}
 		}
 	} else {
@@ -99,7 +99,13 @@ void lan_main()
 	}
 }
 
-void do_timer()
+void do_timer(unsigned long cs)
 {
-	write_char('T');
+	if (0x8 == cs) {
+		write_char('K');
+	} else if (0xf == cs) {
+		write_char('T');
+	} else {
+		write_char('U');
+	}
 }

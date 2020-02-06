@@ -35,6 +35,7 @@ struct tss_struct {
 	long	gs;		/* 16 high bits zero */
 	long	ldt;		/* 16 high bits zero */
 	long	trace_bitmap;	/* bits: trace 0, bitmap 16-31 */
+	
 };
 
 #define TASK_RUNNING		0
@@ -51,7 +52,8 @@ struct task_struct {
 	long pid;
 	unsigned long start_code;
 	struct desc_struct ldt[3];
-	struct tss_struct tss;
+	//struct tss_struct tss;
+	unsigned long kernel_stack;
 };
 
 #define _set_tssldt_desc(n,addr,type) \
