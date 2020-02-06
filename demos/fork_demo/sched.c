@@ -1,3 +1,4 @@
+#include "mm.h"
 #include "sched.h"
 
 struct task_struct * task[NR_TASKS];
@@ -5,8 +6,15 @@ struct task_struct init_task;
 struct task_struct *current = &init_task;
 long last_pid = -1;
 
+extern void switch_to(unsigned long, struct task_struct *);
+extern void set_tss0_esp0(unsigned long);
+extern void get_esp0_when_switch(unsigned long *);
+
 void sched_init()
 {
+    for (int i = 0; i < NR_TASKS; ++ i) {
+        task[i] = 0;
+    }
     init_task.state = TASK_UNINTERRUPTIBLE;
     init_task.pid = ++ last_pid;
     init_task.ldt[0].a = 0;
@@ -21,4 +29,35 @@ void sched_init()
     init_task.state = TASK_RUNNING;
 }
 
+void schedule()
+{
+    while (1) {
+        for (int i = 0; i < NR_TASKS; ++ i) {
+            if (task[i]) {
+                if (task[i]->pid != i) {
+                    if (task[i]->state == TASK_RUNNING) {
+                        set_tss0_esp0((unsigned long)(task[i])+PAGE_SIZE); //给切换栈机制搭桥
+                        unsigned long esp0 = 0;
+                        get_esp0_when_switch(&esp0);
+                        current->kernel_stack = esp0;
+                        current = task[i];
+                        switch_to(_LDT(i), task[i]);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
 
+void do_timer(unsigned long cs)
+{
+	if (0x8 == cs) {
+		write_char('K');
+	} else if (0xf == cs) {
+		//write_char('T');
+        schedule();
+	} else {
+		write_char('U');
+	}
+}

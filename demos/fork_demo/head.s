@@ -6,11 +6,12 @@ TSS0_SEL equ 0x20
 LDT0_SEL equ 0x28
 
 global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault, set_tss0_esp0
-global assign_cr3_cr0, system_call, set_ldt_desc, set_base, sys_fork
-extern lan_main, do_timer, sys_call_table, copy_process
+global assign_cr3_cr0, system_call, set_ldt_desc, set_base, sys_fork, switch_to
+extern lan_main, do_timer, sys_call_table, find_empty_process, copy_process
 
 global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
 extern e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16
+global first_return_from_kernel, get_esp0_when_switch
 
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
@@ -207,13 +208,62 @@ system_call:
     iret
 
 sys_fork:
+    call find_empty_process
     push gs
     push dword esi
     push dword edi
     push dword ebp
+    push dword eax
     call copy_process
-    add dword esp, 16
+    add dword esp, 20
     ret
+
+get_esp0_when_switch:
+    push dword eax
+    push dword ebx
+    mov dword eax, esp
+    sub dword eax, 12
+    add dword eax, 48
+    mov ebx, [esp+12]
+    mov [ebx], eax
+    pop dword ebx
+    pop dword eax
+    ret
+
+switch_to:
+    push dword eax
+    push dword ebx
+    push dword ecx
+    push dword edx
+    push dword ebp
+    push dword esi
+    push dword edi
+    push dword es
+    push dword ds
+    push dword fs
+    push dword gs
+
+    mov dword eax, [esp+48] ;_LDT(i)
+    mov dword ebx, [esp+52] ;task[i]
+
+    lldt ax
+    mov dword esp, [ebx]; 在task_struct kernel_stack是第一个成员变量
+
+    pop dword gs
+    pop dword fs
+    pop dword ds
+    pop dword es
+    pop dword edi
+    pop dword esi
+    pop dword ebp
+    pop dword edx
+    pop dword ecx
+    pop dword ebx
+    pop dword eax
+    ret
+
+first_return_from_kernel:
+    iret
 
 set_ldt_desc:   ; set_tss_desc(n,addr)
     push dword eax
@@ -246,7 +296,8 @@ set_base:   ; set_base(n,addr)
 
 set_tss0_esp0:
     push dword eax
-    mov eax, [tss0+4]
+    mov eax, [esp+4]
+    mov [tss0+4], eax
     pop dword eax
     ret
 

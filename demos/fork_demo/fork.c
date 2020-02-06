@@ -1,6 +1,8 @@
 #include "mm.h"
 #include "sched.h"
 
+extern void first_return_from_kernel();
+
 int copy_mem(int nr,struct task_struct * p)
 {
 	unsigned long old_data_base,new_data_base,data_limit;
@@ -21,7 +23,12 @@ int copy_mem(int nr,struct task_struct * p)
 	return 0;
 }
 
-int copy_process(long ebp,long edi,long esi,long gs,long none,
+int find_empty_process()
+{
+	return ++ last_pid;
+}
+
+int copy_process(long eax, long ebp,long edi,long esi,long gs,long none,
 		long ebx,long ecx,long edx, long orig_eax, 
 		long fs,long es,long ds,
 		long eip,long cs,long eflags,long esp,long ss)
@@ -33,7 +40,7 @@ int copy_process(long ebp,long edi,long esi,long gs,long none,
 	}
 	*p = *current;
 	p->state = TASK_UNINTERRUPTIBLE;
-	p->pid = ++ last_pid;
+	p->pid = eax;
 	/*p->tss.esp0 = PAGE_SIZE + (long)(p);
 	p->tss.ss0 = 0x10;
 	p->tss.eip = eip;
@@ -52,12 +59,25 @@ int copy_process(long ebp,long edi,long esi,long gs,long none,
 	p->tss.ds = ds & 0xffff;
 	p->tss.fs = fs & 0xffff;
 	p->tss.gs = gs & 0xffff;*/
-	p->kernel_stack = PAGE_SIZE + (long)(p);
 	task[last_pid] = p;
-
-	//todo: 
-	//copy mem
-
+	p->kernel_stack = PAGE_SIZE + (long)(p);
+	*((unsigned long *)--(p->kernel_stack)) = ss;
+	*((unsigned long *)--(p->kernel_stack)) = esp;
+	*((unsigned long *)--(p->kernel_stack)) = eflags;
+	*((unsigned long *)--(p->kernel_stack)) = cs;
+	*((unsigned long *)--(p->kernel_stack)) = eip;
+	*((unsigned long *)--(p->kernel_stack)) = first_return_from_kernel;
+	*((unsigned long *)--(p->kernel_stack)) = 0; // eax
+	*((unsigned long *)--(p->kernel_stack)) = ebx;
+	*((unsigned long *)--(p->kernel_stack)) = ecx;
+	*((unsigned long *)--(p->kernel_stack)) = edx;
+	*((unsigned long *)--(p->kernel_stack)) = ebp;
+	*((unsigned long *)--(p->kernel_stack)) = esi;
+	*((unsigned long *)--(p->kernel_stack)) = edi;
+	*((unsigned long *)--(p->kernel_stack)) = es & 0xffff;
+	*((unsigned long *)--(p->kernel_stack)) = ds & 0xffff;
+	*((unsigned long *)--(p->kernel_stack)) = fs & 0xffff;
+	*((unsigned long *)--(p->kernel_stack)) = gs & 0xffff;
 	if (copy_mem(last_pid, p)) {
 		//todo:
 		//abort

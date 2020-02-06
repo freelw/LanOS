@@ -98,14 +98,3 @@ void lan_main()
 		}
 	}
 }
-
-void do_timer(unsigned long cs)
-{
-	if (0x8 == cs) {
-		write_char('K');
-	} else if (0xf == cs) {
-		write_char('T');
-	} else {
-		write_char('U');
-	}
-}

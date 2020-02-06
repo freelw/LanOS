@@ -45,6 +45,7 @@ struct tss_struct {
 #define TASK_STOPPED		4
 
 struct task_struct {
+	unsigned long kernel_stack;
 	long state;	/* -1 unrunnable, 0 runnable, >0 stopped */
 	long counter;
 	long priority;
@@ -52,8 +53,6 @@ struct task_struct {
 	long pid;
 	unsigned long start_code;
 	struct desc_struct ldt[3];
-	//struct tss_struct tss;
-	unsigned long kernel_stack;
 };
 
 #define _set_tssldt_desc(n,addr,type) \
