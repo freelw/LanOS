@@ -22,6 +22,8 @@ void setup_paging()
 		pg[0][i] = (i << 12) + 7;
 	}
 	assign_cr3_cr0(pg_dir);
+	/*char *p = 0x3ffffff;
+	p[0] = 1;*/
 }
 
 void init_mem_map()

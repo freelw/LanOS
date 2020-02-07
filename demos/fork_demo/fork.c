@@ -60,24 +60,25 @@ int copy_process(long eax, long ebp,long edi,long esi,long gs,long none,
 	p->tss.fs = fs & 0xffff;
 	p->tss.gs = gs & 0xffff;*/
 	task[last_pid] = p;
-	p->kernel_stack = PAGE_SIZE + (long)(p);
-	*((unsigned long *)--(p->kernel_stack)) = ss;
-	*((unsigned long *)--(p->kernel_stack)) = esp;
-	*((unsigned long *)--(p->kernel_stack)) = eflags;
-	*((unsigned long *)--(p->kernel_stack)) = cs;
-	*((unsigned long *)--(p->kernel_stack)) = eip;
-	*((unsigned long *)--(p->kernel_stack)) = first_return_from_kernel;
-	*((unsigned long *)--(p->kernel_stack)) = 0; // eax
-	*((unsigned long *)--(p->kernel_stack)) = ebx;
-	*((unsigned long *)--(p->kernel_stack)) = ecx;
-	*((unsigned long *)--(p->kernel_stack)) = edx;
-	*((unsigned long *)--(p->kernel_stack)) = ebp;
-	*((unsigned long *)--(p->kernel_stack)) = esi;
-	*((unsigned long *)--(p->kernel_stack)) = edi;
-	*((unsigned long *)--(p->kernel_stack)) = es & 0xffff;
-	*((unsigned long *)--(p->kernel_stack)) = ds & 0xffff;
-	*((unsigned long *)--(p->kernel_stack)) = fs & 0xffff;
-	*((unsigned long *)--(p->kernel_stack)) = gs & 0xffff;
+	long * krnstack = (long *)(PAGE_SIZE+(long)p);
+	*(--krnstack) = ss;
+	*(--krnstack) = esp;
+	*(--krnstack) = eflags;
+	*(--krnstack) = cs;
+	*(--krnstack) = eip;
+	*(--krnstack) = first_return_from_kernel;
+	*(--krnstack) = 0; // eax
+	*(--krnstack) = ebx;
+	*(--krnstack) = ecx;
+	*(--krnstack) = edx;
+	*(--krnstack) = ebp;
+	*(--krnstack) = esi;
+	*(--krnstack) = edi;
+	*(--krnstack) = es & 0xffff;
+	*(--krnstack) = ds & 0xffff;
+	*(--krnstack) = fs & 0xffff;
+	*(--krnstack) = gs & 0xffff;
+	p->kernel_stack = krnstack;
 	if (copy_mem(last_pid, p)) {
 		//todo:
 		//abort
