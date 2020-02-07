@@ -9,6 +9,7 @@ long last_pid = -1;
 extern void switch_to(unsigned long, struct task_struct *);
 extern void set_tss0_esp0(unsigned long);
 extern void get_esp0_when_switch(unsigned long *);
+extern void krn_stk0();
 
 void sched_init()
 {
@@ -34,9 +35,13 @@ void schedule()
     while (1) {
         for (int i = 0; i < NR_TASKS; ++ i) {
             if (task[i]) {
-                if (task[i]->pid != i) {
+                if (current->pid != i) {
                     if (task[i]->state == TASK_RUNNING) {
-                        set_tss0_esp0((unsigned long)(task[i])+PAGE_SIZE); //给切换栈机制搭桥
+                        if (0 == i) {
+                            set_tss0_esp0(krn_stk0); //0任务的内核栈是写死的，不能用task[i])+PAGE_SIZE来计算
+                        } else {
+                            set_tss0_esp0((unsigned long)(task[i])+PAGE_SIZE); //给切换栈机制搭桥
+                        }
                         unsigned long esp0 = 0;
                         get_esp0_when_switch(&esp0);
                         current->kernel_stack = esp0;
@@ -55,7 +60,7 @@ void do_timer(unsigned long cs)
 	if (0x8 == cs) {
 		write_char('K');
 	} else if (0xf == cs) {
-		//write_char('T');
+		write_char('T');
         schedule();
 	} else {
 		write_char('U');

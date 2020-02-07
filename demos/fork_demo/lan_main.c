@@ -22,6 +22,7 @@ extern void _e13();
 extern void _e14();
 extern void _e15();
 extern void _e16();
+extern void init_0();
 
 #include "mm.h"
 #include "sched.h"
@@ -29,9 +30,9 @@ extern void _e16();
 #include "move_to_user_mode.h"
 
 #define __NR_test_sys_call 0
-#define __NR_fork 1
+#define __NR_fork1 1
 _syscall0(int, test_sys_call)
-_syscall0(int, fork)
+static inline _syscall0(int, fork1)
 
 void check_a20_valid()
 {
@@ -87,14 +88,18 @@ void lan_main()
 	sched_init();
 	sti();
 	move_to_user_mode();
-	if (({long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_fork):);__res;})) {	
-		while(1) {
-			//for (int i = 0; i < 10000; ++ i);
-			{long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_test_sys_call):);__res;}
-		}
-	} else {
-		while (1) {
-			/* code */
-		}
+	//if (({long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_fork):);__res;})) {	
+	__asm__("int $0x80 \n\t" \
+	 		"testl %%eax, %%eax \n\t" \
+			"je 1f \n\t" \
+			"movl %%ebx, %%eax \n\t" \
+			"2: \n\t" \
+			"int $0x80\n\t" \
+			"jmp 2b \n\t" \
+			"1: \n\t" \
+			::"a" (__NR_fork1), "b" (__NR_test_sys_call):);
+	
+	while (1) {
+		//{__asm__("int $0x80"::"a" (__NR_test_sys_call):);}
 	}
 }
