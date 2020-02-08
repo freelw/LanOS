@@ -9,6 +9,7 @@ unsigned long get_data_base(struct task_struct *s)
 	ret |= s->ldt[2].b & 0xff000000;
 	return ret;
 }
+
 int copy_mem(int nr,struct task_struct * p)
 {
 	unsigned long old_data_base,new_data_base,data_limit;
@@ -16,7 +17,6 @@ int copy_mem(int nr,struct task_struct * p)
 
 	code_limit=get_limit(0x0f);
 	data_limit=get_limit(0x17);
-	//old_code_base = get_base(current->ldt[1]);
 	old_data_base = get_data_base(current);
 	new_data_base = new_code_base = nr * TASK_SIZE + PG_NUM*4*1024*1024;
 	p->start_code = new_code_base;

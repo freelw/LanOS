@@ -31,8 +31,9 @@ extern void init_0();
 
 #define __NR_test_sys_call 0
 #define __NR_fork1 1
-_syscall0(int, test_sys_call)
-static inline _syscall0(int, fork1)
+#define __NR_test_sys_call1 2
+//_syscall0(int, test_sys_call)
+// _syscall0(int, fork1)
 
 void check_a20_valid()
 {
@@ -88,7 +89,7 @@ void lan_main()
 	sched_init();
 	sti();
 	move_to_user_mode();
-	//if (({long __res; __asm__("int $0x80":"=a" (__res):"0" (__NR_fork):);__res;})) {	
+
 	__asm__("int $0x80 \n\t" \
 	 		"testl %%eax, %%eax \n\t" \
 			"je 1f \n\t" \
@@ -100,6 +101,6 @@ void lan_main()
 			::"a" (__NR_fork1), "b" (__NR_test_sys_call):);
 	
 	while (1) {
-		//{__asm__("int $0x80"::"a" (__NR_test_sys_call):);}
+		{__asm__("int $0x80"::"a" (__NR_test_sys_call1):);}
 	}
 }
