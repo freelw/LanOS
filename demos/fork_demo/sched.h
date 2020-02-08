@@ -88,7 +88,7 @@ __asm__("movw %%dx,%0\n\t" \
 
 #define set_limit(ldt,limit) _set_limit( ((char *)&(ldt)) , (limit-1)>>12 )
 
-#define _get_base(addr) ({\
+//#define _get_base(addr) ({\
 unsigned long __base; \
 __asm__("movb %3,%%dh\n\t" \
 	"movb %2,%%dl\n\t" \
@@ -100,7 +100,7 @@ __asm__("movb %3,%%dh\n\t" \
 	 "m" (*((addr)+7))); \
 __base;})
 
-#define get_base(ldt) _get_base( ((char *)&(ldt)) )
+//#define get_base(ldt) _get_base( ((char *)&(ldt)) )
 
 #define get_limit(segment) ({ \
 unsigned long __limit; \

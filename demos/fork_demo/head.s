@@ -222,8 +222,8 @@ get_esp0_when_switch:
     push dword eax
     push dword ebx
     mov dword eax, esp
-    sub dword eax, 12
-    add dword eax, 48
+    add dword eax, 12
+    sub dword eax, 48
     mov ebx, [esp+12]
     mov [ebx], eax
     pop dword ebx

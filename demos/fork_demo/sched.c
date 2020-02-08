@@ -3,7 +3,7 @@
 
 struct task_struct * task[NR_TASKS];
 struct task_struct init_task;
-struct task_struct *current = &init_task;
+struct task_struct *current = (struct task_struct *)&init_task;
 long last_pid = -1;
 
 extern void switch_to(unsigned long, struct task_struct *);

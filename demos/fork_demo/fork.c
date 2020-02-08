@@ -2,16 +2,22 @@
 #include "sched.h"
 
 extern void first_return_from_kernel();
-
+unsigned long get_data_base(struct task_struct *s)
+{
+	unsigned long ret = (s->ldt[2].a) >> 16;
+	ret |= (s->ldt[2].b & 0xff) << 16;
+	ret |= s->ldt[2].b & 0xff000000;
+	return ret;
+}
 int copy_mem(int nr,struct task_struct * p)
 {
 	unsigned long old_data_base,new_data_base,data_limit;
-	unsigned long old_code_base,new_code_base,code_limit;
+	unsigned long new_code_base,code_limit;
 
 	code_limit=get_limit(0x0f);
 	data_limit=get_limit(0x17);
-	old_code_base = get_base(current->ldt[1]);
-	old_data_base = get_base(current->ldt[2]);
+	//old_code_base = get_base(current->ldt[1]);
+	old_data_base = get_data_base(current);
 	new_data_base = new_code_base = nr * TASK_SIZE + PG_NUM*4*1024*1024;
 	p->start_code = new_code_base;
 	set_base(&(p->ldt[1]),new_code_base);
