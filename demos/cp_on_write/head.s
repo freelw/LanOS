@@ -399,10 +399,15 @@ _e13:
 _e14:
     push dword eax
     mov dword eax, cr2
+    push word ds
     push dword eax
+    mov eax, 0x10
+    mov ds, ax
     call e14
-    add dword eax, 4
+    add dword esp, 4
+    pop word ds
     pop dword eax
+    add dword esp, 4
     iret
 
 _e15:

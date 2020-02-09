@@ -121,8 +121,8 @@ void un_wp_page(unsigned long * table_entry)
 
 void e14(unsigned long address)
 {
-	unsigned long page_index = (address>>12)&0xffc;
-	unsigned long page_table_index = (address>>22)&0xffc;
+	unsigned long page_index = (address>>12)&0x3ff;
+	unsigned long page_table_index = (address>>22)&0x3ff;
 	unsigned long *table_entry = page_index*4 + 0xfffff000&(*(unsigned long*)(page_table_index*4+PAGE_DIR));
     un_wp_page(table_entry);
 }
