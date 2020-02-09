@@ -5,6 +5,7 @@ struct task_struct * task[NR_TASKS];
 struct task_struct init_task;
 struct task_struct *current = (struct task_struct *)&init_task;
 long last_pid = -1;
+long last_sched_i = 0;
 
 extern void switch_to(unsigned long, struct task_struct *);
 extern void set_tss0_esp0(unsigned long);
@@ -32,23 +33,25 @@ void sched_init()
 
 void schedule()
 {
+    int i = last_sched_i;
     while (1) {
-        for (int i = 0; i < NR_TASKS; ++ i) {
-            if (task[i]) {
-                if (current->pid != i) {
-                    if (task[i]->state == TASK_RUNNING) {
-                        if (0 == i) {
-                            set_tss0_esp0(krn_stk0); //0任务的内核栈是写死的，不能用task[i])+PAGE_SIZE来计算
-                        } else {
-                            set_tss0_esp0((unsigned long)(task[i])+PAGE_SIZE); //给切换栈机制搭桥
-                        }
-                        unsigned long esp0 = 0;
-                        get_esp0_when_switch(&esp0);
-                        current->kernel_stack = esp0;
-                        current = task[i];
-                        switch_to(_LDT(i), task[i]);
-                        return;
+        ++ i;
+        i %= NR_TASKS;
+        if (task[i]) {
+            if (current->pid != i) {
+                if (task[i]->state == TASK_RUNNING) {
+                    last_sched_i = i;
+                    if (0 == i) {
+                        set_tss0_esp0(krn_stk0); //0任务的内核栈是写死的，不能用task[i])+PAGE_SIZE来计算
+                    } else {
+                        set_tss0_esp0((unsigned long)(task[i])+PAGE_SIZE); //给切换栈机制搭桥
                     }
+                    unsigned long esp0 = 0;
+                    get_esp0_when_switch(&esp0);
+                    current->kernel_stack = esp0;
+                    current = task[i];
+                    switch_to(_LDT(i), task[i]);
+                    return;
                 }
             }
         }

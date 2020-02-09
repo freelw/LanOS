@@ -32,8 +32,10 @@ extern void init_0();
 #define __NR_test_sys_call 0
 #define __NR_fork1 1
 #define __NR_test_sys_call1 2
+#define __NR_test_sys_call2 3
 _syscall0(int, test_sys_call)
 _syscall0(int, fork1)
+_syscall0(int, test_sys_call2)
 
 void check_a20_valid()
 {
@@ -100,8 +102,14 @@ void lan_main()
 			"1: \n\t" \
 			::"a" (__NR_fork1), "b" (__NR_test_sys_call1):);
 	
-	while (1) {
-		//{__asm__("int $0x80"::"a" (__NR_test_sys_call):);}
-		test_sys_call();
+
+	if (fork1()) {	
+		while (1) {
+			test_sys_call();
+		}
+	} else {
+		while(1) {
+			test_sys_call2();
+		}
 	}
 }
