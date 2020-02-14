@@ -1,88 +1,82 @@
-extern void write_char(char ch);
+extern void print_str(char *s);
 
 void e0()
 {
-    write_char('0');
+    print_str("e0");
 }
 
 void e1()
 {
-    write_char('1');
+    print_str("e1");
 }
 
 void e2()
 {
-    write_char('2');
+    print_str("e2");
 }
 
 void e3()
 {
-    write_char('3');
+    print_str("e3");
 }
 
 void e4()
 {
-    write_char('4');
+    print_str("e4");
 }
 
 void e5()
 {
-    write_char('5');
+    print_str("e5");
 }
 
 void e6()
 {
-    write_char('6');
+    print_str("e6");
 }
 
 void e7()
 {
-    write_char('7');
+    print_str("e7");
 }
 
 void e8()
 {
-    write_char('8');
+    print_str("e8");
 }
 
 void e9()
 {
-    write_char('9');
+    print_str("e9");
 }
 
 void e10()
 {
-    write_char('1');
-    write_char('0');
+    print_str("e10");
 }
 
 void e11()
 {
-    write_char('1');
-    write_char('1');
+    print_str("e11");
 }
 
 void e12()
 {
-    write_char('1');
-    write_char('2');
+    print_str("e12");
 }
 
 void e13()
 {
-    write_char('1');
-    write_char('3');
+    print_str("e13");
 }
 
 void e15()
 {
-    write_char('1');
-    write_char('5');
+    print_str("e15");
 }
 
 void e16()
 {
-    write_char('1');
-    write_char('6');
+    print_str("e16");
 }
 
