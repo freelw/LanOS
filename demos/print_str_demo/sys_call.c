@@ -43,9 +43,36 @@ int _sys_print_str(char *msg)
     return 0;
 }
 
+int _sys_print_num(int num)
+{
+    char buf[64];
+    int index = 0;
+    for (int i = 0; i < 64; ++ i) {
+        buf[i] = 0;
+    }
+    if (num == 0) {
+        buf[index++] = '0';
+    } else if (num < 0) {
+        num = -num;
+        buf[index++] = '-';
+    }
+    char tmp[64];
+    int index_tmp = 0;
+    while (num > 0) {
+        tmp[index_tmp ++] = num%10 + '0';
+        num /= 10;
+    }
+    for (int i = index_tmp-1; i >= 0; -- i) {
+        buf[index++] = tmp[i];
+    }
+    print_str(buf);
+    return 0;
+}
+
 extern void sys_fork();
 extern void sys_print_str();
+extern void sys_print_num();
 
 extern sys_call sys_call_table[] = {
-    _test_sys_call, sys_fork, _test_sys_call1, _test_sys_call2, sys_print_str
+    _test_sys_call, sys_fork, _test_sys_call1, _test_sys_call2, sys_print_str, sys_print_num
 };

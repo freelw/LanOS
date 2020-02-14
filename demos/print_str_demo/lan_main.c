@@ -34,10 +34,12 @@ extern void init_0();
 #define __NR_test_sys_call1 2
 #define __NR_test_sys_call2 3
 #define __NR_s_print_str 4
+#define __NR_s_print_num 5
 _syscall0(int, test_sys_call)
 _syscall0(int, fork1)
 _syscall0(int, test_sys_call2)
 _syscall1(int, s_print_str, char*, msg)
+_syscall1(int, s_print_num, int, num)
 
 void check_a20_valid()
 {
@@ -95,14 +97,20 @@ void lan_main()
 			::"a" (__NR_fork1));
 
 	if (fork1()) {
+		int i = 0;
 		while (1) {
-			s_print_str("abc");
-			for (int i = 0; i < 1000000; ++ i);
+			i++;
+			s_print_str("process 1 cnt:");
+			s_print_num(i);
+			for (int i = 0; i < 100000000; ++ i);
 		}
 	} else {
+		int j = 0;
 		while(1) {
-			s_print_str("defffffffff");
-			for (int i = 0; i < 1000000; ++ i);
+			j++;
+			s_print_str("process 2 cnt:");
+			s_print_num(j);
+			for (int i = 0; i < 100000000; ++ i);
 		}
 	}
 }
