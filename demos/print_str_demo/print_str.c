@@ -18,6 +18,9 @@ void print_str(char *s)
                 screen_buff[i*80+j] = screen_buff[(i+1)*80+j];
             }
         }
+        for (int j = 0; j < 80; ++ j) {
+            screen_buff[24*80 + j] = 0;
+        }
         cur_l = MAX_L-1;
     }
     int y = cur_l;
