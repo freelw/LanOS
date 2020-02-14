@@ -5,3 +5,8 @@
 
     VBoxManage clonemedium --format RAW debian.vdi debian.img
 
+### 反汇编
+
+    objdump -l lan_os > disasm.txt
+    makefile 要加上 gcc -g
+

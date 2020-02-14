@@ -30,3 +30,9 @@
 * [初步调试fork](https://github.com/freelw/LanOS/blob/master/demos/fork_demo/readme.md)
 * [fork+写时复制](https://github.com/freelw/LanOS/blob/master/demos/cp_on_write/readme.md)
 
+## Todo
+1. print_str 实现
+2. print_num 实现
+3. lan_fs 实现
+4. exec 实现
+
