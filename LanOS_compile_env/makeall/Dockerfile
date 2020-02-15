@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 RUN  apt update \
-	&& apt-get -y install nasm gcc make
+	&& apt-get -y install nasm gcc make nodejs
 
 COPY entrypoint.sh /root/entrypoint.sh
 WORKDIR /root/
