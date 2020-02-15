@@ -1,7 +1,7 @@
 [BITS 16]
 ORG 07c00h
 SYSSEG equ 01000h
-SYSLEN equ 61
+SYSLEN equ 72
 jmp 07c0h:(load_system-$)
 
 load_system:
@@ -10,10 +10,13 @@ load_system:
     mov ax, SYSSEG
     mov es, ax              ;es:bx 01000h:0h bios读取磁盘写入内存的目标位置
     xor bx, bx
-    mov ax, 0200h+SYSLEN    ;ah 读扇区功能号2 al读扇区数量 17
+    mov ax, 0200h+17    ;ah 读扇区功能号2 al读扇区数量 17
     int 013h
-    jnc ok_load
+    jnc ok_load1
     jmp $
+
+ok_load1:
+    mov dh, 1
 
 ok_load:
     cli
