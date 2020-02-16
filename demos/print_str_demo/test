@@ -1,0 +1,4068 @@
+
+lan_os:	file format ELF32-i386
+
+Disassembly of section .text:
+start_up32:
+       0:	b8 10 00 00 00 	movl	$16, %eax
+       5:	8e d8 	movl	%eax, %ds
+       7:	0f b2 25 08 11 00 00 	lssl	4360, %esp
+       e:	e8 27 00 00 00 	calll	39 <LDT0_SEL+0x12>
+      13:	e8 2a 00 00 00 	calll	42 <LDT0_SEL+0x1a>
+      18:	b8 10 00 00 00 	movl	$16, %eax
+      1d:	8e d8 	movl	%eax, %ds
+      1f:	8e c0 	movl	%eax, %es
+      21:	8e e0 	movl	%eax, %fs
+      23:	8e e8 	movl	%eax, %gs
+      25:	0f b2 25 08 11 00 00 	lssl	4360, %esp
+      2c:	b8 20 00 00 00 	movl	$32, %eax
+      31:	0f 00 d8 	ltrw	%ax
+      34:	68 8a 12 00 00 	pushl	$4746
+      39:	c3 	retl
+
+setup_gdt:
+      3a:	0f 01 15 56 02 00 00 	lgdtl	598
+      41:	c3 	retl
+
+setup_idt:
+      42:	8d 15 44 02 00 00 	leal	580, %edx
+      48:	b8 00 00 08 00 	movl	$524288, %eax
+      4d:	66 89 d0 	movw	%dx, %ax
+      50:	66 ba 00 8e 	movw	$36352, %dx
+      54:	8d 3d 60 02 00 00 	leal	608, %edi
+      5a:	b9 00 01 00 00 	movl	$256, %ecx
+
+rp_idt:
+      5f:	89 07 	movl	%eax, (%edi)
+      61:	89 57 04 	movl	%edx, 4(%edi)
+      64:	83 c7 08 	addl	$8, %edi
+      67:	49 	decl	%ecx
+      68:	75 f5 	jne	-11 <LDT0_SEL+0x37>
+      6a:	0f 01 1d 50 02 00 00 	lidtl	592
+      71:	c3 	retl
+
+write_char:
+      72:	0f a8 	pushl	%gs
+      74:	53 	pushl	%ebx
+      75:	50 	pushl	%eax
+      76:	bb 18 00 00 00 	movl	$24, %ebx
+      7b:	8e eb 	movl	%ebx, %gs
+      7d:	8b 44 24 10 	movl	16(%esp), %eax
+      81:	8b 5c 24 14 	movl	20(%esp), %ebx
+      85:	d1 e3 	shll	%ebx
+      87:	65 88 03 	movb	%al, %gs:(%ebx)
+      8a:	58 	popl	%eax
+      8b:	5b 	popl	%ebx
+      8c:	0f a9 	popl	%gs
+      8e:	c3 	retl
+
+open_a20:
+      8f:	e8 13 00 00 00 	calll	19 <LDT0_SEL+0x7f>
+      94:	b0 d1 	movb	$-47, %al
+      96:	e6 64 	outb	%al, $100
+      98:	e8 0a 00 00 00 	calll	10 <LDT0_SEL+0x7f>
+      9d:	b0 df 	movb	$-33, %al
+      9f:	e6 60 	outb	%al, $96
+      a1:	e8 01 00 00 00 	calll	1 <LDT0_SEL+0x7f>
+      a6:	c3 	retl
+
+empty_8042:
+      a7:	eb 00 	jmp	0 <LDT0_SEL+0x81>
+      a9:	eb 00 	jmp	0 <LDT0_SEL+0x83>
+      ab:	e4 64 	inb	$100, %al
+      ad:	a8 02 	testb	$2, %al
+      af:	75 f6 	jne	-10 <LDT0_SEL+0x7f>
+      b1:	c3 	retl
+
+init_latch:
+      b2:	b0 36 	movb	$54, %al
+      b4:	ba 43 00 00 00 	movl	$67, %edx
+      b9:	ee 	outb	%al, %dx
+      ba:	b8 9a 2e 00 00 	movl	$11930, %eax
+      bf:	ba 40 00 00 00 	movl	$64, %edx
+      c4:	ee 	outb	%al, %dx
+      c5:	88 e0 	movb	%ah, %al
+      c7:	ee 	outb	%al, %dx
+
+init_8259A:
+      c8:	b0 11 	movb	$17, %al
+      ca:	e6 20 	outb	%al, $32
+      cc:	e8 4e 00 00 00 	calll	78 <LDT0_SEL+0xf7>
+      d1:	e6 a0 	outb	%al, $160
+      d3:	e8 47 00 00 00 	calll	71 <LDT0_SEL+0xf7>
+      d8:	b0 20 	movb	$32, %al
+      da:	e6 21 	outb	%al, $33
+      dc:	e8 3e 00 00 00 	calll	62 <LDT0_SEL+0xf7>
+      e1:	b0 28 	movb	$40, %al
+      e3:	e6 a1 	outb	%al, $161
+      e5:	e8 35 00 00 00 	calll	53 <LDT0_SEL+0xf7>
+      ea:	b0 04 	movb	$4, %al
+      ec:	e6 21 	outb	%al, $33
+      ee:	e8 2c 00 00 00 	calll	44 <LDT0_SEL+0xf7>
+      f3:	b0 02 	movb	$2, %al
+      f5:	e6 a1 	outb	%al, $161
+      f7:	e8 23 00 00 00 	calll	35 <LDT0_SEL+0xf7>
+      fc:	b0 01 	movb	$1, %al
+      fe:	e6 21 	outb	%al, $33
+     100:	e8 1a 00 00 00 	calll	26 <LDT0_SEL+0xf7>
+     105:	e6 a1 	outb	%al, $161
+     107:	e8 13 00 00 00 	calll	19 <LDT0_SEL+0xf7>
+     10c:	b0 fe 	movb	$-2, %al
+     10e:	e6 21 	outb	%al, $33
+     110:	e8 0a 00 00 00 	calll	10 <LDT0_SEL+0xf7>
+     115:	b0 ff 	movb	$-1, %al
+     117:	e6 a1 	outb	%al, $161
+     119:	e8 01 00 00 00 	calll	1 <LDT0_SEL+0xf7>
+     11e:	c3 	retl
+
+io_delay:
+     11f:	90 	nop
+     120:	90 	nop
+     121:	90 	nop
+     122:	90 	nop
+     123:	c3 	retl
+
+timer_interrupt:
+     124:	1e 	pushl	%ds
+     125:	06 	pushl	%es
+     126:	0f a0 	pushl	%fs
+     128:	50 	pushl	%eax
+     129:	52 	pushl	%edx
+     12a:	51 	pushl	%ecx
+     12b:	53 	pushl	%ebx
+     12c:	ba 10 00 00 00 	movl	$16, %edx
+     131:	8e da 	movl	%edx, %ds
+     133:	8e c2 	movl	%edx, %es
+     135:	ba 17 00 00 00 	movl	$23, %edx
+     13a:	8e e2 	movl	%edx, %fs
+     13c:	b0 20 	movb	$32, %al
+     13e:	e6 20 	outb	%al, $32
+     140:	8b 44 24 20 	movl	32(%esp), %eax
+     144:	50 	pushl	%eax
+     145:	e8 5a 19 00 00 	calll	6490 <LDT0_SEL+0x1a7c>
+     14a:	58 	popl	%eax
+     14b:	5b 	popl	%ebx
+     14c:	59 	popl	%ecx
+     14d:	5a 	popl	%edx
+     14e:	58 	popl	%eax
+     14f:	0f a1 	popl	%fs
+     151:	07 	popl	%es
+     152:	1f 	popl	%ds
+     153:	cf 	iretl
+
+assign_cr3_cr0:
+     154:	8b 44 24 04 	movl	4(%esp), %eax
+     158:	0f 22 d8 	movl	%eax, %cr3
+     15b:	0f 20 c0 	movl	%cr0, %eax
+     15e:	0d 00 00 00 80 	orl	$2147483648, %eax
+     163:	0f 22 c0 	movl	%eax, %cr0
+     166:	c3 	retl
+
+page_fault:
+     167:	cf 	iretl
+
+system_call:
+     168:	1e 	pushl	%ds
+     169:	06 	pushl	%es
+     16a:	0f a0 	pushl	%fs
+     16c:	50 	pushl	%eax
+     16d:	52 	pushl	%edx
+     16e:	51 	pushl	%ecx
+     16f:	53 	pushl	%ebx
+     170:	ba 10 00 00 00 	movl	$16, %edx
+     175:	8e da 	movl	%edx, %ds
+     177:	8e c2 	movl	%edx, %es
+     179:	ba 17 00 00 00 	movl	$23, %edx
+     17e:	8e e2 	movl	%edx, %fs
+     180:	ff 14 85 5c 28 00 00 	calll	*10332(,%eax,4)
+     187:	50 	pushl	%eax
+     188:	58 	popl	%eax
+     189:	5b 	popl	%ebx
+     18a:	59 	popl	%ecx
+     18b:	5a 	popl	%edx
+     18c:	83 c4 04 	addl	$4, %esp
+     18f:	0f a1 	popl	%fs
+     191:	07 	popl	%es
+     192:	1f 	popl	%ds
+     193:	cf 	iretl
+
+sys_fork:
+     194:	e8 f9 19 00 00 	calll	6649 <LDT0_SEL+0x1b6a>
+     199:	0f a8 	pushl	%gs
+     19b:	56 	pushl	%esi
+     19c:	57 	pushl	%edi
+     19d:	55 	pushl	%ebp
+     19e:	50 	pushl	%eax
+     19f:	e8 05 1a 00 00 	calll	6661 <LDT0_SEL+0x1b81>
+     1a4:	83 c4 14 	addl	$20, %esp
+     1a7:	c3 	retl
+
+sys_print_num:
+     1a8:	53 	pushl	%ebx
+     1a9:	e8 cb 14 00 00 	calll	5323 <LDT0_SEL+0x1651>
+     1ae:	5b 	popl	%ebx
+     1af:	c3 	retl
+
+sys_print_str:
+     1b0:	53 	pushl	%ebx
+     1b1:	e8 4f 14 00 00 	calll	5199 <LDT0_SEL+0x15dd>
+     1b6:	5b 	popl	%ebx
+     1b7:	c3 	retl
+
+get_esp0_when_switch:
+     1b8:	50 	pushl	%eax
+     1b9:	53 	pushl	%ebx
+     1ba:	89 e0 	movl	%esp, %eax
+     1bc:	83 c0 0c 	addl	$12, %eax
+     1bf:	83 e8 30 	subl	$48, %eax
+     1c2:	8b 5c 24 0c 	movl	12(%esp), %ebx
+     1c6:	89 03 	movl	%eax, (%ebx)
+     1c8:	5b 	popl	%ebx
+     1c9:	58 	popl	%eax
+     1ca:	c3 	retl
+
+switch_to:
+     1cb:	50 	pushl	%eax
+     1cc:	53 	pushl	%ebx
+     1cd:	51 	pushl	%ecx
+     1ce:	52 	pushl	%edx
+     1cf:	55 	pushl	%ebp
+     1d0:	56 	pushl	%esi
+     1d1:	57 	pushl	%edi
+     1d2:	06 	pushl	%es
+     1d3:	1e 	pushl	%ds
+     1d4:	0f a0 	pushl	%fs
+     1d6:	0f a8 	pushl	%gs
+     1d8:	8b 44 24 30 	movl	48(%esp), %eax
+     1dc:	8b 5c 24 34 	movl	52(%esp), %ebx
+     1e0:	0f 00 d0 	lldtw	%ax
+     1e3:	8b 23 	movl	(%ebx), %esp
+     1e5:	0f a9 	popl	%gs
+     1e7:	0f a1 	popl	%fs
+     1e9:	1f 	popl	%ds
+     1ea:	07 	popl	%es
+     1eb:	5f 	popl	%edi
+     1ec:	5e 	popl	%esi
+     1ed:	5d 	popl	%ebp
+     1ee:	5a 	popl	%edx
+     1ef:	59 	popl	%ecx
+     1f0:	5b 	popl	%ebx
+     1f1:	58 	popl	%eax
+     1f2:	c3 	retl
+
+first_return_from_kernel:
+     1f3:	cf 	iretl
+
+set_ldt_desc:
+     1f4:	50 	pushl	%eax
+     1f5:	53 	pushl	%ebx
+     1f6:	8b 5c 24 0c 	movl	12(%esp), %ebx
+     1fa:	8b 44 24 10 	movl	16(%esp), %eax
+     1fe:	66 c7 03 68 00 	movw	$104, (%ebx)
+     203:	66 89 43 02 	movw	%ax, 2(%ebx)
+     207:	c1 c8 10 	rorl	$16, %eax
+     20a:	88 43 04 	movb	%al, 4(%ebx)
+     20d:	c6 43 05 e2 	movb	$-30, 5(%ebx)
+     211:	c6 43 06 00 	movb	$0, 6(%ebx)
+     215:	88 63 07 	movb	%ah, 7(%ebx)
+     218:	5b 	popl	%ebx
+     219:	58 	popl	%eax
+     21a:	c3 	retl
+
+set_base:
+     21b:	50 	pushl	%eax
+     21c:	53 	pushl	%ebx
+     21d:	8b 5c 24 0c 	movl	12(%esp), %ebx
+     221:	8b 44 24 10 	movl	16(%esp), %eax
+     225:	66 89 43 02 	movw	%ax, 2(%ebx)
+     229:	c1 c8 10 	rorl	$16, %eax
+     22c:	88 42 04 	movb	%al, 4(%edx)
+     22f:	88 62 07 	movb	%ah, 7(%edx)
+     232:	5b 	popl	%ebx
+     233:	58 	popl	%eax
+     234:	c3 	retl
+
+set_tss0_esp0:
+     235:	50 	pushl	%eax
+     236:	8b 44 24 08 	movl	8(%esp), %eax
+     23a:	a3 a4 0c 00 00 	movl	%eax, 3236
+     23f:	58 	popl	%eax
+     240:	c3 	retl
+     241:	90 	nop
+     242:	90 	nop
+     243:	90 	nop
+
+ignore_int:
+     244:	cf 	iretl
+
+current:
+     245:	00 00 	addb	%al, (%eax)
+     247:	00 00 	addb	%al, (%eax)
+
+src_loc:
+     249:	00 00 	addb	%al, (%eax)
+     24b:	00 00 	addb	%al, (%eax)
+     24d:	90 	nop
+     24e:	90 	nop
+     24f:	90 	nop
+
+lidt_48:
+     250:	ff 07 	incl	(%edi)
+     252:	60 	pushal
+     253:	02 00 	addb	(%eax), %al
+     255:	00 27 	addb	%ah, (%edi)
+
+lgdt_48:
+     256:	27 	daa
+     257:	02 60 0a 	addb	10(%eax), %ah
+     25a:	00 00 	addb	%al, (%eax)
+     25c:	90 	nop
+     25d:	90 	nop
+     25e:	90 	nop
+     25f:	90 	nop
+
+idt:
+     260:	00 00 	addb	%al, (%eax)
+     262:	00 00 	addb	%al, (%eax)
+     264:	00 00 	addb	%al, (%eax)
+     266:	00 00 	addb	%al, (%eax)
+     268:	00 00 	addb	%al, (%eax)
+     26a:	00 00 	addb	%al, (%eax)
+     26c:	00 00 	addb	%al, (%eax)
+     26e:	00 00 	addb	%al, (%eax)
+     270:	00 00 	addb	%al, (%eax)
+     272:	00 00 	addb	%al, (%eax)
+     274:	00 00 	addb	%al, (%eax)
+     276:	00 00 	addb	%al, (%eax)
+     278:	00 00 	addb	%al, (%eax)
+     27a:	00 00 	addb	%al, (%eax)
+     27c:	00 00 	addb	%al, (%eax)
+     27e:	00 00 	addb	%al, (%eax)
+     280:	00 00 	addb	%al, (%eax)
+     282:	00 00 	addb	%al, (%eax)
+     284:	00 00 	addb	%al, (%eax)
+     286:	00 00 	addb	%al, (%eax)
+     288:	00 00 	addb	%al, (%eax)
+     28a:	00 00 	addb	%al, (%eax)
+     28c:	00 00 	addb	%al, (%eax)
+     28e:	00 00 	addb	%al, (%eax)
+     290:	00 00 	addb	%al, (%eax)
+     292:	00 00 	addb	%al, (%eax)
+     294:	00 00 	addb	%al, (%eax)
+     296:	00 00 	addb	%al, (%eax)
+     298:	00 00 	addb	%al, (%eax)
+     29a:	00 00 	addb	%al, (%eax)
+     29c:	00 00 	addb	%al, (%eax)
+     29e:	00 00 	addb	%al, (%eax)
+     2a0:	00 00 	addb	%al, (%eax)
+     2a2:	00 00 	addb	%al, (%eax)
+     2a4:	00 00 	addb	%al, (%eax)
+     2a6:	00 00 	addb	%al, (%eax)
+     2a8:	00 00 	addb	%al, (%eax)
+     2aa:	00 00 	addb	%al, (%eax)
+     2ac:	00 00 	addb	%al, (%eax)
+     2ae:	00 00 	addb	%al, (%eax)
+     2b0:	00 00 	addb	%al, (%eax)
+     2b2:	00 00 	addb	%al, (%eax)
+     2b4:	00 00 	addb	%al, (%eax)
+     2b6:	00 00 	addb	%al, (%eax)
+     2b8:	00 00 	addb	%al, (%eax)
+     2ba:	00 00 	addb	%al, (%eax)
+     2bc:	00 00 	addb	%al, (%eax)
+     2be:	00 00 	addb	%al, (%eax)
+     2c0:	00 00 	addb	%al, (%eax)
+     2c2:	00 00 	addb	%al, (%eax)
+     2c4:	00 00 	addb	%al, (%eax)
+     2c6:	00 00 	addb	%al, (%eax)
+     2c8:	00 00 	addb	%al, (%eax)
+     2ca:	00 00 	addb	%al, (%eax)
+     2cc:	00 00 	addb	%al, (%eax)
+     2ce:	00 00 	addb	%al, (%eax)
+     2d0:	00 00 	addb	%al, (%eax)
+     2d2:	00 00 	addb	%al, (%eax)
+     2d4:	00 00 	addb	%al, (%eax)
+     2d6:	00 00 	addb	%al, (%eax)
+     2d8:	00 00 	addb	%al, (%eax)
+     2da:	00 00 	addb	%al, (%eax)
+     2dc:	00 00 	addb	%al, (%eax)
+     2de:	00 00 	addb	%al, (%eax)
+     2e0:	00 00 	addb	%al, (%eax)
+     2e2:	00 00 	addb	%al, (%eax)
+     2e4:	00 00 	addb	%al, (%eax)
+     2e6:	00 00 	addb	%al, (%eax)
+     2e8:	00 00 	addb	%al, (%eax)
+     2ea:	00 00 	addb	%al, (%eax)
+     2ec:	00 00 	addb	%al, (%eax)
+     2ee:	00 00 	addb	%al, (%eax)
+     2f0:	00 00 	addb	%al, (%eax)
+     2f2:	00 00 	addb	%al, (%eax)
+     2f4:	00 00 	addb	%al, (%eax)
+     2f6:	00 00 	addb	%al, (%eax)
+     2f8:	00 00 	addb	%al, (%eax)
+     2fa:	00 00 	addb	%al, (%eax)
+     2fc:	00 00 	addb	%al, (%eax)
+     2fe:	00 00 	addb	%al, (%eax)
+     300:	00 00 	addb	%al, (%eax)
+     302:	00 00 	addb	%al, (%eax)
+     304:	00 00 	addb	%al, (%eax)
+     306:	00 00 	addb	%al, (%eax)
+     308:	00 00 	addb	%al, (%eax)
+     30a:	00 00 	addb	%al, (%eax)
+     30c:	00 00 	addb	%al, (%eax)
+     30e:	00 00 	addb	%al, (%eax)
+     310:	00 00 	addb	%al, (%eax)
+     312:	00 00 	addb	%al, (%eax)
+     314:	00 00 	addb	%al, (%eax)
+     316:	00 00 	addb	%al, (%eax)
+     318:	00 00 	addb	%al, (%eax)
+     31a:	00 00 	addb	%al, (%eax)
+     31c:	00 00 	addb	%al, (%eax)
+     31e:	00 00 	addb	%al, (%eax)
+     320:	00 00 	addb	%al, (%eax)
+     322:	00 00 	addb	%al, (%eax)
+     324:	00 00 	addb	%al, (%eax)
+     326:	00 00 	addb	%al, (%eax)
+     328:	00 00 	addb	%al, (%eax)
+     32a:	00 00 	addb	%al, (%eax)
+     32c:	00 00 	addb	%al, (%eax)
+     32e:	00 00 	addb	%al, (%eax)
+     330:	00 00 	addb	%al, (%eax)
+     332:	00 00 	addb	%al, (%eax)
+     334:	00 00 	addb	%al, (%eax)
+     336:	00 00 	addb	%al, (%eax)
+     338:	00 00 	addb	%al, (%eax)
+     33a:	00 00 	addb	%al, (%eax)
+     33c:	00 00 	addb	%al, (%eax)
+     33e:	00 00 	addb	%al, (%eax)
+     340:	00 00 	addb	%al, (%eax)
+     342:	00 00 	addb	%al, (%eax)
+     344:	00 00 	addb	%al, (%eax)
+     346:	00 00 	addb	%al, (%eax)
+     348:	00 00 	addb	%al, (%eax)
+     34a:	00 00 	addb	%al, (%eax)
+     34c:	00 00 	addb	%al, (%eax)
+     34e:	00 00 	addb	%al, (%eax)
+     350:	00 00 	addb	%al, (%eax)
+     352:	00 00 	addb	%al, (%eax)
+     354:	00 00 	addb	%al, (%eax)
+     356:	00 00 	addb	%al, (%eax)
+     358:	00 00 	addb	%al, (%eax)
+     35a:	00 00 	addb	%al, (%eax)
+     35c:	00 00 	addb	%al, (%eax)
+     35e:	00 00 	addb	%al, (%eax)
+     360:	00 00 	addb	%al, (%eax)
+     362:	00 00 	addb	%al, (%eax)
+     364:	00 00 	addb	%al, (%eax)
+     366:	00 00 	addb	%al, (%eax)
+     368:	00 00 	addb	%al, (%eax)
+     36a:	00 00 	addb	%al, (%eax)
+     36c:	00 00 	addb	%al, (%eax)
+     36e:	00 00 	addb	%al, (%eax)
+     370:	00 00 	addb	%al, (%eax)
+     372:	00 00 	addb	%al, (%eax)
+     374:	00 00 	addb	%al, (%eax)
+     376:	00 00 	addb	%al, (%eax)
+     378:	00 00 	addb	%al, (%eax)
+     37a:	00 00 	addb	%al, (%eax)
+     37c:	00 00 	addb	%al, (%eax)
+     37e:	00 00 	addb	%al, (%eax)
+     380:	00 00 	addb	%al, (%eax)
+     382:	00 00 	addb	%al, (%eax)
+     384:	00 00 	addb	%al, (%eax)
+     386:	00 00 	addb	%al, (%eax)
+     388:	00 00 	addb	%al, (%eax)
+     38a:	00 00 	addb	%al, (%eax)
+     38c:	00 00 	addb	%al, (%eax)
+     38e:	00 00 	addb	%al, (%eax)
+     390:	00 00 	addb	%al, (%eax)
+     392:	00 00 	addb	%al, (%eax)
+     394:	00 00 	addb	%al, (%eax)
+     396:	00 00 	addb	%al, (%eax)
+     398:	00 00 	addb	%al, (%eax)
+     39a:	00 00 	addb	%al, (%eax)
+     39c:	00 00 	addb	%al, (%eax)
+     39e:	00 00 	addb	%al, (%eax)
+     3a0:	00 00 	addb	%al, (%eax)
+     3a2:	00 00 	addb	%al, (%eax)
+     3a4:	00 00 	addb	%al, (%eax)
+     3a6:	00 00 	addb	%al, (%eax)
+     3a8:	00 00 	addb	%al, (%eax)
+     3aa:	00 00 	addb	%al, (%eax)
+     3ac:	00 00 	addb	%al, (%eax)
+     3ae:	00 00 	addb	%al, (%eax)
+     3b0:	00 00 	addb	%al, (%eax)
+     3b2:	00 00 	addb	%al, (%eax)
+     3b4:	00 00 	addb	%al, (%eax)
+     3b6:	00 00 	addb	%al, (%eax)
+     3b8:	00 00 	addb	%al, (%eax)
+     3ba:	00 00 	addb	%al, (%eax)
+     3bc:	00 00 	addb	%al, (%eax)
+     3be:	00 00 	addb	%al, (%eax)
+     3c0:	00 00 	addb	%al, (%eax)
+     3c2:	00 00 	addb	%al, (%eax)
+     3c4:	00 00 	addb	%al, (%eax)
+     3c6:	00 00 	addb	%al, (%eax)
+     3c8:	00 00 	addb	%al, (%eax)
+     3ca:	00 00 	addb	%al, (%eax)
+     3cc:	00 00 	addb	%al, (%eax)
+     3ce:	00 00 	addb	%al, (%eax)
+     3d0:	00 00 	addb	%al, (%eax)
+     3d2:	00 00 	addb	%al, (%eax)
+     3d4:	00 00 	addb	%al, (%eax)
+     3d6:	00 00 	addb	%al, (%eax)
+     3d8:	00 00 	addb	%al, (%eax)
+     3da:	00 00 	addb	%al, (%eax)
+     3dc:	00 00 	addb	%al, (%eax)
+     3de:	00 00 	addb	%al, (%eax)
+     3e0:	00 00 	addb	%al, (%eax)
+     3e2:	00 00 	addb	%al, (%eax)
+     3e4:	00 00 	addb	%al, (%eax)
+     3e6:	00 00 	addb	%al, (%eax)
+     3e8:	00 00 	addb	%al, (%eax)
+     3ea:	00 00 	addb	%al, (%eax)
+     3ec:	00 00 	addb	%al, (%eax)
+     3ee:	00 00 	addb	%al, (%eax)
+     3f0:	00 00 	addb	%al, (%eax)
+     3f2:	00 00 	addb	%al, (%eax)
+     3f4:	00 00 	addb	%al, (%eax)
+     3f6:	00 00 	addb	%al, (%eax)
+     3f8:	00 00 	addb	%al, (%eax)
+     3fa:	00 00 	addb	%al, (%eax)
+     3fc:	00 00 	addb	%al, (%eax)
+     3fe:	00 00 	addb	%al, (%eax)
+     400:	00 00 	addb	%al, (%eax)
+     402:	00 00 	addb	%al, (%eax)
+     404:	00 00 	addb	%al, (%eax)
+     406:	00 00 	addb	%al, (%eax)
+     408:	00 00 	addb	%al, (%eax)
+     40a:	00 00 	addb	%al, (%eax)
+     40c:	00 00 	addb	%al, (%eax)
+     40e:	00 00 	addb	%al, (%eax)
+     410:	00 00 	addb	%al, (%eax)
+     412:	00 00 	addb	%al, (%eax)
+     414:	00 00 	addb	%al, (%eax)
+     416:	00 00 	addb	%al, (%eax)
+     418:	00 00 	addb	%al, (%eax)
+     41a:	00 00 	addb	%al, (%eax)
+     41c:	00 00 	addb	%al, (%eax)
+     41e:	00 00 	addb	%al, (%eax)
+     420:	00 00 	addb	%al, (%eax)
+     422:	00 00 	addb	%al, (%eax)
+     424:	00 00 	addb	%al, (%eax)
+     426:	00 00 	addb	%al, (%eax)
+     428:	00 00 	addb	%al, (%eax)
+     42a:	00 00 	addb	%al, (%eax)
+     42c:	00 00 	addb	%al, (%eax)
+     42e:	00 00 	addb	%al, (%eax)
+     430:	00 00 	addb	%al, (%eax)
+     432:	00 00 	addb	%al, (%eax)
+     434:	00 00 	addb	%al, (%eax)
+     436:	00 00 	addb	%al, (%eax)
+     438:	00 00 	addb	%al, (%eax)
+     43a:	00 00 	addb	%al, (%eax)
+     43c:	00 00 	addb	%al, (%eax)
+     43e:	00 00 	addb	%al, (%eax)
+     440:	00 00 	addb	%al, (%eax)
+     442:	00 00 	addb	%al, (%eax)
+     444:	00 00 	addb	%al, (%eax)
+     446:	00 00 	addb	%al, (%eax)
+     448:	00 00 	addb	%al, (%eax)
+     44a:	00 00 	addb	%al, (%eax)
+     44c:	00 00 	addb	%al, (%eax)
+     44e:	00 00 	addb	%al, (%eax)
+     450:	00 00 	addb	%al, (%eax)
+     452:	00 00 	addb	%al, (%eax)
+     454:	00 00 	addb	%al, (%eax)
+     456:	00 00 	addb	%al, (%eax)
+     458:	00 00 	addb	%al, (%eax)
+     45a:	00 00 	addb	%al, (%eax)
+     45c:	00 00 	addb	%al, (%eax)
+     45e:	00 00 	addb	%al, (%eax)
+     460:	00 00 	addb	%al, (%eax)
+     462:	00 00 	addb	%al, (%eax)
+     464:	00 00 	addb	%al, (%eax)
+     466:	00 00 	addb	%al, (%eax)
+     468:	00 00 	addb	%al, (%eax)
+     46a:	00 00 	addb	%al, (%eax)
+     46c:	00 00 	addb	%al, (%eax)
+     46e:	00 00 	addb	%al, (%eax)
+     470:	00 00 	addb	%al, (%eax)
+     472:	00 00 	addb	%al, (%eax)
+     474:	00 00 	addb	%al, (%eax)
+     476:	00 00 	addb	%al, (%eax)
+     478:	00 00 	addb	%al, (%eax)
+     47a:	00 00 	addb	%al, (%eax)
+     47c:	00 00 	addb	%al, (%eax)
+     47e:	00 00 	addb	%al, (%eax)
+     480:	00 00 	addb	%al, (%eax)
+     482:	00 00 	addb	%al, (%eax)
+     484:	00 00 	addb	%al, (%eax)
+     486:	00 00 	addb	%al, (%eax)
+     488:	00 00 	addb	%al, (%eax)
+     48a:	00 00 	addb	%al, (%eax)
+     48c:	00 00 	addb	%al, (%eax)
+     48e:	00 00 	addb	%al, (%eax)
+     490:	00 00 	addb	%al, (%eax)
+     492:	00 00 	addb	%al, (%eax)
+     494:	00 00 	addb	%al, (%eax)
+     496:	00 00 	addb	%al, (%eax)
+     498:	00 00 	addb	%al, (%eax)
+     49a:	00 00 	addb	%al, (%eax)
+     49c:	00 00 	addb	%al, (%eax)
+     49e:	00 00 	addb	%al, (%eax)
+     4a0:	00 00 	addb	%al, (%eax)
+     4a2:	00 00 	addb	%al, (%eax)
+     4a4:	00 00 	addb	%al, (%eax)
+     4a6:	00 00 	addb	%al, (%eax)
+     4a8:	00 00 	addb	%al, (%eax)
+     4aa:	00 00 	addb	%al, (%eax)
+     4ac:	00 00 	addb	%al, (%eax)
+     4ae:	00 00 	addb	%al, (%eax)
+     4b0:	00 00 	addb	%al, (%eax)
+     4b2:	00 00 	addb	%al, (%eax)
+     4b4:	00 00 	addb	%al, (%eax)
+     4b6:	00 00 	addb	%al, (%eax)
+     4b8:	00 00 	addb	%al, (%eax)
+     4ba:	00 00 	addb	%al, (%eax)
+     4bc:	00 00 	addb	%al, (%eax)
+     4be:	00 00 	addb	%al, (%eax)
+     4c0:	00 00 	addb	%al, (%eax)
+     4c2:	00 00 	addb	%al, (%eax)
+     4c4:	00 00 	addb	%al, (%eax)
+     4c6:	00 00 	addb	%al, (%eax)
+     4c8:	00 00 	addb	%al, (%eax)
+     4ca:	00 00 	addb	%al, (%eax)
+     4cc:	00 00 	addb	%al, (%eax)
+     4ce:	00 00 	addb	%al, (%eax)
+     4d0:	00 00 	addb	%al, (%eax)
+     4d2:	00 00 	addb	%al, (%eax)
+     4d4:	00 00 	addb	%al, (%eax)
+     4d6:	00 00 	addb	%al, (%eax)
+     4d8:	00 00 	addb	%al, (%eax)
+     4da:	00 00 	addb	%al, (%eax)
+     4dc:	00 00 	addb	%al, (%eax)
+     4de:	00 00 	addb	%al, (%eax)
+     4e0:	00 00 	addb	%al, (%eax)
+     4e2:	00 00 	addb	%al, (%eax)
+     4e4:	00 00 	addb	%al, (%eax)
+     4e6:	00 00 	addb	%al, (%eax)
+     4e8:	00 00 	addb	%al, (%eax)
+     4ea:	00 00 	addb	%al, (%eax)
+     4ec:	00 00 	addb	%al, (%eax)
+     4ee:	00 00 	addb	%al, (%eax)
+     4f0:	00 00 	addb	%al, (%eax)
+     4f2:	00 00 	addb	%al, (%eax)
+     4f4:	00 00 	addb	%al, (%eax)
+     4f6:	00 00 	addb	%al, (%eax)
+     4f8:	00 00 	addb	%al, (%eax)
+     4fa:	00 00 	addb	%al, (%eax)
+     4fc:	00 00 	addb	%al, (%eax)
+     4fe:	00 00 	addb	%al, (%eax)
+     500:	00 00 	addb	%al, (%eax)
+     502:	00 00 	addb	%al, (%eax)
+     504:	00 00 	addb	%al, (%eax)
+     506:	00 00 	addb	%al, (%eax)
+     508:	00 00 	addb	%al, (%eax)
+     50a:	00 00 	addb	%al, (%eax)
+     50c:	00 00 	addb	%al, (%eax)
+     50e:	00 00 	addb	%al, (%eax)
+     510:	00 00 	addb	%al, (%eax)
+     512:	00 00 	addb	%al, (%eax)
+     514:	00 00 	addb	%al, (%eax)
+     516:	00 00 	addb	%al, (%eax)
+     518:	00 00 	addb	%al, (%eax)
+     51a:	00 00 	addb	%al, (%eax)
+     51c:	00 00 	addb	%al, (%eax)
+     51e:	00 00 	addb	%al, (%eax)
+     520:	00 00 	addb	%al, (%eax)
+     522:	00 00 	addb	%al, (%eax)
+     524:	00 00 	addb	%al, (%eax)
+     526:	00 00 	addb	%al, (%eax)
+     528:	00 00 	addb	%al, (%eax)
+     52a:	00 00 	addb	%al, (%eax)
+     52c:	00 00 	addb	%al, (%eax)
+     52e:	00 00 	addb	%al, (%eax)
+     530:	00 00 	addb	%al, (%eax)
+     532:	00 00 	addb	%al, (%eax)
+     534:	00 00 	addb	%al, (%eax)
+     536:	00 00 	addb	%al, (%eax)
+     538:	00 00 	addb	%al, (%eax)
+     53a:	00 00 	addb	%al, (%eax)
+     53c:	00 00 	addb	%al, (%eax)
+     53e:	00 00 	addb	%al, (%eax)
+     540:	00 00 	addb	%al, (%eax)
+     542:	00 00 	addb	%al, (%eax)
+     544:	00 00 	addb	%al, (%eax)
+     546:	00 00 	addb	%al, (%eax)
+     548:	00 00 	addb	%al, (%eax)
+     54a:	00 00 	addb	%al, (%eax)
+     54c:	00 00 	addb	%al, (%eax)
+     54e:	00 00 	addb	%al, (%eax)
+     550:	00 00 	addb	%al, (%eax)
+     552:	00 00 	addb	%al, (%eax)
+     554:	00 00 	addb	%al, (%eax)
+     556:	00 00 	addb	%al, (%eax)
+     558:	00 00 	addb	%al, (%eax)
+     55a:	00 00 	addb	%al, (%eax)
+     55c:	00 00 	addb	%al, (%eax)
+     55e:	00 00 	addb	%al, (%eax)
+     560:	00 00 	addb	%al, (%eax)
+     562:	00 00 	addb	%al, (%eax)
+     564:	00 00 	addb	%al, (%eax)
+     566:	00 00 	addb	%al, (%eax)
+     568:	00 00 	addb	%al, (%eax)
+     56a:	00 00 	addb	%al, (%eax)
+     56c:	00 00 	addb	%al, (%eax)
+     56e:	00 00 	addb	%al, (%eax)
+     570:	00 00 	addb	%al, (%eax)
+     572:	00 00 	addb	%al, (%eax)
+     574:	00 00 	addb	%al, (%eax)
+     576:	00 00 	addb	%al, (%eax)
+     578:	00 00 	addb	%al, (%eax)
+     57a:	00 00 	addb	%al, (%eax)
+     57c:	00 00 	addb	%al, (%eax)
+     57e:	00 00 	addb	%al, (%eax)
+     580:	00 00 	addb	%al, (%eax)
+     582:	00 00 	addb	%al, (%eax)
+     584:	00 00 	addb	%al, (%eax)
+     586:	00 00 	addb	%al, (%eax)
+     588:	00 00 	addb	%al, (%eax)
+     58a:	00 00 	addb	%al, (%eax)
+     58c:	00 00 	addb	%al, (%eax)
+     58e:	00 00 	addb	%al, (%eax)
+     590:	00 00 	addb	%al, (%eax)
+     592:	00 00 	addb	%al, (%eax)
+     594:	00 00 	addb	%al, (%eax)
+     596:	00 00 	addb	%al, (%eax)
+     598:	00 00 	addb	%al, (%eax)
+     59a:	00 00 	addb	%al, (%eax)
+     59c:	00 00 	addb	%al, (%eax)
+     59e:	00 00 	addb	%al, (%eax)
+     5a0:	00 00 	addb	%al, (%eax)
+     5a2:	00 00 	addb	%al, (%eax)
+     5a4:	00 00 	addb	%al, (%eax)
+     5a6:	00 00 	addb	%al, (%eax)
+     5a8:	00 00 	addb	%al, (%eax)
+     5aa:	00 00 	addb	%al, (%eax)
+     5ac:	00 00 	addb	%al, (%eax)
+     5ae:	00 00 	addb	%al, (%eax)
+     5b0:	00 00 	addb	%al, (%eax)
+     5b2:	00 00 	addb	%al, (%eax)
+     5b4:	00 00 	addb	%al, (%eax)
+     5b6:	00 00 	addb	%al, (%eax)
+     5b8:	00 00 	addb	%al, (%eax)
+     5ba:	00 00 	addb	%al, (%eax)
+     5bc:	00 00 	addb	%al, (%eax)
+     5be:	00 00 	addb	%al, (%eax)
+     5c0:	00 00 	addb	%al, (%eax)
+     5c2:	00 00 	addb	%al, (%eax)
+     5c4:	00 00 	addb	%al, (%eax)
+     5c6:	00 00 	addb	%al, (%eax)
+     5c8:	00 00 	addb	%al, (%eax)
+     5ca:	00 00 	addb	%al, (%eax)
+     5cc:	00 00 	addb	%al, (%eax)
+     5ce:	00 00 	addb	%al, (%eax)
+     5d0:	00 00 	addb	%al, (%eax)
+     5d2:	00 00 	addb	%al, (%eax)
+     5d4:	00 00 	addb	%al, (%eax)
+     5d6:	00 00 	addb	%al, (%eax)
+     5d8:	00 00 	addb	%al, (%eax)
+     5da:	00 00 	addb	%al, (%eax)
+     5dc:	00 00 	addb	%al, (%eax)
+     5de:	00 00 	addb	%al, (%eax)
+     5e0:	00 00 	addb	%al, (%eax)
+     5e2:	00 00 	addb	%al, (%eax)
+     5e4:	00 00 	addb	%al, (%eax)
+     5e6:	00 00 	addb	%al, (%eax)
+     5e8:	00 00 	addb	%al, (%eax)
+     5ea:	00 00 	addb	%al, (%eax)
+     5ec:	00 00 	addb	%al, (%eax)
+     5ee:	00 00 	addb	%al, (%eax)
+     5f0:	00 00 	addb	%al, (%eax)
+     5f2:	00 00 	addb	%al, (%eax)
+     5f4:	00 00 	addb	%al, (%eax)
+     5f6:	00 00 	addb	%al, (%eax)
+     5f8:	00 00 	addb	%al, (%eax)
+     5fa:	00 00 	addb	%al, (%eax)
+     5fc:	00 00 	addb	%al, (%eax)
+     5fe:	00 00 	addb	%al, (%eax)
+     600:	00 00 	addb	%al, (%eax)
+     602:	00 00 	addb	%al, (%eax)
+     604:	00 00 	addb	%al, (%eax)
+     606:	00 00 	addb	%al, (%eax)
+     608:	00 00 	addb	%al, (%eax)
+     60a:	00 00 	addb	%al, (%eax)
+     60c:	00 00 	addb	%al, (%eax)
+     60e:	00 00 	addb	%al, (%eax)
+     610:	00 00 	addb	%al, (%eax)
+     612:	00 00 	addb	%al, (%eax)
+     614:	00 00 	addb	%al, (%eax)
+     616:	00 00 	addb	%al, (%eax)
+     618:	00 00 	addb	%al, (%eax)
+     61a:	00 00 	addb	%al, (%eax)
+     61c:	00 00 	addb	%al, (%eax)
+     61e:	00 00 	addb	%al, (%eax)
+     620:	00 00 	addb	%al, (%eax)
+     622:	00 00 	addb	%al, (%eax)
+     624:	00 00 	addb	%al, (%eax)
+     626:	00 00 	addb	%al, (%eax)
+     628:	00 00 	addb	%al, (%eax)
+     62a:	00 00 	addb	%al, (%eax)
+     62c:	00 00 	addb	%al, (%eax)
+     62e:	00 00 	addb	%al, (%eax)
+     630:	00 00 	addb	%al, (%eax)
+     632:	00 00 	addb	%al, (%eax)
+     634:	00 00 	addb	%al, (%eax)
+     636:	00 00 	addb	%al, (%eax)
+     638:	00 00 	addb	%al, (%eax)
+     63a:	00 00 	addb	%al, (%eax)
+     63c:	00 00 	addb	%al, (%eax)
+     63e:	00 00 	addb	%al, (%eax)
+     640:	00 00 	addb	%al, (%eax)
+     642:	00 00 	addb	%al, (%eax)
+     644:	00 00 	addb	%al, (%eax)
+     646:	00 00 	addb	%al, (%eax)
+     648:	00 00 	addb	%al, (%eax)
+     64a:	00 00 	addb	%al, (%eax)
+     64c:	00 00 	addb	%al, (%eax)
+     64e:	00 00 	addb	%al, (%eax)
+     650:	00 00 	addb	%al, (%eax)
+     652:	00 00 	addb	%al, (%eax)
+     654:	00 00 	addb	%al, (%eax)
+     656:	00 00 	addb	%al, (%eax)
+     658:	00 00 	addb	%al, (%eax)
+     65a:	00 00 	addb	%al, (%eax)
+     65c:	00 00 	addb	%al, (%eax)
+     65e:	00 00 	addb	%al, (%eax)
+     660:	00 00 	addb	%al, (%eax)
+     662:	00 00 	addb	%al, (%eax)
+     664:	00 00 	addb	%al, (%eax)
+     666:	00 00 	addb	%al, (%eax)
+     668:	00 00 	addb	%al, (%eax)
+     66a:	00 00 	addb	%al, (%eax)
+     66c:	00 00 	addb	%al, (%eax)
+     66e:	00 00 	addb	%al, (%eax)
+     670:	00 00 	addb	%al, (%eax)
+     672:	00 00 	addb	%al, (%eax)
+     674:	00 00 	addb	%al, (%eax)
+     676:	00 00 	addb	%al, (%eax)
+     678:	00 00 	addb	%al, (%eax)
+     67a:	00 00 	addb	%al, (%eax)
+     67c:	00 00 	addb	%al, (%eax)
+     67e:	00 00 	addb	%al, (%eax)
+     680:	00 00 	addb	%al, (%eax)
+     682:	00 00 	addb	%al, (%eax)
+     684:	00 00 	addb	%al, (%eax)
+     686:	00 00 	addb	%al, (%eax)
+     688:	00 00 	addb	%al, (%eax)
+     68a:	00 00 	addb	%al, (%eax)
+     68c:	00 00 	addb	%al, (%eax)
+     68e:	00 00 	addb	%al, (%eax)
+     690:	00 00 	addb	%al, (%eax)
+     692:	00 00 	addb	%al, (%eax)
+     694:	00 00 	addb	%al, (%eax)
+     696:	00 00 	addb	%al, (%eax)
+     698:	00 00 	addb	%al, (%eax)
+     69a:	00 00 	addb	%al, (%eax)
+     69c:	00 00 	addb	%al, (%eax)
+     69e:	00 00 	addb	%al, (%eax)
+     6a0:	00 00 	addb	%al, (%eax)
+     6a2:	00 00 	addb	%al, (%eax)
+     6a4:	00 00 	addb	%al, (%eax)
+     6a6:	00 00 	addb	%al, (%eax)
+     6a8:	00 00 	addb	%al, (%eax)
+     6aa:	00 00 	addb	%al, (%eax)
+     6ac:	00 00 	addb	%al, (%eax)
+     6ae:	00 00 	addb	%al, (%eax)
+     6b0:	00 00 	addb	%al, (%eax)
+     6b2:	00 00 	addb	%al, (%eax)
+     6b4:	00 00 	addb	%al, (%eax)
+     6b6:	00 00 	addb	%al, (%eax)
+     6b8:	00 00 	addb	%al, (%eax)
+     6ba:	00 00 	addb	%al, (%eax)
+     6bc:	00 00 	addb	%al, (%eax)
+     6be:	00 00 	addb	%al, (%eax)
+     6c0:	00 00 	addb	%al, (%eax)
+     6c2:	00 00 	addb	%al, (%eax)
+     6c4:	00 00 	addb	%al, (%eax)
+     6c6:	00 00 	addb	%al, (%eax)
+     6c8:	00 00 	addb	%al, (%eax)
+     6ca:	00 00 	addb	%al, (%eax)
+     6cc:	00 00 	addb	%al, (%eax)
+     6ce:	00 00 	addb	%al, (%eax)
+     6d0:	00 00 	addb	%al, (%eax)
+     6d2:	00 00 	addb	%al, (%eax)
+     6d4:	00 00 	addb	%al, (%eax)
+     6d6:	00 00 	addb	%al, (%eax)
+     6d8:	00 00 	addb	%al, (%eax)
+     6da:	00 00 	addb	%al, (%eax)
+     6dc:	00 00 	addb	%al, (%eax)
+     6de:	00 00 	addb	%al, (%eax)
+     6e0:	00 00 	addb	%al, (%eax)
+     6e2:	00 00 	addb	%al, (%eax)
+     6e4:	00 00 	addb	%al, (%eax)
+     6e6:	00 00 	addb	%al, (%eax)
+     6e8:	00 00 	addb	%al, (%eax)
+     6ea:	00 00 	addb	%al, (%eax)
+     6ec:	00 00 	addb	%al, (%eax)
+     6ee:	00 00 	addb	%al, (%eax)
+     6f0:	00 00 	addb	%al, (%eax)
+     6f2:	00 00 	addb	%al, (%eax)
+     6f4:	00 00 	addb	%al, (%eax)
+     6f6:	00 00 	addb	%al, (%eax)
+     6f8:	00 00 	addb	%al, (%eax)
+     6fa:	00 00 	addb	%al, (%eax)
+     6fc:	00 00 	addb	%al, (%eax)
+     6fe:	00 00 	addb	%al, (%eax)
+     700:	00 00 	addb	%al, (%eax)
+     702:	00 00 	addb	%al, (%eax)
+     704:	00 00 	addb	%al, (%eax)
+     706:	00 00 	addb	%al, (%eax)
+     708:	00 00 	addb	%al, (%eax)
+     70a:	00 00 	addb	%al, (%eax)
+     70c:	00 00 	addb	%al, (%eax)
+     70e:	00 00 	addb	%al, (%eax)
+     710:	00 00 	addb	%al, (%eax)
+     712:	00 00 	addb	%al, (%eax)
+     714:	00 00 	addb	%al, (%eax)
+     716:	00 00 	addb	%al, (%eax)
+     718:	00 00 	addb	%al, (%eax)
+     71a:	00 00 	addb	%al, (%eax)
+     71c:	00 00 	addb	%al, (%eax)
+     71e:	00 00 	addb	%al, (%eax)
+     720:	00 00 	addb	%al, (%eax)
+     722:	00 00 	addb	%al, (%eax)
+     724:	00 00 	addb	%al, (%eax)
+     726:	00 00 	addb	%al, (%eax)
+     728:	00 00 	addb	%al, (%eax)
+     72a:	00 00 	addb	%al, (%eax)
+     72c:	00 00 	addb	%al, (%eax)
+     72e:	00 00 	addb	%al, (%eax)
+     730:	00 00 	addb	%al, (%eax)
+     732:	00 00 	addb	%al, (%eax)
+     734:	00 00 	addb	%al, (%eax)
+     736:	00 00 	addb	%al, (%eax)
+     738:	00 00 	addb	%al, (%eax)
+     73a:	00 00 	addb	%al, (%eax)
+     73c:	00 00 	addb	%al, (%eax)
+     73e:	00 00 	addb	%al, (%eax)
+     740:	00 00 	addb	%al, (%eax)
+     742:	00 00 	addb	%al, (%eax)
+     744:	00 00 	addb	%al, (%eax)
+     746:	00 00 	addb	%al, (%eax)
+     748:	00 00 	addb	%al, (%eax)
+     74a:	00 00 	addb	%al, (%eax)
+     74c:	00 00 	addb	%al, (%eax)
+     74e:	00 00 	addb	%al, (%eax)
+     750:	00 00 	addb	%al, (%eax)
+     752:	00 00 	addb	%al, (%eax)
+     754:	00 00 	addb	%al, (%eax)
+     756:	00 00 	addb	%al, (%eax)
+     758:	00 00 	addb	%al, (%eax)
+     75a:	00 00 	addb	%al, (%eax)
+     75c:	00 00 	addb	%al, (%eax)
+     75e:	00 00 	addb	%al, (%eax)
+     760:	00 00 	addb	%al, (%eax)
+     762:	00 00 	addb	%al, (%eax)
+     764:	00 00 	addb	%al, (%eax)
+     766:	00 00 	addb	%al, (%eax)
+     768:	00 00 	addb	%al, (%eax)
+     76a:	00 00 	addb	%al, (%eax)
+     76c:	00 00 	addb	%al, (%eax)
+     76e:	00 00 	addb	%al, (%eax)
+     770:	00 00 	addb	%al, (%eax)
+     772:	00 00 	addb	%al, (%eax)
+     774:	00 00 	addb	%al, (%eax)
+     776:	00 00 	addb	%al, (%eax)
+     778:	00 00 	addb	%al, (%eax)
+     77a:	00 00 	addb	%al, (%eax)
+     77c:	00 00 	addb	%al, (%eax)
+     77e:	00 00 	addb	%al, (%eax)
+     780:	00 00 	addb	%al, (%eax)
+     782:	00 00 	addb	%al, (%eax)
+     784:	00 00 	addb	%al, (%eax)
+     786:	00 00 	addb	%al, (%eax)
+     788:	00 00 	addb	%al, (%eax)
+     78a:	00 00 	addb	%al, (%eax)
+     78c:	00 00 	addb	%al, (%eax)
+     78e:	00 00 	addb	%al, (%eax)
+     790:	00 00 	addb	%al, (%eax)
+     792:	00 00 	addb	%al, (%eax)
+     794:	00 00 	addb	%al, (%eax)
+     796:	00 00 	addb	%al, (%eax)
+     798:	00 00 	addb	%al, (%eax)
+     79a:	00 00 	addb	%al, (%eax)
+     79c:	00 00 	addb	%al, (%eax)
+     79e:	00 00 	addb	%al, (%eax)
+     7a0:	00 00 	addb	%al, (%eax)
+     7a2:	00 00 	addb	%al, (%eax)
+     7a4:	00 00 	addb	%al, (%eax)
+     7a6:	00 00 	addb	%al, (%eax)
+     7a8:	00 00 	addb	%al, (%eax)
+     7aa:	00 00 	addb	%al, (%eax)
+     7ac:	00 00 	addb	%al, (%eax)
+     7ae:	00 00 	addb	%al, (%eax)
+     7b0:	00 00 	addb	%al, (%eax)
+     7b2:	00 00 	addb	%al, (%eax)
+     7b4:	00 00 	addb	%al, (%eax)
+     7b6:	00 00 	addb	%al, (%eax)
+     7b8:	00 00 	addb	%al, (%eax)
+     7ba:	00 00 	addb	%al, (%eax)
+     7bc:	00 00 	addb	%al, (%eax)
+     7be:	00 00 	addb	%al, (%eax)
+     7c0:	00 00 	addb	%al, (%eax)
+     7c2:	00 00 	addb	%al, (%eax)
+     7c4:	00 00 	addb	%al, (%eax)
+     7c6:	00 00 	addb	%al, (%eax)
+     7c8:	00 00 	addb	%al, (%eax)
+     7ca:	00 00 	addb	%al, (%eax)
+     7cc:	00 00 	addb	%al, (%eax)
+     7ce:	00 00 	addb	%al, (%eax)
+     7d0:	00 00 	addb	%al, (%eax)
+     7d2:	00 00 	addb	%al, (%eax)
+     7d4:	00 00 	addb	%al, (%eax)
+     7d6:	00 00 	addb	%al, (%eax)
+     7d8:	00 00 	addb	%al, (%eax)
+     7da:	00 00 	addb	%al, (%eax)
+     7dc:	00 00 	addb	%al, (%eax)
+     7de:	00 00 	addb	%al, (%eax)
+     7e0:	00 00 	addb	%al, (%eax)
+     7e2:	00 00 	addb	%al, (%eax)
+     7e4:	00 00 	addb	%al, (%eax)
+     7e6:	00 00 	addb	%al, (%eax)
+     7e8:	00 00 	addb	%al, (%eax)
+     7ea:	00 00 	addb	%al, (%eax)
+     7ec:	00 00 	addb	%al, (%eax)
+     7ee:	00 00 	addb	%al, (%eax)
+     7f0:	00 00 	addb	%al, (%eax)
+     7f2:	00 00 	addb	%al, (%eax)
+     7f4:	00 00 	addb	%al, (%eax)
+     7f6:	00 00 	addb	%al, (%eax)
+     7f8:	00 00 	addb	%al, (%eax)
+     7fa:	00 00 	addb	%al, (%eax)
+     7fc:	00 00 	addb	%al, (%eax)
+     7fe:	00 00 	addb	%al, (%eax)
+     800:	00 00 	addb	%al, (%eax)
+     802:	00 00 	addb	%al, (%eax)
+     804:	00 00 	addb	%al, (%eax)
+     806:	00 00 	addb	%al, (%eax)
+     808:	00 00 	addb	%al, (%eax)
+     80a:	00 00 	addb	%al, (%eax)
+     80c:	00 00 	addb	%al, (%eax)
+     80e:	00 00 	addb	%al, (%eax)
+     810:	00 00 	addb	%al, (%eax)
+     812:	00 00 	addb	%al, (%eax)
+     814:	00 00 	addb	%al, (%eax)
+     816:	00 00 	addb	%al, (%eax)
+     818:	00 00 	addb	%al, (%eax)
+     81a:	00 00 	addb	%al, (%eax)
+     81c:	00 00 	addb	%al, (%eax)
+     81e:	00 00 	addb	%al, (%eax)
+     820:	00 00 	addb	%al, (%eax)
+     822:	00 00 	addb	%al, (%eax)
+     824:	00 00 	addb	%al, (%eax)
+     826:	00 00 	addb	%al, (%eax)
+     828:	00 00 	addb	%al, (%eax)
+     82a:	00 00 	addb	%al, (%eax)
+     82c:	00 00 	addb	%al, (%eax)
+     82e:	00 00 	addb	%al, (%eax)
+     830:	00 00 	addb	%al, (%eax)
+     832:	00 00 	addb	%al, (%eax)
+     834:	00 00 	addb	%al, (%eax)
+     836:	00 00 	addb	%al, (%eax)
+     838:	00 00 	addb	%al, (%eax)
+     83a:	00 00 	addb	%al, (%eax)
+     83c:	00 00 	addb	%al, (%eax)
+     83e:	00 00 	addb	%al, (%eax)
+     840:	00 00 	addb	%al, (%eax)
+     842:	00 00 	addb	%al, (%eax)
+     844:	00 00 	addb	%al, (%eax)
+     846:	00 00 	addb	%al, (%eax)
+     848:	00 00 	addb	%al, (%eax)
+     84a:	00 00 	addb	%al, (%eax)
+     84c:	00 00 	addb	%al, (%eax)
+     84e:	00 00 	addb	%al, (%eax)
+     850:	00 00 	addb	%al, (%eax)
+     852:	00 00 	addb	%al, (%eax)
+     854:	00 00 	addb	%al, (%eax)
+     856:	00 00 	addb	%al, (%eax)
+     858:	00 00 	addb	%al, (%eax)
+     85a:	00 00 	addb	%al, (%eax)
+     85c:	00 00 	addb	%al, (%eax)
+     85e:	00 00 	addb	%al, (%eax)
+     860:	00 00 	addb	%al, (%eax)
+     862:	00 00 	addb	%al, (%eax)
+     864:	00 00 	addb	%al, (%eax)
+     866:	00 00 	addb	%al, (%eax)
+     868:	00 00 	addb	%al, (%eax)
+     86a:	00 00 	addb	%al, (%eax)
+     86c:	00 00 	addb	%al, (%eax)
+     86e:	00 00 	addb	%al, (%eax)
+     870:	00 00 	addb	%al, (%eax)
+     872:	00 00 	addb	%al, (%eax)
+     874:	00 00 	addb	%al, (%eax)
+     876:	00 00 	addb	%al, (%eax)
+     878:	00 00 	addb	%al, (%eax)
+     87a:	00 00 	addb	%al, (%eax)
+     87c:	00 00 	addb	%al, (%eax)
+     87e:	00 00 	addb	%al, (%eax)
+     880:	00 00 	addb	%al, (%eax)
+     882:	00 00 	addb	%al, (%eax)
+     884:	00 00 	addb	%al, (%eax)
+     886:	00 00 	addb	%al, (%eax)
+     888:	00 00 	addb	%al, (%eax)
+     88a:	00 00 	addb	%al, (%eax)
+     88c:	00 00 	addb	%al, (%eax)
+     88e:	00 00 	addb	%al, (%eax)
+     890:	00 00 	addb	%al, (%eax)
+     892:	00 00 	addb	%al, (%eax)
+     894:	00 00 	addb	%al, (%eax)
+     896:	00 00 	addb	%al, (%eax)
+     898:	00 00 	addb	%al, (%eax)
+     89a:	00 00 	addb	%al, (%eax)
+     89c:	00 00 	addb	%al, (%eax)
+     89e:	00 00 	addb	%al, (%eax)
+     8a0:	00 00 	addb	%al, (%eax)
+     8a2:	00 00 	addb	%al, (%eax)
+     8a4:	00 00 	addb	%al, (%eax)
+     8a6:	00 00 	addb	%al, (%eax)
+     8a8:	00 00 	addb	%al, (%eax)
+     8aa:	00 00 	addb	%al, (%eax)
+     8ac:	00 00 	addb	%al, (%eax)
+     8ae:	00 00 	addb	%al, (%eax)
+     8b0:	00 00 	addb	%al, (%eax)
+     8b2:	00 00 	addb	%al, (%eax)
+     8b4:	00 00 	addb	%al, (%eax)
+     8b6:	00 00 	addb	%al, (%eax)
+     8b8:	00 00 	addb	%al, (%eax)
+     8ba:	00 00 	addb	%al, (%eax)
+     8bc:	00 00 	addb	%al, (%eax)
+     8be:	00 00 	addb	%al, (%eax)
+     8c0:	00 00 	addb	%al, (%eax)
+     8c2:	00 00 	addb	%al, (%eax)
+     8c4:	00 00 	addb	%al, (%eax)
+     8c6:	00 00 	addb	%al, (%eax)
+     8c8:	00 00 	addb	%al, (%eax)
+     8ca:	00 00 	addb	%al, (%eax)
+     8cc:	00 00 	addb	%al, (%eax)
+     8ce:	00 00 	addb	%al, (%eax)
+     8d0:	00 00 	addb	%al, (%eax)
+     8d2:	00 00 	addb	%al, (%eax)
+     8d4:	00 00 	addb	%al, (%eax)
+     8d6:	00 00 	addb	%al, (%eax)
+     8d8:	00 00 	addb	%al, (%eax)
+     8da:	00 00 	addb	%al, (%eax)
+     8dc:	00 00 	addb	%al, (%eax)
+     8de:	00 00 	addb	%al, (%eax)
+     8e0:	00 00 	addb	%al, (%eax)
+     8e2:	00 00 	addb	%al, (%eax)
+     8e4:	00 00 	addb	%al, (%eax)
+     8e6:	00 00 	addb	%al, (%eax)
+     8e8:	00 00 	addb	%al, (%eax)
+     8ea:	00 00 	addb	%al, (%eax)
+     8ec:	00 00 	addb	%al, (%eax)
+     8ee:	00 00 	addb	%al, (%eax)
+     8f0:	00 00 	addb	%al, (%eax)
+     8f2:	00 00 	addb	%al, (%eax)
+     8f4:	00 00 	addb	%al, (%eax)
+     8f6:	00 00 	addb	%al, (%eax)
+     8f8:	00 00 	addb	%al, (%eax)
+     8fa:	00 00 	addb	%al, (%eax)
+     8fc:	00 00 	addb	%al, (%eax)
+     8fe:	00 00 	addb	%al, (%eax)
+     900:	00 00 	addb	%al, (%eax)
+     902:	00 00 	addb	%al, (%eax)
+     904:	00 00 	addb	%al, (%eax)
+     906:	00 00 	addb	%al, (%eax)
+     908:	00 00 	addb	%al, (%eax)
+     90a:	00 00 	addb	%al, (%eax)
+     90c:	00 00 	addb	%al, (%eax)
+     90e:	00 00 	addb	%al, (%eax)
+     910:	00 00 	addb	%al, (%eax)
+     912:	00 00 	addb	%al, (%eax)
+     914:	00 00 	addb	%al, (%eax)
+     916:	00 00 	addb	%al, (%eax)
+     918:	00 00 	addb	%al, (%eax)
+     91a:	00 00 	addb	%al, (%eax)
+     91c:	00 00 	addb	%al, (%eax)
+     91e:	00 00 	addb	%al, (%eax)
+     920:	00 00 	addb	%al, (%eax)
+     922:	00 00 	addb	%al, (%eax)
+     924:	00 00 	addb	%al, (%eax)
+     926:	00 00 	addb	%al, (%eax)
+     928:	00 00 	addb	%al, (%eax)
+     92a:	00 00 	addb	%al, (%eax)
+     92c:	00 00 	addb	%al, (%eax)
+     92e:	00 00 	addb	%al, (%eax)
+     930:	00 00 	addb	%al, (%eax)
+     932:	00 00 	addb	%al, (%eax)
+     934:	00 00 	addb	%al, (%eax)
+     936:	00 00 	addb	%al, (%eax)
+     938:	00 00 	addb	%al, (%eax)
+     93a:	00 00 	addb	%al, (%eax)
+     93c:	00 00 	addb	%al, (%eax)
+     93e:	00 00 	addb	%al, (%eax)
+     940:	00 00 	addb	%al, (%eax)
+     942:	00 00 	addb	%al, (%eax)
+     944:	00 00 	addb	%al, (%eax)
+     946:	00 00 	addb	%al, (%eax)
+     948:	00 00 	addb	%al, (%eax)
+     94a:	00 00 	addb	%al, (%eax)
+     94c:	00 00 	addb	%al, (%eax)
+     94e:	00 00 	addb	%al, (%eax)
+     950:	00 00 	addb	%al, (%eax)
+     952:	00 00 	addb	%al, (%eax)
+     954:	00 00 	addb	%al, (%eax)
+     956:	00 00 	addb	%al, (%eax)
+     958:	00 00 	addb	%al, (%eax)
+     95a:	00 00 	addb	%al, (%eax)
+     95c:	00 00 	addb	%al, (%eax)
+     95e:	00 00 	addb	%al, (%eax)
+     960:	00 00 	addb	%al, (%eax)
+     962:	00 00 	addb	%al, (%eax)
+     964:	00 00 	addb	%al, (%eax)
+     966:	00 00 	addb	%al, (%eax)
+     968:	00 00 	addb	%al, (%eax)
+     96a:	00 00 	addb	%al, (%eax)
+     96c:	00 00 	addb	%al, (%eax)
+     96e:	00 00 	addb	%al, (%eax)
+     970:	00 00 	addb	%al, (%eax)
+     972:	00 00 	addb	%al, (%eax)
+     974:	00 00 	addb	%al, (%eax)
+     976:	00 00 	addb	%al, (%eax)
+     978:	00 00 	addb	%al, (%eax)
+     97a:	00 00 	addb	%al, (%eax)
+     97c:	00 00 	addb	%al, (%eax)
+     97e:	00 00 	addb	%al, (%eax)
+     980:	00 00 	addb	%al, (%eax)
+     982:	00 00 	addb	%al, (%eax)
+     984:	00 00 	addb	%al, (%eax)
+     986:	00 00 	addb	%al, (%eax)
+     988:	00 00 	addb	%al, (%eax)
+     98a:	00 00 	addb	%al, (%eax)
+     98c:	00 00 	addb	%al, (%eax)
+     98e:	00 00 	addb	%al, (%eax)
+     990:	00 00 	addb	%al, (%eax)
+     992:	00 00 	addb	%al, (%eax)
+     994:	00 00 	addb	%al, (%eax)
+     996:	00 00 	addb	%al, (%eax)
+     998:	00 00 	addb	%al, (%eax)
+     99a:	00 00 	addb	%al, (%eax)
+     99c:	00 00 	addb	%al, (%eax)
+     99e:	00 00 	addb	%al, (%eax)
+     9a0:	00 00 	addb	%al, (%eax)
+     9a2:	00 00 	addb	%al, (%eax)
+     9a4:	00 00 	addb	%al, (%eax)
+     9a6:	00 00 	addb	%al, (%eax)
+     9a8:	00 00 	addb	%al, (%eax)
+     9aa:	00 00 	addb	%al, (%eax)
+     9ac:	00 00 	addb	%al, (%eax)
+     9ae:	00 00 	addb	%al, (%eax)
+     9b0:	00 00 	addb	%al, (%eax)
+     9b2:	00 00 	addb	%al, (%eax)
+     9b4:	00 00 	addb	%al, (%eax)
+     9b6:	00 00 	addb	%al, (%eax)
+     9b8:	00 00 	addb	%al, (%eax)
+     9ba:	00 00 	addb	%al, (%eax)
+     9bc:	00 00 	addb	%al, (%eax)
+     9be:	00 00 	addb	%al, (%eax)
+     9c0:	00 00 	addb	%al, (%eax)
+     9c2:	00 00 	addb	%al, (%eax)
+     9c4:	00 00 	addb	%al, (%eax)
+     9c6:	00 00 	addb	%al, (%eax)
+     9c8:	00 00 	addb	%al, (%eax)
+     9ca:	00 00 	addb	%al, (%eax)
+     9cc:	00 00 	addb	%al, (%eax)
+     9ce:	00 00 	addb	%al, (%eax)
+     9d0:	00 00 	addb	%al, (%eax)
+     9d2:	00 00 	addb	%al, (%eax)
+     9d4:	00 00 	addb	%al, (%eax)
+     9d6:	00 00 	addb	%al, (%eax)
+     9d8:	00 00 	addb	%al, (%eax)
+     9da:	00 00 	addb	%al, (%eax)
+     9dc:	00 00 	addb	%al, (%eax)
+     9de:	00 00 	addb	%al, (%eax)
+     9e0:	00 00 	addb	%al, (%eax)
+     9e2:	00 00 	addb	%al, (%eax)
+     9e4:	00 00 	addb	%al, (%eax)
+     9e6:	00 00 	addb	%al, (%eax)
+     9e8:	00 00 	addb	%al, (%eax)
+     9ea:	00 00 	addb	%al, (%eax)
+     9ec:	00 00 	addb	%al, (%eax)
+     9ee:	00 00 	addb	%al, (%eax)
+     9f0:	00 00 	addb	%al, (%eax)
+     9f2:	00 00 	addb	%al, (%eax)
+     9f4:	00 00 	addb	%al, (%eax)
+     9f6:	00 00 	addb	%al, (%eax)
+     9f8:	00 00 	addb	%al, (%eax)
+     9fa:	00 00 	addb	%al, (%eax)
+     9fc:	00 00 	addb	%al, (%eax)
+     9fe:	00 00 	addb	%al, (%eax)
+     a00:	00 00 	addb	%al, (%eax)
+     a02:	00 00 	addb	%al, (%eax)
+     a04:	00 00 	addb	%al, (%eax)
+     a06:	00 00 	addb	%al, (%eax)
+     a08:	00 00 	addb	%al, (%eax)
+     a0a:	00 00 	addb	%al, (%eax)
+     a0c:	00 00 	addb	%al, (%eax)
+     a0e:	00 00 	addb	%al, (%eax)
+     a10:	00 00 	addb	%al, (%eax)
+     a12:	00 00 	addb	%al, (%eax)
+     a14:	00 00 	addb	%al, (%eax)
+     a16:	00 00 	addb	%al, (%eax)
+     a18:	00 00 	addb	%al, (%eax)
+     a1a:	00 00 	addb	%al, (%eax)
+     a1c:	00 00 	addb	%al, (%eax)
+     a1e:	00 00 	addb	%al, (%eax)
+     a20:	00 00 	addb	%al, (%eax)
+     a22:	00 00 	addb	%al, (%eax)
+     a24:	00 00 	addb	%al, (%eax)
+     a26:	00 00 	addb	%al, (%eax)
+     a28:	00 00 	addb	%al, (%eax)
+     a2a:	00 00 	addb	%al, (%eax)
+     a2c:	00 00 	addb	%al, (%eax)
+     a2e:	00 00 	addb	%al, (%eax)
+     a30:	00 00 	addb	%al, (%eax)
+     a32:	00 00 	addb	%al, (%eax)
+     a34:	00 00 	addb	%al, (%eax)
+     a36:	00 00 	addb	%al, (%eax)
+     a38:	00 00 	addb	%al, (%eax)
+     a3a:	00 00 	addb	%al, (%eax)
+     a3c:	00 00 	addb	%al, (%eax)
+     a3e:	00 00 	addb	%al, (%eax)
+     a40:	00 00 	addb	%al, (%eax)
+     a42:	00 00 	addb	%al, (%eax)
+     a44:	00 00 	addb	%al, (%eax)
+     a46:	00 00 	addb	%al, (%eax)
+     a48:	00 00 	addb	%al, (%eax)
+     a4a:	00 00 	addb	%al, (%eax)
+     a4c:	00 00 	addb	%al, (%eax)
+     a4e:	00 00 	addb	%al, (%eax)
+     a50:	00 00 	addb	%al, (%eax)
+     a52:	00 00 	addb	%al, (%eax)
+     a54:	00 00 	addb	%al, (%eax)
+     a56:	00 00 	addb	%al, (%eax)
+     a58:	00 00 	addb	%al, (%eax)
+     a5a:	00 00 	addb	%al, (%eax)
+     a5c:	00 00 	addb	%al, (%eax)
+     a5e:	00 00 	addb	%al, (%eax)
+
+gdt:
+     a60:	00 00 	addb	%al, (%eax)
+     a62:	00 00 	addb	%al, (%eax)
+     a64:	00 00 	addb	%al, (%eax)
+     a66:	00 00 	addb	%al, (%eax)
+     a68:	ff 3f  <unknown>
+     a6a:	00 00 	addb	%al, (%eax)
+     a6c:	00 9a c0 00 ff 3f 	addb	%bl, 1073676480(%edx)
+     a72:	00 00 	addb	%al, (%eax)
+     a74:	00 92 c0 00 02 00 	addb	%dl, 131264(%edx)
+     a7a:	00 80 0b 92 c0 00 	addb	%al, 12620299(%eax)
+     a80:	68 00 a0 0c 00 	pushl	$827392
+     a85:	e9 00 00 00 00 	jmp	0 <LDT0_SEL+0xa62>
+     a8a:	00 00 	addb	%al, (%eax)
+     a8c:	00 00 	addb	%al, (%eax)
+     a8e:	00 00 	addb	%al, (%eax)
+     a90:	00 00 	addb	%al, (%eax)
+     a92:	00 00 	addb	%al, (%eax)
+     a94:	00 00 	addb	%al, (%eax)
+     a96:	00 00 	addb	%al, (%eax)
+     a98:	00 00 	addb	%al, (%eax)
+     a9a:	00 00 	addb	%al, (%eax)
+     a9c:	00 00 	addb	%al, (%eax)
+     a9e:	00 00 	addb	%al, (%eax)
+     aa0:	00 00 	addb	%al, (%eax)
+     aa2:	00 00 	addb	%al, (%eax)
+     aa4:	00 00 	addb	%al, (%eax)
+     aa6:	00 00 	addb	%al, (%eax)
+     aa8:	00 00 	addb	%al, (%eax)
+     aaa:	00 00 	addb	%al, (%eax)
+     aac:	00 00 	addb	%al, (%eax)
+     aae:	00 00 	addb	%al, (%eax)
+     ab0:	00 00 	addb	%al, (%eax)
+     ab2:	00 00 	addb	%al, (%eax)
+     ab4:	00 00 	addb	%al, (%eax)
+     ab6:	00 00 	addb	%al, (%eax)
+     ab8:	00 00 	addb	%al, (%eax)
+     aba:	00 00 	addb	%al, (%eax)
+     abc:	00 00 	addb	%al, (%eax)
+     abe:	00 00 	addb	%al, (%eax)
+     ac0:	00 00 	addb	%al, (%eax)
+     ac2:	00 00 	addb	%al, (%eax)
+     ac4:	00 00 	addb	%al, (%eax)
+     ac6:	00 00 	addb	%al, (%eax)
+     ac8:	00 00 	addb	%al, (%eax)
+     aca:	00 00 	addb	%al, (%eax)
+     acc:	00 00 	addb	%al, (%eax)
+     ace:	00 00 	addb	%al, (%eax)
+     ad0:	00 00 	addb	%al, (%eax)
+     ad2:	00 00 	addb	%al, (%eax)
+     ad4:	00 00 	addb	%al, (%eax)
+     ad6:	00 00 	addb	%al, (%eax)
+     ad8:	00 00 	addb	%al, (%eax)
+     ada:	00 00 	addb	%al, (%eax)
+     adc:	00 00 	addb	%al, (%eax)
+     ade:	00 00 	addb	%al, (%eax)
+     ae0:	00 00 	addb	%al, (%eax)
+     ae2:	00 00 	addb	%al, (%eax)
+     ae4:	00 00 	addb	%al, (%eax)
+     ae6:	00 00 	addb	%al, (%eax)
+     ae8:	00 00 	addb	%al, (%eax)
+     aea:	00 00 	addb	%al, (%eax)
+     aec:	00 00 	addb	%al, (%eax)
+     aee:	00 00 	addb	%al, (%eax)
+     af0:	00 00 	addb	%al, (%eax)
+     af2:	00 00 	addb	%al, (%eax)
+     af4:	00 00 	addb	%al, (%eax)
+     af6:	00 00 	addb	%al, (%eax)
+     af8:	00 00 	addb	%al, (%eax)
+     afa:	00 00 	addb	%al, (%eax)
+     afc:	00 00 	addb	%al, (%eax)
+     afe:	00 00 	addb	%al, (%eax)
+     b00:	00 00 	addb	%al, (%eax)
+     b02:	00 00 	addb	%al, (%eax)
+     b04:	00 00 	addb	%al, (%eax)
+     b06:	00 00 	addb	%al, (%eax)
+     b08:	00 00 	addb	%al, (%eax)
+     b0a:	00 00 	addb	%al, (%eax)
+     b0c:	00 00 	addb	%al, (%eax)
+     b0e:	00 00 	addb	%al, (%eax)
+     b10:	00 00 	addb	%al, (%eax)
+     b12:	00 00 	addb	%al, (%eax)
+     b14:	00 00 	addb	%al, (%eax)
+     b16:	00 00 	addb	%al, (%eax)
+     b18:	00 00 	addb	%al, (%eax)
+     b1a:	00 00 	addb	%al, (%eax)
+     b1c:	00 00 	addb	%al, (%eax)
+     b1e:	00 00 	addb	%al, (%eax)
+     b20:	00 00 	addb	%al, (%eax)
+     b22:	00 00 	addb	%al, (%eax)
+     b24:	00 00 	addb	%al, (%eax)
+     b26:	00 00 	addb	%al, (%eax)
+     b28:	00 00 	addb	%al, (%eax)
+     b2a:	00 00 	addb	%al, (%eax)
+     b2c:	00 00 	addb	%al, (%eax)
+     b2e:	00 00 	addb	%al, (%eax)
+     b30:	00 00 	addb	%al, (%eax)
+     b32:	00 00 	addb	%al, (%eax)
+     b34:	00 00 	addb	%al, (%eax)
+     b36:	00 00 	addb	%al, (%eax)
+     b38:	00 00 	addb	%al, (%eax)
+     b3a:	00 00 	addb	%al, (%eax)
+     b3c:	00 00 	addb	%al, (%eax)
+     b3e:	00 00 	addb	%al, (%eax)
+     b40:	00 00 	addb	%al, (%eax)
+     b42:	00 00 	addb	%al, (%eax)
+     b44:	00 00 	addb	%al, (%eax)
+     b46:	00 00 	addb	%al, (%eax)
+     b48:	00 00 	addb	%al, (%eax)
+     b4a:	00 00 	addb	%al, (%eax)
+     b4c:	00 00 	addb	%al, (%eax)
+     b4e:	00 00 	addb	%al, (%eax)
+     b50:	00 00 	addb	%al, (%eax)
+     b52:	00 00 	addb	%al, (%eax)
+     b54:	00 00 	addb	%al, (%eax)
+     b56:	00 00 	addb	%al, (%eax)
+     b58:	00 00 	addb	%al, (%eax)
+     b5a:	00 00 	addb	%al, (%eax)
+     b5c:	00 00 	addb	%al, (%eax)
+     b5e:	00 00 	addb	%al, (%eax)
+     b60:	00 00 	addb	%al, (%eax)
+     b62:	00 00 	addb	%al, (%eax)
+     b64:	00 00 	addb	%al, (%eax)
+     b66:	00 00 	addb	%al, (%eax)
+     b68:	00 00 	addb	%al, (%eax)
+     b6a:	00 00 	addb	%al, (%eax)
+     b6c:	00 00 	addb	%al, (%eax)
+     b6e:	00 00 	addb	%al, (%eax)
+     b70:	00 00 	addb	%al, (%eax)
+     b72:	00 00 	addb	%al, (%eax)
+     b74:	00 00 	addb	%al, (%eax)
+     b76:	00 00 	addb	%al, (%eax)
+     b78:	00 00 	addb	%al, (%eax)
+     b7a:	00 00 	addb	%al, (%eax)
+     b7c:	00 00 	addb	%al, (%eax)
+     b7e:	00 00 	addb	%al, (%eax)
+     b80:	00 00 	addb	%al, (%eax)
+     b82:	00 00 	addb	%al, (%eax)
+     b84:	00 00 	addb	%al, (%eax)
+     b86:	00 00 	addb	%al, (%eax)
+     b88:	00 00 	addb	%al, (%eax)
+     b8a:	00 00 	addb	%al, (%eax)
+     b8c:	00 00 	addb	%al, (%eax)
+     b8e:	00 00 	addb	%al, (%eax)
+     b90:	00 00 	addb	%al, (%eax)
+     b92:	00 00 	addb	%al, (%eax)
+     b94:	00 00 	addb	%al, (%eax)
+     b96:	00 00 	addb	%al, (%eax)
+     b98:	00 00 	addb	%al, (%eax)
+     b9a:	00 00 	addb	%al, (%eax)
+     b9c:	00 00 	addb	%al, (%eax)
+     b9e:	00 00 	addb	%al, (%eax)
+     ba0:	00 00 	addb	%al, (%eax)
+     ba2:	00 00 	addb	%al, (%eax)
+     ba4:	00 00 	addb	%al, (%eax)
+     ba6:	00 00 	addb	%al, (%eax)
+     ba8:	00 00 	addb	%al, (%eax)
+     baa:	00 00 	addb	%al, (%eax)
+     bac:	00 00 	addb	%al, (%eax)
+     bae:	00 00 	addb	%al, (%eax)
+     bb0:	00 00 	addb	%al, (%eax)
+     bb2:	00 00 	addb	%al, (%eax)
+     bb4:	00 00 	addb	%al, (%eax)
+     bb6:	00 00 	addb	%al, (%eax)
+     bb8:	00 00 	addb	%al, (%eax)
+     bba:	00 00 	addb	%al, (%eax)
+     bbc:	00 00 	addb	%al, (%eax)
+     bbe:	00 00 	addb	%al, (%eax)
+     bc0:	00 00 	addb	%al, (%eax)
+     bc2:	00 00 	addb	%al, (%eax)
+     bc4:	00 00 	addb	%al, (%eax)
+     bc6:	00 00 	addb	%al, (%eax)
+     bc8:	00 00 	addb	%al, (%eax)
+     bca:	00 00 	addb	%al, (%eax)
+     bcc:	00 00 	addb	%al, (%eax)
+     bce:	00 00 	addb	%al, (%eax)
+     bd0:	00 00 	addb	%al, (%eax)
+     bd2:	00 00 	addb	%al, (%eax)
+     bd4:	00 00 	addb	%al, (%eax)
+     bd6:	00 00 	addb	%al, (%eax)
+     bd8:	00 00 	addb	%al, (%eax)
+     bda:	00 00 	addb	%al, (%eax)
+     bdc:	00 00 	addb	%al, (%eax)
+     bde:	00 00 	addb	%al, (%eax)
+     be0:	00 00 	addb	%al, (%eax)
+     be2:	00 00 	addb	%al, (%eax)
+     be4:	00 00 	addb	%al, (%eax)
+     be6:	00 00 	addb	%al, (%eax)
+     be8:	00 00 	addb	%al, (%eax)
+     bea:	00 00 	addb	%al, (%eax)
+     bec:	00 00 	addb	%al, (%eax)
+     bee:	00 00 	addb	%al, (%eax)
+     bf0:	00 00 	addb	%al, (%eax)
+     bf2:	00 00 	addb	%al, (%eax)
+     bf4:	00 00 	addb	%al, (%eax)
+     bf6:	00 00 	addb	%al, (%eax)
+     bf8:	00 00 	addb	%al, (%eax)
+     bfa:	00 00 	addb	%al, (%eax)
+     bfc:	00 00 	addb	%al, (%eax)
+     bfe:	00 00 	addb	%al, (%eax)
+     c00:	00 00 	addb	%al, (%eax)
+     c02:	00 00 	addb	%al, (%eax)
+     c04:	00 00 	addb	%al, (%eax)
+     c06:	00 00 	addb	%al, (%eax)
+     c08:	00 00 	addb	%al, (%eax)
+     c0a:	00 00 	addb	%al, (%eax)
+     c0c:	00 00 	addb	%al, (%eax)
+     c0e:	00 00 	addb	%al, (%eax)
+     c10:	00 00 	addb	%al, (%eax)
+     c12:	00 00 	addb	%al, (%eax)
+     c14:	00 00 	addb	%al, (%eax)
+     c16:	00 00 	addb	%al, (%eax)
+     c18:	00 00 	addb	%al, (%eax)
+     c1a:	00 00 	addb	%al, (%eax)
+     c1c:	00 00 	addb	%al, (%eax)
+     c1e:	00 00 	addb	%al, (%eax)
+     c20:	00 00 	addb	%al, (%eax)
+     c22:	00 00 	addb	%al, (%eax)
+     c24:	00 00 	addb	%al, (%eax)
+     c26:	00 00 	addb	%al, (%eax)
+     c28:	00 00 	addb	%al, (%eax)
+     c2a:	00 00 	addb	%al, (%eax)
+     c2c:	00 00 	addb	%al, (%eax)
+     c2e:	00 00 	addb	%al, (%eax)
+     c30:	00 00 	addb	%al, (%eax)
+     c32:	00 00 	addb	%al, (%eax)
+     c34:	00 00 	addb	%al, (%eax)
+     c36:	00 00 	addb	%al, (%eax)
+     c38:	00 00 	addb	%al, (%eax)
+     c3a:	00 00 	addb	%al, (%eax)
+     c3c:	00 00 	addb	%al, (%eax)
+     c3e:	00 00 	addb	%al, (%eax)
+     c40:	00 00 	addb	%al, (%eax)
+     c42:	00 00 	addb	%al, (%eax)
+     c44:	00 00 	addb	%al, (%eax)
+     c46:	00 00 	addb	%al, (%eax)
+     c48:	00 00 	addb	%al, (%eax)
+     c4a:	00 00 	addb	%al, (%eax)
+     c4c:	00 00 	addb	%al, (%eax)
+     c4e:	00 00 	addb	%al, (%eax)
+     c50:	00 00 	addb	%al, (%eax)
+     c52:	00 00 	addb	%al, (%eax)
+     c54:	00 00 	addb	%al, (%eax)
+     c56:	00 00 	addb	%al, (%eax)
+     c58:	00 00 	addb	%al, (%eax)
+     c5a:	00 00 	addb	%al, (%eax)
+     c5c:	00 00 	addb	%al, (%eax)
+     c5e:	00 00 	addb	%al, (%eax)
+     c60:	00 00 	addb	%al, (%eax)
+     c62:	00 00 	addb	%al, (%eax)
+     c64:	00 00 	addb	%al, (%eax)
+     c66:	00 00 	addb	%al, (%eax)
+     c68:	00 00 	addb	%al, (%eax)
+     c6a:	00 00 	addb	%al, (%eax)
+     c6c:	00 00 	addb	%al, (%eax)
+     c6e:	00 00 	addb	%al, (%eax)
+     c70:	00 00 	addb	%al, (%eax)
+     c72:	00 00 	addb	%al, (%eax)
+     c74:	00 00 	addb	%al, (%eax)
+     c76:	00 00 	addb	%al, (%eax)
+     c78:	00 00 	addb	%al, (%eax)
+     c7a:	00 00 	addb	%al, (%eax)
+     c7c:	00 00 	addb	%al, (%eax)
+     c7e:	00 00 	addb	%al, (%eax)
+     c80:	00 00 	addb	%al, (%eax)
+     c82:	00 00 	addb	%al, (%eax)
+     c84:	00 00 	addb	%al, (%eax)
+     c86:	00 00 	addb	%al, (%eax)
+
+ldt0:
+     c88:	00 00 	addb	%al, (%eax)
+     c8a:	00 00 	addb	%al, (%eax)
+     c8c:	00 00 	addb	%al, (%eax)
+     c8e:	00 00 	addb	%al, (%eax)
+     c90:	ff 03 	incl	(%ebx)
+     c92:	00 00 	addb	%al, (%eax)
+     c94:	00 fa 	addb	%bh, %dl
+     c96:	c0 00 ff 	rolb	$255, (%eax)
+     c99:	03 00 	addl	(%eax), %eax
+     c9b:	00 00 	addb	%al, (%eax)
+     c9d:	f2 c0 00 00 	repne		rolb	$0, (%eax)
+
+tss0:
+     ca0:	00 00 	addb	%al, (%eax)
+     ca2:	00 00 	addb	%al, (%eax)
+     ca4:	08 0f 	orb	%cl, (%edi)
+     ca6:	00 00 	addb	%al, (%eax)
+     ca8:	10 00 	adcb	%al, (%eax)
+     caa:	00 00 	addb	%al, (%eax)
+     cac:	00 00 	addb	%al, (%eax)
+     cae:	00 00 	addb	%al, (%eax)
+     cb0:	00 00 	addb	%al, (%eax)
+     cb2:	00 00 	addb	%al, (%eax)
+     cb4:	00 00 	addb	%al, (%eax)
+     cb6:	00 00 	addb	%al, (%eax)
+     cb8:	00 00 	addb	%al, (%eax)
+     cba:	00 00 	addb	%al, (%eax)
+     cbc:	00 00 	addb	%al, (%eax)
+     cbe:	00 00 	addb	%al, (%eax)
+     cc0:	00 00 	addb	%al, (%eax)
+     cc2:	00 00 	addb	%al, (%eax)
+     cc4:	00 00 	addb	%al, (%eax)
+     cc6:	00 00 	addb	%al, (%eax)
+     cc8:	00 00 	addb	%al, (%eax)
+     cca:	00 00 	addb	%al, (%eax)
+     ccc:	00 00 	addb	%al, (%eax)
+     cce:	00 00 	addb	%al, (%eax)
+     cd0:	00 00 	addb	%al, (%eax)
+     cd2:	00 00 	addb	%al, (%eax)
+     cd4:	00 00 	addb	%al, (%eax)
+     cd6:	00 00 	addb	%al, (%eax)
+     cd8:	00 00 	addb	%al, (%eax)
+     cda:	00 00 	addb	%al, (%eax)
+     cdc:	00 00 	addb	%al, (%eax)
+     cde:	00 00 	addb	%al, (%eax)
+     ce0:	00 00 	addb	%al, (%eax)
+     ce2:	00 00 	addb	%al, (%eax)
+     ce4:	00 00 	addb	%al, (%eax)
+     ce6:	00 00 	addb	%al, (%eax)
+     ce8:	00 00 	addb	%al, (%eax)
+     cea:	00 00 	addb	%al, (%eax)
+     cec:	00 00 	addb	%al, (%eax)
+     cee:	00 00 	addb	%al, (%eax)
+     cf0:	00 00 	addb	%al, (%eax)
+     cf2:	00 00 	addb	%al, (%eax)
+     cf4:	00 00 	addb	%al, (%eax)
+     cf6:	00 00 	addb	%al, (%eax)
+     cf8:	00 00 	addb	%al, (%eax)
+     cfa:	00 00 	addb	%al, (%eax)
+     cfc:	00 00 	addb	%al, (%eax)
+     cfe:	00 00 	addb	%al, (%eax)
+     d00:	28 00 	subb	%al, (%eax)
+     d02:	00 00 	addb	%al, (%eax)
+     d04:	00 00 	addb	%al, (%eax)
+     d06:	00 08 	addb	%cl, (%eax)
+     d08:	00 00 	addb	%al, (%eax)
+     d0a:	00 00 	addb	%al, (%eax)
+     d0c:	00 00 	addb	%al, (%eax)
+     d0e:	00 00 	addb	%al, (%eax)
+     d10:	00 00 	addb	%al, (%eax)
+     d12:	00 00 	addb	%al, (%eax)
+     d14:	00 00 	addb	%al, (%eax)
+     d16:	00 00 	addb	%al, (%eax)
+     d18:	00 00 	addb	%al, (%eax)
+     d1a:	00 00 	addb	%al, (%eax)
+     d1c:	00 00 	addb	%al, (%eax)
+     d1e:	00 00 	addb	%al, (%eax)
+     d20:	00 00 	addb	%al, (%eax)
+     d22:	00 00 	addb	%al, (%eax)
+     d24:	00 00 	addb	%al, (%eax)
+     d26:	00 00 	addb	%al, (%eax)
+     d28:	00 00 	addb	%al, (%eax)
+     d2a:	00 00 	addb	%al, (%eax)
+     d2c:	00 00 	addb	%al, (%eax)
+     d2e:	00 00 	addb	%al, (%eax)
+     d30:	00 00 	addb	%al, (%eax)
+     d32:	00 00 	addb	%al, (%eax)
+     d34:	00 00 	addb	%al, (%eax)
+     d36:	00 00 	addb	%al, (%eax)
+     d38:	00 00 	addb	%al, (%eax)
+     d3a:	00 00 	addb	%al, (%eax)
+     d3c:	00 00 	addb	%al, (%eax)
+     d3e:	00 00 	addb	%al, (%eax)
+     d40:	00 00 	addb	%al, (%eax)
+     d42:	00 00 	addb	%al, (%eax)
+     d44:	00 00 	addb	%al, (%eax)
+     d46:	00 00 	addb	%al, (%eax)
+     d48:	00 00 	addb	%al, (%eax)
+     d4a:	00 00 	addb	%al, (%eax)
+     d4c:	00 00 	addb	%al, (%eax)
+     d4e:	00 00 	addb	%al, (%eax)
+     d50:	00 00 	addb	%al, (%eax)
+     d52:	00 00 	addb	%al, (%eax)
+     d54:	00 00 	addb	%al, (%eax)
+     d56:	00 00 	addb	%al, (%eax)
+     d58:	00 00 	addb	%al, (%eax)
+     d5a:	00 00 	addb	%al, (%eax)
+     d5c:	00 00 	addb	%al, (%eax)
+     d5e:	00 00 	addb	%al, (%eax)
+     d60:	00 00 	addb	%al, (%eax)
+     d62:	00 00 	addb	%al, (%eax)
+     d64:	00 00 	addb	%al, (%eax)
+     d66:	00 00 	addb	%al, (%eax)
+     d68:	00 00 	addb	%al, (%eax)
+     d6a:	00 00 	addb	%al, (%eax)
+     d6c:	00 00 	addb	%al, (%eax)
+     d6e:	00 00 	addb	%al, (%eax)
+     d70:	00 00 	addb	%al, (%eax)
+     d72:	00 00 	addb	%al, (%eax)
+     d74:	00 00 	addb	%al, (%eax)
+     d76:	00 00 	addb	%al, (%eax)
+     d78:	00 00 	addb	%al, (%eax)
+     d7a:	00 00 	addb	%al, (%eax)
+     d7c:	00 00 	addb	%al, (%eax)
+     d7e:	00 00 	addb	%al, (%eax)
+     d80:	00 00 	addb	%al, (%eax)
+     d82:	00 00 	addb	%al, (%eax)
+     d84:	00 00 	addb	%al, (%eax)
+     d86:	00 00 	addb	%al, (%eax)
+     d88:	00 00 	addb	%al, (%eax)
+     d8a:	00 00 	addb	%al, (%eax)
+     d8c:	00 00 	addb	%al, (%eax)
+     d8e:	00 00 	addb	%al, (%eax)
+     d90:	00 00 	addb	%al, (%eax)
+     d92:	00 00 	addb	%al, (%eax)
+     d94:	00 00 	addb	%al, (%eax)
+     d96:	00 00 	addb	%al, (%eax)
+     d98:	00 00 	addb	%al, (%eax)
+     d9a:	00 00 	addb	%al, (%eax)
+     d9c:	00 00 	addb	%al, (%eax)
+     d9e:	00 00 	addb	%al, (%eax)
+     da0:	00 00 	addb	%al, (%eax)
+     da2:	00 00 	addb	%al, (%eax)
+     da4:	00 00 	addb	%al, (%eax)
+     da6:	00 00 	addb	%al, (%eax)
+     da8:	00 00 	addb	%al, (%eax)
+     daa:	00 00 	addb	%al, (%eax)
+     dac:	00 00 	addb	%al, (%eax)
+     dae:	00 00 	addb	%al, (%eax)
+     db0:	00 00 	addb	%al, (%eax)
+     db2:	00 00 	addb	%al, (%eax)
+     db4:	00 00 	addb	%al, (%eax)
+     db6:	00 00 	addb	%al, (%eax)
+     db8:	00 00 	addb	%al, (%eax)
+     dba:	00 00 	addb	%al, (%eax)
+     dbc:	00 00 	addb	%al, (%eax)
+     dbe:	00 00 	addb	%al, (%eax)
+     dc0:	00 00 	addb	%al, (%eax)
+     dc2:	00 00 	addb	%al, (%eax)
+     dc4:	00 00 	addb	%al, (%eax)
+     dc6:	00 00 	addb	%al, (%eax)
+     dc8:	00 00 	addb	%al, (%eax)
+     dca:	00 00 	addb	%al, (%eax)
+     dcc:	00 00 	addb	%al, (%eax)
+     dce:	00 00 	addb	%al, (%eax)
+     dd0:	00 00 	addb	%al, (%eax)
+     dd2:	00 00 	addb	%al, (%eax)
+     dd4:	00 00 	addb	%al, (%eax)
+     dd6:	00 00 	addb	%al, (%eax)
+     dd8:	00 00 	addb	%al, (%eax)
+     dda:	00 00 	addb	%al, (%eax)
+     ddc:	00 00 	addb	%al, (%eax)
+     dde:	00 00 	addb	%al, (%eax)
+     de0:	00 00 	addb	%al, (%eax)
+     de2:	00 00 	addb	%al, (%eax)
+     de4:	00 00 	addb	%al, (%eax)
+     de6:	00 00 	addb	%al, (%eax)
+     de8:	00 00 	addb	%al, (%eax)
+     dea:	00 00 	addb	%al, (%eax)
+     dec:	00 00 	addb	%al, (%eax)
+     dee:	00 00 	addb	%al, (%eax)
+     df0:	00 00 	addb	%al, (%eax)
+     df2:	00 00 	addb	%al, (%eax)
+     df4:	00 00 	addb	%al, (%eax)
+     df6:	00 00 	addb	%al, (%eax)
+     df8:	00 00 	addb	%al, (%eax)
+     dfa:	00 00 	addb	%al, (%eax)
+     dfc:	00 00 	addb	%al, (%eax)
+     dfe:	00 00 	addb	%al, (%eax)
+     e00:	00 00 	addb	%al, (%eax)
+     e02:	00 00 	addb	%al, (%eax)
+     e04:	00 00 	addb	%al, (%eax)
+     e06:	00 00 	addb	%al, (%eax)
+     e08:	00 00 	addb	%al, (%eax)
+     e0a:	00 00 	addb	%al, (%eax)
+     e0c:	00 00 	addb	%al, (%eax)
+     e0e:	00 00 	addb	%al, (%eax)
+     e10:	00 00 	addb	%al, (%eax)
+     e12:	00 00 	addb	%al, (%eax)
+     e14:	00 00 	addb	%al, (%eax)
+     e16:	00 00 	addb	%al, (%eax)
+     e18:	00 00 	addb	%al, (%eax)
+     e1a:	00 00 	addb	%al, (%eax)
+     e1c:	00 00 	addb	%al, (%eax)
+     e1e:	00 00 	addb	%al, (%eax)
+     e20:	00 00 	addb	%al, (%eax)
+     e22:	00 00 	addb	%al, (%eax)
+     e24:	00 00 	addb	%al, (%eax)
+     e26:	00 00 	addb	%al, (%eax)
+     e28:	00 00 	addb	%al, (%eax)
+     e2a:	00 00 	addb	%al, (%eax)
+     e2c:	00 00 	addb	%al, (%eax)
+     e2e:	00 00 	addb	%al, (%eax)
+     e30:	00 00 	addb	%al, (%eax)
+     e32:	00 00 	addb	%al, (%eax)
+     e34:	00 00 	addb	%al, (%eax)
+     e36:	00 00 	addb	%al, (%eax)
+     e38:	00 00 	addb	%al, (%eax)
+     e3a:	00 00 	addb	%al, (%eax)
+     e3c:	00 00 	addb	%al, (%eax)
+     e3e:	00 00 	addb	%al, (%eax)
+     e40:	00 00 	addb	%al, (%eax)
+     e42:	00 00 	addb	%al, (%eax)
+     e44:	00 00 	addb	%al, (%eax)
+     e46:	00 00 	addb	%al, (%eax)
+     e48:	00 00 	addb	%al, (%eax)
+     e4a:	00 00 	addb	%al, (%eax)
+     e4c:	00 00 	addb	%al, (%eax)
+     e4e:	00 00 	addb	%al, (%eax)
+     e50:	00 00 	addb	%al, (%eax)
+     e52:	00 00 	addb	%al, (%eax)
+     e54:	00 00 	addb	%al, (%eax)
+     e56:	00 00 	addb	%al, (%eax)
+     e58:	00 00 	addb	%al, (%eax)
+     e5a:	00 00 	addb	%al, (%eax)
+     e5c:	00 00 	addb	%al, (%eax)
+     e5e:	00 00 	addb	%al, (%eax)
+     e60:	00 00 	addb	%al, (%eax)
+     e62:	00 00 	addb	%al, (%eax)
+     e64:	00 00 	addb	%al, (%eax)
+     e66:	00 00 	addb	%al, (%eax)
+     e68:	00 00 	addb	%al, (%eax)
+     e6a:	00 00 	addb	%al, (%eax)
+     e6c:	00 00 	addb	%al, (%eax)
+     e6e:	00 00 	addb	%al, (%eax)
+     e70:	00 00 	addb	%al, (%eax)
+     e72:	00 00 	addb	%al, (%eax)
+     e74:	00 00 	addb	%al, (%eax)
+     e76:	00 00 	addb	%al, (%eax)
+     e78:	00 00 	addb	%al, (%eax)
+     e7a:	00 00 	addb	%al, (%eax)
+     e7c:	00 00 	addb	%al, (%eax)
+     e7e:	00 00 	addb	%al, (%eax)
+     e80:	00 00 	addb	%al, (%eax)
+     e82:	00 00 	addb	%al, (%eax)
+     e84:	00 00 	addb	%al, (%eax)
+     e86:	00 00 	addb	%al, (%eax)
+     e88:	00 00 	addb	%al, (%eax)
+     e8a:	00 00 	addb	%al, (%eax)
+     e8c:	00 00 	addb	%al, (%eax)
+     e8e:	00 00 	addb	%al, (%eax)
+     e90:	00 00 	addb	%al, (%eax)
+     e92:	00 00 	addb	%al, (%eax)
+     e94:	00 00 	addb	%al, (%eax)
+     e96:	00 00 	addb	%al, (%eax)
+     e98:	00 00 	addb	%al, (%eax)
+     e9a:	00 00 	addb	%al, (%eax)
+     e9c:	00 00 	addb	%al, (%eax)
+     e9e:	00 00 	addb	%al, (%eax)
+     ea0:	00 00 	addb	%al, (%eax)
+     ea2:	00 00 	addb	%al, (%eax)
+     ea4:	00 00 	addb	%al, (%eax)
+     ea6:	00 00 	addb	%al, (%eax)
+     ea8:	00 00 	addb	%al, (%eax)
+     eaa:	00 00 	addb	%al, (%eax)
+     eac:	00 00 	addb	%al, (%eax)
+     eae:	00 00 	addb	%al, (%eax)
+     eb0:	00 00 	addb	%al, (%eax)
+     eb2:	00 00 	addb	%al, (%eax)
+     eb4:	00 00 	addb	%al, (%eax)
+     eb6:	00 00 	addb	%al, (%eax)
+     eb8:	00 00 	addb	%al, (%eax)
+     eba:	00 00 	addb	%al, (%eax)
+     ebc:	00 00 	addb	%al, (%eax)
+     ebe:	00 00 	addb	%al, (%eax)
+     ec0:	00 00 	addb	%al, (%eax)
+     ec2:	00 00 	addb	%al, (%eax)
+     ec4:	00 00 	addb	%al, (%eax)
+     ec6:	00 00 	addb	%al, (%eax)
+     ec8:	00 00 	addb	%al, (%eax)
+     eca:	00 00 	addb	%al, (%eax)
+     ecc:	00 00 	addb	%al, (%eax)
+     ece:	00 00 	addb	%al, (%eax)
+     ed0:	00 00 	addb	%al, (%eax)
+     ed2:	00 00 	addb	%al, (%eax)
+     ed4:	00 00 	addb	%al, (%eax)
+     ed6:	00 00 	addb	%al, (%eax)
+     ed8:	00 00 	addb	%al, (%eax)
+     eda:	00 00 	addb	%al, (%eax)
+     edc:	00 00 	addb	%al, (%eax)
+     ede:	00 00 	addb	%al, (%eax)
+     ee0:	00 00 	addb	%al, (%eax)
+     ee2:	00 00 	addb	%al, (%eax)
+     ee4:	00 00 	addb	%al, (%eax)
+     ee6:	00 00 	addb	%al, (%eax)
+     ee8:	00 00 	addb	%al, (%eax)
+     eea:	00 00 	addb	%al, (%eax)
+     eec:	00 00 	addb	%al, (%eax)
+     eee:	00 00 	addb	%al, (%eax)
+     ef0:	00 00 	addb	%al, (%eax)
+     ef2:	00 00 	addb	%al, (%eax)
+     ef4:	00 00 	addb	%al, (%eax)
+     ef6:	00 00 	addb	%al, (%eax)
+     ef8:	00 00 	addb	%al, (%eax)
+     efa:	00 00 	addb	%al, (%eax)
+     efc:	00 00 	addb	%al, (%eax)
+     efe:	00 00 	addb	%al, (%eax)
+     f00:	00 00 	addb	%al, (%eax)
+     f02:	00 00 	addb	%al, (%eax)
+     f04:	00 00 	addb	%al, (%eax)
+     f06:	00 00 	addb	%al, (%eax)
+
+krn_stk0:
+     f08:	00 00 	addb	%al, (%eax)
+     f0a:	00 00 	addb	%al, (%eax)
+     f0c:	00 00 	addb	%al, (%eax)
+     f0e:	00 00 	addb	%al, (%eax)
+     f10:	00 00 	addb	%al, (%eax)
+     f12:	00 00 	addb	%al, (%eax)
+     f14:	00 00 	addb	%al, (%eax)
+     f16:	00 00 	addb	%al, (%eax)
+     f18:	00 00 	addb	%al, (%eax)
+     f1a:	00 00 	addb	%al, (%eax)
+     f1c:	00 00 	addb	%al, (%eax)
+     f1e:	00 00 	addb	%al, (%eax)
+     f20:	00 00 	addb	%al, (%eax)
+     f22:	00 00 	addb	%al, (%eax)
+     f24:	00 00 	addb	%al, (%eax)
+     f26:	00 00 	addb	%al, (%eax)
+     f28:	00 00 	addb	%al, (%eax)
+     f2a:	00 00 	addb	%al, (%eax)
+     f2c:	00 00 	addb	%al, (%eax)
+     f2e:	00 00 	addb	%al, (%eax)
+     f30:	00 00 	addb	%al, (%eax)
+     f32:	00 00 	addb	%al, (%eax)
+     f34:	00 00 	addb	%al, (%eax)
+     f36:	00 00 	addb	%al, (%eax)
+     f38:	00 00 	addb	%al, (%eax)
+     f3a:	00 00 	addb	%al, (%eax)
+     f3c:	00 00 	addb	%al, (%eax)
+     f3e:	00 00 	addb	%al, (%eax)
+     f40:	00 00 	addb	%al, (%eax)
+     f42:	00 00 	addb	%al, (%eax)
+     f44:	00 00 	addb	%al, (%eax)
+     f46:	00 00 	addb	%al, (%eax)
+     f48:	00 00 	addb	%al, (%eax)
+     f4a:	00 00 	addb	%al, (%eax)
+     f4c:	00 00 	addb	%al, (%eax)
+     f4e:	00 00 	addb	%al, (%eax)
+     f50:	00 00 	addb	%al, (%eax)
+     f52:	00 00 	addb	%al, (%eax)
+     f54:	00 00 	addb	%al, (%eax)
+     f56:	00 00 	addb	%al, (%eax)
+     f58:	00 00 	addb	%al, (%eax)
+     f5a:	00 00 	addb	%al, (%eax)
+     f5c:	00 00 	addb	%al, (%eax)
+     f5e:	00 00 	addb	%al, (%eax)
+     f60:	00 00 	addb	%al, (%eax)
+     f62:	00 00 	addb	%al, (%eax)
+     f64:	00 00 	addb	%al, (%eax)
+     f66:	00 00 	addb	%al, (%eax)
+     f68:	00 00 	addb	%al, (%eax)
+     f6a:	00 00 	addb	%al, (%eax)
+     f6c:	00 00 	addb	%al, (%eax)
+     f6e:	00 00 	addb	%al, (%eax)
+     f70:	00 00 	addb	%al, (%eax)
+     f72:	00 00 	addb	%al, (%eax)
+     f74:	00 00 	addb	%al, (%eax)
+     f76:	00 00 	addb	%al, (%eax)
+     f78:	00 00 	addb	%al, (%eax)
+     f7a:	00 00 	addb	%al, (%eax)
+     f7c:	00 00 	addb	%al, (%eax)
+     f7e:	00 00 	addb	%al, (%eax)
+     f80:	00 00 	addb	%al, (%eax)
+     f82:	00 00 	addb	%al, (%eax)
+     f84:	00 00 	addb	%al, (%eax)
+     f86:	00 00 	addb	%al, (%eax)
+     f88:	00 00 	addb	%al, (%eax)
+     f8a:	00 00 	addb	%al, (%eax)
+     f8c:	00 00 	addb	%al, (%eax)
+     f8e:	00 00 	addb	%al, (%eax)
+     f90:	00 00 	addb	%al, (%eax)
+     f92:	00 00 	addb	%al, (%eax)
+     f94:	00 00 	addb	%al, (%eax)
+     f96:	00 00 	addb	%al, (%eax)
+     f98:	00 00 	addb	%al, (%eax)
+     f9a:	00 00 	addb	%al, (%eax)
+     f9c:	00 00 	addb	%al, (%eax)
+     f9e:	00 00 	addb	%al, (%eax)
+     fa0:	00 00 	addb	%al, (%eax)
+     fa2:	00 00 	addb	%al, (%eax)
+     fa4:	00 00 	addb	%al, (%eax)
+     fa6:	00 00 	addb	%al, (%eax)
+     fa8:	00 00 	addb	%al, (%eax)
+     faa:	00 00 	addb	%al, (%eax)
+     fac:	00 00 	addb	%al, (%eax)
+     fae:	00 00 	addb	%al, (%eax)
+     fb0:	00 00 	addb	%al, (%eax)
+     fb2:	00 00 	addb	%al, (%eax)
+     fb4:	00 00 	addb	%al, (%eax)
+     fb6:	00 00 	addb	%al, (%eax)
+     fb8:	00 00 	addb	%al, (%eax)
+     fba:	00 00 	addb	%al, (%eax)
+     fbc:	00 00 	addb	%al, (%eax)
+     fbe:	00 00 	addb	%al, (%eax)
+     fc0:	00 00 	addb	%al, (%eax)
+     fc2:	00 00 	addb	%al, (%eax)
+     fc4:	00 00 	addb	%al, (%eax)
+     fc6:	00 00 	addb	%al, (%eax)
+     fc8:	00 00 	addb	%al, (%eax)
+     fca:	00 00 	addb	%al, (%eax)
+     fcc:	00 00 	addb	%al, (%eax)
+     fce:	00 00 	addb	%al, (%eax)
+     fd0:	00 00 	addb	%al, (%eax)
+     fd2:	00 00 	addb	%al, (%eax)
+     fd4:	00 00 	addb	%al, (%eax)
+     fd6:	00 00 	addb	%al, (%eax)
+     fd8:	00 00 	addb	%al, (%eax)
+     fda:	00 00 	addb	%al, (%eax)
+     fdc:	00 00 	addb	%al, (%eax)
+     fde:	00 00 	addb	%al, (%eax)
+     fe0:	00 00 	addb	%al, (%eax)
+     fe2:	00 00 	addb	%al, (%eax)
+     fe4:	00 00 	addb	%al, (%eax)
+     fe6:	00 00 	addb	%al, (%eax)
+     fe8:	00 00 	addb	%al, (%eax)
+     fea:	00 00 	addb	%al, (%eax)
+     fec:	00 00 	addb	%al, (%eax)
+     fee:	00 00 	addb	%al, (%eax)
+     ff0:	00 00 	addb	%al, (%eax)
+     ff2:	00 00 	addb	%al, (%eax)
+     ff4:	00 00 	addb	%al, (%eax)
+     ff6:	00 00 	addb	%al, (%eax)
+     ff8:	00 00 	addb	%al, (%eax)
+     ffa:	00 00 	addb	%al, (%eax)
+     ffc:	00 00 	addb	%al, (%eax)
+     ffe:	00 00 	addb	%al, (%eax)
+    1000:	00 00 	addb	%al, (%eax)
+    1002:	00 00 	addb	%al, (%eax)
+    1004:	00 00 	addb	%al, (%eax)
+    1006:	00 00 	addb	%al, (%eax)
+    1008:	00 00 	addb	%al, (%eax)
+    100a:	00 00 	addb	%al, (%eax)
+    100c:	00 00 	addb	%al, (%eax)
+    100e:	00 00 	addb	%al, (%eax)
+    1010:	00 00 	addb	%al, (%eax)
+    1012:	00 00 	addb	%al, (%eax)
+    1014:	00 00 	addb	%al, (%eax)
+    1016:	00 00 	addb	%al, (%eax)
+    1018:	00 00 	addb	%al, (%eax)
+    101a:	00 00 	addb	%al, (%eax)
+    101c:	00 00 	addb	%al, (%eax)
+    101e:	00 00 	addb	%al, (%eax)
+    1020:	00 00 	addb	%al, (%eax)
+    1022:	00 00 	addb	%al, (%eax)
+    1024:	00 00 	addb	%al, (%eax)
+    1026:	00 00 	addb	%al, (%eax)
+    1028:	00 00 	addb	%al, (%eax)
+    102a:	00 00 	addb	%al, (%eax)
+    102c:	00 00 	addb	%al, (%eax)
+    102e:	00 00 	addb	%al, (%eax)
+    1030:	00 00 	addb	%al, (%eax)
+    1032:	00 00 	addb	%al, (%eax)
+    1034:	00 00 	addb	%al, (%eax)
+    1036:	00 00 	addb	%al, (%eax)
+    1038:	00 00 	addb	%al, (%eax)
+    103a:	00 00 	addb	%al, (%eax)
+    103c:	00 00 	addb	%al, (%eax)
+    103e:	00 00 	addb	%al, (%eax)
+    1040:	00 00 	addb	%al, (%eax)
+    1042:	00 00 	addb	%al, (%eax)
+    1044:	00 00 	addb	%al, (%eax)
+    1046:	00 00 	addb	%al, (%eax)
+    1048:	00 00 	addb	%al, (%eax)
+    104a:	00 00 	addb	%al, (%eax)
+    104c:	00 00 	addb	%al, (%eax)
+    104e:	00 00 	addb	%al, (%eax)
+    1050:	00 00 	addb	%al, (%eax)
+    1052:	00 00 	addb	%al, (%eax)
+    1054:	00 00 	addb	%al, (%eax)
+    1056:	00 00 	addb	%al, (%eax)
+    1058:	00 00 	addb	%al, (%eax)
+    105a:	00 00 	addb	%al, (%eax)
+    105c:	00 00 	addb	%al, (%eax)
+    105e:	00 00 	addb	%al, (%eax)
+    1060:	00 00 	addb	%al, (%eax)
+    1062:	00 00 	addb	%al, (%eax)
+    1064:	00 00 	addb	%al, (%eax)
+    1066:	00 00 	addb	%al, (%eax)
+    1068:	00 00 	addb	%al, (%eax)
+    106a:	00 00 	addb	%al, (%eax)
+    106c:	00 00 	addb	%al, (%eax)
+    106e:	00 00 	addb	%al, (%eax)
+    1070:	00 00 	addb	%al, (%eax)
+    1072:	00 00 	addb	%al, (%eax)
+    1074:	00 00 	addb	%al, (%eax)
+    1076:	00 00 	addb	%al, (%eax)
+    1078:	00 00 	addb	%al, (%eax)
+    107a:	00 00 	addb	%al, (%eax)
+    107c:	00 00 	addb	%al, (%eax)
+    107e:	00 00 	addb	%al, (%eax)
+    1080:	00 00 	addb	%al, (%eax)
+    1082:	00 00 	addb	%al, (%eax)
+    1084:	00 00 	addb	%al, (%eax)
+    1086:	00 00 	addb	%al, (%eax)
+    1088:	00 00 	addb	%al, (%eax)
+    108a:	00 00 	addb	%al, (%eax)
+    108c:	00 00 	addb	%al, (%eax)
+    108e:	00 00 	addb	%al, (%eax)
+    1090:	00 00 	addb	%al, (%eax)
+    1092:	00 00 	addb	%al, (%eax)
+    1094:	00 00 	addb	%al, (%eax)
+    1096:	00 00 	addb	%al, (%eax)
+    1098:	00 00 	addb	%al, (%eax)
+    109a:	00 00 	addb	%al, (%eax)
+    109c:	00 00 	addb	%al, (%eax)
+    109e:	00 00 	addb	%al, (%eax)
+    10a0:	00 00 	addb	%al, (%eax)
+    10a2:	00 00 	addb	%al, (%eax)
+    10a4:	00 00 	addb	%al, (%eax)
+    10a6:	00 00 	addb	%al, (%eax)
+    10a8:	00 00 	addb	%al, (%eax)
+    10aa:	00 00 	addb	%al, (%eax)
+    10ac:	00 00 	addb	%al, (%eax)
+    10ae:	00 00 	addb	%al, (%eax)
+    10b0:	00 00 	addb	%al, (%eax)
+    10b2:	00 00 	addb	%al, (%eax)
+    10b4:	00 00 	addb	%al, (%eax)
+    10b6:	00 00 	addb	%al, (%eax)
+    10b8:	00 00 	addb	%al, (%eax)
+    10ba:	00 00 	addb	%al, (%eax)
+    10bc:	00 00 	addb	%al, (%eax)
+    10be:	00 00 	addb	%al, (%eax)
+    10c0:	00 00 	addb	%al, (%eax)
+    10c2:	00 00 	addb	%al, (%eax)
+    10c4:	00 00 	addb	%al, (%eax)
+    10c6:	00 00 	addb	%al, (%eax)
+    10c8:	00 00 	addb	%al, (%eax)
+    10ca:	00 00 	addb	%al, (%eax)
+    10cc:	00 00 	addb	%al, (%eax)
+    10ce:	00 00 	addb	%al, (%eax)
+    10d0:	00 00 	addb	%al, (%eax)
+    10d2:	00 00 	addb	%al, (%eax)
+    10d4:	00 00 	addb	%al, (%eax)
+    10d6:	00 00 	addb	%al, (%eax)
+    10d8:	00 00 	addb	%al, (%eax)
+    10da:	00 00 	addb	%al, (%eax)
+    10dc:	00 00 	addb	%al, (%eax)
+    10de:	00 00 	addb	%al, (%eax)
+    10e0:	00 00 	addb	%al, (%eax)
+    10e2:	00 00 	addb	%al, (%eax)
+    10e4:	00 00 	addb	%al, (%eax)
+    10e6:	00 00 	addb	%al, (%eax)
+    10e8:	00 00 	addb	%al, (%eax)
+    10ea:	00 00 	addb	%al, (%eax)
+    10ec:	00 00 	addb	%al, (%eax)
+    10ee:	00 00 	addb	%al, (%eax)
+    10f0:	00 00 	addb	%al, (%eax)
+    10f2:	00 00 	addb	%al, (%eax)
+    10f4:	00 00 	addb	%al, (%eax)
+    10f6:	00 00 	addb	%al, (%eax)
+    10f8:	00 00 	addb	%al, (%eax)
+    10fa:	00 00 	addb	%al, (%eax)
+    10fc:	00 00 	addb	%al, (%eax)
+    10fe:	00 00 	addb	%al, (%eax)
+    1100:	00 00 	addb	%al, (%eax)
+    1102:	00 00 	addb	%al, (%eax)
+    1104:	00 00 	addb	%al, (%eax)
+    1106:	00 00 	addb	%al, (%eax)
+
+init_stack:
+    1108:	08 11 	orb	%dl, (%ecx)
+    110a:	00 00 	addb	%al, (%eax)
+    110c:	10 00 	adcb	%al, (%eax)
+
+_e0:
+    110e:	e8 6b 06 00 00 	calll	1643 <LDT0_SEL+0x1756>
+    1113:	cf 	iretl
+
+_e1:
+    1114:	e8 7e 06 00 00 	calll	1662 <LDT0_SEL+0x176f>
+    1119:	cf 	iretl
+
+_e2:
+    111a:	e8 91 06 00 00 	calll	1681 <LDT0_SEL+0x1788>
+    111f:	cf 	iretl
+
+_e3:
+    1120:	e8 a4 06 00 00 	calll	1700 <LDT0_SEL+0x17a1>
+    1125:	cf 	iretl
+
+_e4:
+    1126:	e8 b7 06 00 00 	calll	1719 <LDT0_SEL+0x17ba>
+    112b:	cf 	iretl
+
+_e5:
+    112c:	e8 ca 06 00 00 	calll	1738 <LDT0_SEL+0x17d3>
+    1131:	cf 	iretl
+
+_e6:
+    1132:	e8 dd 06 00 00 	calll	1757 <LDT0_SEL+0x17ec>
+    1137:	cf 	iretl
+
+_e7:
+    1138:	e8 f0 06 00 00 	calll	1776 <LDT0_SEL+0x1805>
+    113d:	cf 	iretl
+
+_e8:
+    113e:	e8 03 07 00 00 	calll	1795 <LDT0_SEL+0x181e>
+    1143:	cf 	iretl
+
+_e9:
+    1144:	e8 16 07 00 00 	calll	1814 <LDT0_SEL+0x1837>
+    1149:	cf 	iretl
+
+_e10:
+    114a:	e8 29 07 00 00 	calll	1833 <LDT0_SEL+0x1850>
+    114f:	cf 	iretl
+
+_e11:
+    1150:	e8 3c 07 00 00 	calll	1852 <LDT0_SEL+0x1869>
+    1155:	cf 	iretl
+
+_e12:
+    1156:	e8 4f 07 00 00 	calll	1871 <LDT0_SEL+0x1882>
+    115b:	cf 	iretl
+
+_e13:
+    115c:	e8 62 07 00 00 	calll	1890 <LDT0_SEL+0x189b>
+    1161:	cf 	iretl
+
+_e14:
+    1162:	50 	pushl	%eax
+    1163:	0f 20 d0 	movl	%cr2, %eax
+    1166:	1e 	pushl	%ds
+    1167:	50 	pushl	%eax
+    1168:	b8 10 00 00 00 	movl	$16, %eax
+    116d:	8e d8 	movl	%eax, %ds
+    116f:	e8 23 0f 00 00 	calll	3875 <LDT0_SEL+0x206f>
+    1174:	83 c4 04 	addl	$4, %esp
+    1177:	1f 	popl	%ds
+    1178:	58 	popl	%eax
+    1179:	83 c4 04 	addl	$4, %esp
+    117c:	cf 	iretl
+
+_e15:
+    117d:	e8 5a 07 00 00 	calll	1882 <LDT0_SEL+0x18b4>
+    1182:	cf 	iretl
+
+_e16:
+    1183:	e8 6d 07 00 00 	calll	1901 <LDT0_SEL+0x18cd>
+    1188:	cf 	iretl
+
+test_sys_call:
+; /share/lan_main.c:38
+    1189:	55 	pushl	%ebp
+    118a:	89 e5 	movl	%esp, %ebp
+    118c:	83 ec 10 	subl	$16, %esp
+    118f:	b8 00 00 00 00 	movl	$0, %eax
+    1194:	cd 80 	int	$128
+    1196:	89 45 fc 	movl	%eax, -4(%ebp)
+    1199:	83 7d fc 00 	cmpl	$0, -4(%ebp)
+    119d:	78 05 	js	5 <LDT0_SEL+0x117c>
+    119f:	8b 45 fc 	movl	-4(%ebp), %eax
+    11a2:	eb 05 	jmp	5 <LDT0_SEL+0x1181>
+    11a4:	b8 ff ff ff ff 	movl	$4294967295, %eax
+    11a9:	c9 	leave
+    11aa:	c3 	retl
+
+fork1:
+; /share/lan_main.c:39
+    11ab:	55 	pushl	%ebp
+    11ac:	89 e5 	movl	%esp, %ebp
+    11ae:	83 ec 10 	subl	$16, %esp
+    11b1:	b8 01 00 00 00 	movl	$1, %eax
+    11b6:	cd 80 	int	$128
+    11b8:	89 45 fc 	movl	%eax, -4(%ebp)
+    11bb:	83 7d fc 00 	cmpl	$0, -4(%ebp)
+    11bf:	78 05 	js	5 <LDT0_SEL+0x119e>
+    11c1:	8b 45 fc 	movl	-4(%ebp), %eax
+    11c4:	eb 05 	jmp	5 <LDT0_SEL+0x11a3>
+    11c6:	b8 ff ff ff ff 	movl	$4294967295, %eax
+    11cb:	c9 	leave
+    11cc:	c3 	retl
+
+test_sys_call2:
+; /share/lan_main.c:40
+    11cd:	55 	pushl	%ebp
+    11ce:	89 e5 	movl	%esp, %ebp
+    11d0:	83 ec 10 	subl	$16, %esp
+    11d3:	b8 03 00 00 00 	movl	$3, %eax
+    11d8:	cd 80 	int	$128
+    11da:	89 45 fc 	movl	%eax, -4(%ebp)
+    11dd:	83 7d fc 00 	cmpl	$0, -4(%ebp)
+    11e1:	78 05 	js	5 <LDT0_SEL+0x11c0>
+    11e3:	8b 45 fc 	movl	-4(%ebp), %eax
+    11e6:	eb 05 	jmp	5 <LDT0_SEL+0x11c5>
+    11e8:	b8 ff ff ff ff 	movl	$4294967295, %eax
+    11ed:	c9 	leave
+    11ee:	c3 	retl
+
+s_print_str:
+; /share/lan_main.c:41
+    11ef:	55 	pushl	%ebp
+    11f0:	89 e5 	movl	%esp, %ebp
+    11f2:	53 	pushl	%ebx
+    11f3:	83 ec 10 	subl	$16, %esp
+    11f6:	8b 55 08 	movl	8(%ebp), %edx
+    11f9:	b8 04 00 00 00 	movl	$4, %eax
+    11fe:	89 d3 	movl	%edx, %ebx
+    1200:	cd 80 	int	$128
+    1202:	89 45 f8 	movl	%eax, -8(%ebp)
+    1205:	83 7d f8 00 	cmpl	$0, -8(%ebp)
+    1209:	78 05 	js	5 <LDT0_SEL+0x11e8>
+    120b:	8b 45 f8 	movl	-8(%ebp), %eax
+    120e:	eb 05 	jmp	5 <LDT0_SEL+0x11ed>
+    1210:	b8 ff ff ff ff 	movl	$4294967295, %eax
+    1215:	83 c4 10 	addl	$16, %esp
+    1218:	5b 	popl	%ebx
+    1219:	5d 	popl	%ebp
+    121a:	c3 	retl
+
+s_print_num:
+; /share/lan_main.c:42
+    121b:	55 	pushl	%ebp
+    121c:	89 e5 	movl	%esp, %ebp
+    121e:	53 	pushl	%ebx
+    121f:	83 ec 10 	subl	$16, %esp
+    1222:	b8 05 00 00 00 	movl	$5, %eax
+    1227:	8b 55 08 	movl	8(%ebp), %edx
+    122a:	89 d3 	movl	%edx, %ebx
+    122c:	cd 80 	int	$128
+    122e:	89 45 f8 	movl	%eax, -8(%ebp)
+    1231:	83 7d f8 00 	cmpl	$0, -8(%ebp)
+    1235:	78 05 	js	5 <LDT0_SEL+0x1214>
+    1237:	8b 45 f8 	movl	-8(%ebp), %eax
+    123a:	eb 05 	jmp	5 <LDT0_SEL+0x1219>
+    123c:	b8 ff ff ff ff 	movl	$4294967295, %eax
+    1241:	83 c4 10 	addl	$16, %esp
+    1244:	5b 	popl	%ebx
+    1245:	5d 	popl	%ebp
+    1246:	c3 	retl
+
+check_a20_valid:
+; /share/lan_main.c:45
+    1247:	55 	pushl	%ebp
+    1248:	89 e5 	movl	%esp, %ebp
+    124a:	83 ec 10 	subl	$16, %esp
+; /share/lan_main.c:46
+    124d:	c7 45 f8 00 00 00 00 	movl	$0, -8(%ebp)
+; /share/lan_main.c:47
+    1254:	c7 45 f4 00 00 10 00 	movl	$1048576, -12(%ebp)
+; /share/lan_main.c:48
+    125b:	c6 45 ff 00 	movb	$0, -1(%ebp)
+    125f:	eb 1d 	jmp	29 <LDT0_SEL+0x1256>
+; /share/lan_main.c:49
+    1261:	8b 45 f8 	movl	-8(%ebp), %eax
+    1264:	0f b6 55 ff 	movzbl	-1(%ebp), %edx
+    1268:	88 10 	movb	%dl, (%eax)
+; /share/lan_main.c:50
+    126a:	8b 45 f8 	movl	-8(%ebp), %eax
+    126d:	0f b6 10 	movzbl	(%eax), %edx
+    1270:	8b 45 f4 	movl	-12(%ebp), %eax
+    1273:	0f b6 00 	movzbl	(%eax), %eax
+    1276:	38 c2 	cmpb	%al, %dl
+    1278:	75 0c 	jne	12 <LDT0_SEL+0x125e>
+; /share/lan_main.c:48
+    127a:	80 45 ff 01 	addb	$1, -1(%ebp)
+    127e:	80 7d ff 09 	cmpb	$9, -1(%ebp)
+    1282:	76 dd 	jbe	-35 <LDT0_SEL+0x1239>
+; /share/lan_main.c:57
+    1284:	eb 01 	jmp	1 <LDT0_SEL+0x125f>
+; /share/lan_main.c:52
+    1286:	90 	nop
+; /share/lan_main.c:57
+    1287:	90 	nop
+    1288:	c9 	leave
+    1289:	c3 	retl
+
+lan_main:
+; /share/lan_main.c:60
+    128a:	55 	pushl	%ebp
+    128b:	89 e5 	movl	%esp, %ebp
+    128d:	53 	pushl	%ebx
+    128e:	83 ec 14 	subl	$20, %esp
+; /share/lan_main.c:61
+    1291:	e8 f9 ed ff ff 	calll	-4615 <LDT0_SEL+0x67>
+; /share/lan_main.c:62
+    1296:	e8 ac ff ff ff 	calll	-84 <LDT0_SEL+0x121f>
+; /share/lan_main.c:63
+    129b:	e8 c2 0b 00 00 	calll	3010 <LDT0_SEL+0x1e3a>
+; /share/lan_main.c:64
+    12a0:	e8 0d ee ff ff 	calll	-4595 <LDT0_SEL+0x8a>
+; /share/lan_main.c:65
+    12a5:	e8 1e ee ff ff 	calll	-4578 <LDT0_SEL+0xa0>
+; /share/lan_main.c:66
+    12aa:	b9 60 03 00 00 	movl	$864, %ecx
+    12af:	bb 64 03 00 00 	movl	$868, %ebx
+    12b4:	ba 24 01 00 00 	movl	$292, %edx
+    12b9:	b8 00 00 08 00 	movl	$524288, %eax
+    12be:	66 89 d0 	movw	%dx, %ax
+    12c1:	66 ba 00 8e 	movw	$36352, %dx
+    12c5:	89 01 	movl	%eax, (%ecx)
+    12c7:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:68
+    12c9:	b9 60 06 00 00 	movl	$1632, %ecx
+    12ce:	bb 64 06 00 00 	movl	$1636, %ebx
+    12d3:	ba 68 01 00 00 	movl	$360, %edx
+    12d8:	b8 00 00 08 00 	movl	$524288, %eax
+    12dd:	66 89 d0 	movw	%dx, %ax
+    12e0:	66 ba 00 ef 	movw	$61184, %dx
+    12e4:	89 01 	movl	%eax, (%ecx)
+    12e6:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:70
+    12e8:	b9 60 02 00 00 	movl	$608, %ecx
+    12ed:	bb 64 02 00 00 	movl	$612, %ebx
+    12f2:	ba 0e 11 00 00 	movl	$4366, %edx
+    12f7:	b8 00 00 08 00 	movl	$524288, %eax
+    12fc:	66 89 d0 	movw	%dx, %ax
+    12ff:	66 ba 00 8f 	movw	$36608, %dx
+    1303:	89 01 	movl	%eax, (%ecx)
+    1305:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:71
+    1307:	b9 68 02 00 00 	movl	$616, %ecx
+    130c:	bb 6c 02 00 00 	movl	$620, %ebx
+    1311:	ba 14 11 00 00 	movl	$4372, %edx
+    1316:	b8 00 00 08 00 	movl	$524288, %eax
+    131b:	66 89 d0 	movw	%dx, %ax
+    131e:	66 ba 00 8f 	movw	$36608, %dx
+    1322:	89 01 	movl	%eax, (%ecx)
+    1324:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:72
+    1326:	b9 70 02 00 00 	movl	$624, %ecx
+    132b:	bb 74 02 00 00 	movl	$628, %ebx
+    1330:	ba 1a 11 00 00 	movl	$4378, %edx
+    1335:	b8 00 00 08 00 	movl	$524288, %eax
+    133a:	66 89 d0 	movw	%dx, %ax
+    133d:	66 ba 00 8f 	movw	$36608, %dx
+    1341:	89 01 	movl	%eax, (%ecx)
+    1343:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:73
+    1345:	b9 78 02 00 00 	movl	$632, %ecx
+    134a:	bb 7c 02 00 00 	movl	$636, %ebx
+    134f:	ba 20 11 00 00 	movl	$4384, %edx
+    1354:	b8 00 00 08 00 	movl	$524288, %eax
+    1359:	66 89 d0 	movw	%dx, %ax
+    135c:	66 ba 00 ef 	movw	$61184, %dx
+    1360:	89 01 	movl	%eax, (%ecx)
+    1362:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:74
+    1364:	b9 80 02 00 00 	movl	$640, %ecx
+    1369:	bb 84 02 00 00 	movl	$644, %ebx
+    136e:	ba 26 11 00 00 	movl	$4390, %edx
+    1373:	b8 00 00 08 00 	movl	$524288, %eax
+    1378:	66 89 d0 	movw	%dx, %ax
+    137b:	66 ba 00 ef 	movw	$61184, %dx
+    137f:	89 01 	movl	%eax, (%ecx)
+    1381:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:75
+    1383:	b9 88 02 00 00 	movl	$648, %ecx
+    1388:	bb 8c 02 00 00 	movl	$652, %ebx
+    138d:	ba 2c 11 00 00 	movl	$4396, %edx
+    1392:	b8 00 00 08 00 	movl	$524288, %eax
+    1397:	66 89 d0 	movw	%dx, %ax
+    139a:	66 ba 00 ef 	movw	$61184, %dx
+    139e:	89 01 	movl	%eax, (%ecx)
+    13a0:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:76
+    13a2:	b9 90 02 00 00 	movl	$656, %ecx
+    13a7:	bb 94 02 00 00 	movl	$660, %ebx
+    13ac:	ba 32 11 00 00 	movl	$4402, %edx
+    13b1:	b8 00 00 08 00 	movl	$524288, %eax
+    13b6:	66 89 d0 	movw	%dx, %ax
+    13b9:	66 ba 00 8f 	movw	$36608, %dx
+    13bd:	89 01 	movl	%eax, (%ecx)
+    13bf:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:77
+    13c1:	b9 98 02 00 00 	movl	$664, %ecx
+    13c6:	bb 9c 02 00 00 	movl	$668, %ebx
+    13cb:	ba 38 11 00 00 	movl	$4408, %edx
+    13d0:	b8 00 00 08 00 	movl	$524288, %eax
+    13d5:	66 89 d0 	movw	%dx, %ax
+    13d8:	66 ba 00 8f 	movw	$36608, %dx
+    13dc:	89 01 	movl	%eax, (%ecx)
+    13de:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:78
+    13e0:	b9 a0 02 00 00 	movl	$672, %ecx
+    13e5:	bb a4 02 00 00 	movl	$676, %ebx
+    13ea:	ba 3e 11 00 00 	movl	$4414, %edx
+    13ef:	b8 00 00 08 00 	movl	$524288, %eax
+    13f4:	66 89 d0 	movw	%dx, %ax
+    13f7:	66 ba 00 8f 	movw	$36608, %dx
+    13fb:	89 01 	movl	%eax, (%ecx)
+    13fd:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:79
+    13ff:	b9 a8 02 00 00 	movl	$680, %ecx
+    1404:	bb ac 02 00 00 	movl	$684, %ebx
+    1409:	ba 44 11 00 00 	movl	$4420, %edx
+    140e:	b8 00 00 08 00 	movl	$524288, %eax
+    1413:	66 89 d0 	movw	%dx, %ax
+    1416:	66 ba 00 8f 	movw	$36608, %dx
+    141a:	89 01 	movl	%eax, (%ecx)
+    141c:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:80
+    141e:	b9 b0 02 00 00 	movl	$688, %ecx
+    1423:	bb b4 02 00 00 	movl	$692, %ebx
+    1428:	ba 4a 11 00 00 	movl	$4426, %edx
+    142d:	b8 00 00 08 00 	movl	$524288, %eax
+    1432:	66 89 d0 	movw	%dx, %ax
+    1435:	66 ba 00 8f 	movw	$36608, %dx
+    1439:	89 01 	movl	%eax, (%ecx)
+    143b:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:81
+    143d:	b9 b8 02 00 00 	movl	$696, %ecx
+    1442:	bb bc 02 00 00 	movl	$700, %ebx
+    1447:	ba 50 11 00 00 	movl	$4432, %edx
+    144c:	b8 00 00 08 00 	movl	$524288, %eax
+    1451:	66 89 d0 	movw	%dx, %ax
+    1454:	66 ba 00 8f 	movw	$36608, %dx
+    1458:	89 01 	movl	%eax, (%ecx)
+    145a:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:82
+    145c:	b9 c0 02 00 00 	movl	$704, %ecx
+    1461:	bb c4 02 00 00 	movl	$708, %ebx
+    1466:	ba 56 11 00 00 	movl	$4438, %edx
+    146b:	b8 00 00 08 00 	movl	$524288, %eax
+    1470:	66 89 d0 	movw	%dx, %ax
+    1473:	66 ba 00 8f 	movw	$36608, %dx
+    1477:	89 01 	movl	%eax, (%ecx)
+    1479:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:83
+    147b:	b9 c8 02 00 00 	movl	$712, %ecx
+    1480:	bb cc 02 00 00 	movl	$716, %ebx
+    1485:	ba 5c 11 00 00 	movl	$4444, %edx
+    148a:	b8 00 00 08 00 	movl	$524288, %eax
+    148f:	66 89 d0 	movw	%dx, %ax
+    1492:	66 ba 00 8f 	movw	$36608, %dx
+    1496:	89 01 	movl	%eax, (%ecx)
+    1498:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:84
+    149a:	b9 d0 02 00 00 	movl	$720, %ecx
+    149f:	bb d4 02 00 00 	movl	$724, %ebx
+    14a4:	ba 62 11 00 00 	movl	$4450, %edx
+    14a9:	b8 00 00 08 00 	movl	$524288, %eax
+    14ae:	66 89 d0 	movw	%dx, %ax
+    14b1:	66 ba 00 8f 	movw	$36608, %dx
+    14b5:	89 01 	movl	%eax, (%ecx)
+    14b7:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:85
+    14b9:	b9 d8 02 00 00 	movl	$728, %ecx
+    14be:	bb dc 02 00 00 	movl	$732, %ebx
+    14c3:	ba 7d 11 00 00 	movl	$4477, %edx
+    14c8:	b8 00 00 08 00 	movl	$524288, %eax
+    14cd:	66 89 d0 	movw	%dx, %ax
+    14d0:	66 ba 00 8f 	movw	$36608, %dx
+    14d4:	89 01 	movl	%eax, (%ecx)
+    14d6:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:86
+    14d8:	b9 e0 02 00 00 	movl	$736, %ecx
+    14dd:	bb e4 02 00 00 	movl	$740, %ebx
+    14e2:	ba 83 11 00 00 	movl	$4483, %edx
+    14e7:	b8 00 00 08 00 	movl	$524288, %eax
+    14ec:	66 89 d0 	movw	%dx, %ax
+    14ef:	66 ba 00 8f 	movw	$36608, %dx
+    14f3:	89 01 	movl	%eax, (%ecx)
+    14f5:	89 13 	movl	%edx, (%ebx)
+; /share/lan_main.c:87
+    14f7:	e8 12 04 00 00 	calll	1042 <LDT0_SEL+0x18e6>
+; /share/lan_main.c:88
+    14fc:	fb 	sti
+; /share/lan_main.c:89
+    14fd:	89 e0 	movl	%esp, %eax
+    14ff:	6a 17 	pushl	$23
+    1501:	50 	pushl	%eax
+    1502:	9c 	pushfl
+    1503:	6a 0f 	pushl	$15
+    1505:	68 0b 15 00 00 	pushl	$5387
+    150a:	cf 	iretl
+    150b:	b8 17 00 00 00 	movl	$23, %eax
+    1510:	8e d8 	movl	%eax, %ds
+    1512:	8e c0 	movl	%eax, %es
+    1514:	8e e0 	movl	%eax, %fs
+    1516:	8e e8 	movl	%eax, %gs
+; /share/lan_main.c:91
+    1518:	b8 01 00 00 00 	movl	$1, %eax
+    151d:	cd 80 	int	$128
+    151f:	85 c0 	testl	%eax, %eax
+    1521:	74 02 	je	2 <LDT0_SEL+0x14fd>
+    1523:	eb fe 	jmp	-2 <LDT0_SEL+0x14fb>
+; /share/lan_main.c:99
+    1525:	e8 81 fc ff ff 	calll	-895 <LDT0_SEL+0x1183>
+    152a:	85 c0 	testl	%eax, %eax
+    152c:	74 41 	je	65 <LDT0_SEL+0x1547>
+; /share/lan_main.c:100
+    152e:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+; /share/lan_main.c:102
+    1535:	83 45 f4 01 	addl	$1, -12(%ebp)
+; /share/lan_main.c:103
+    1539:	83 ec 0c 	subl	$12, %esp
+    153c:	68 1d 22 00 00 	pushl	$8733
+    1541:	e8 a9 fc ff ff 	calll	-855 <LDT0_SEL+0x11c7>
+    1546:	83 c4 10 	addl	$16, %esp
+; /share/lan_main.c:104
+    1549:	83 ec 0c 	subl	$12, %esp
+    154c:	ff 75 f4 	pushl	-12(%ebp)
+    154f:	e8 c7 fc ff ff 	calll	-825 <LDT0_SEL+0x11f3>
+    1554:	83 c4 10 	addl	$16, %esp
+; /share/lan_main.c:105
+    1557:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    155e:	eb 04 	jmp	4 <LDT0_SEL+0x153c>
+    1560:	83 45 f0 01 	addl	$1, -16(%ebp)
+    1564:	81 7d f0 ff e0 f5 05 	cmpl	$99999999, -16(%ebp)
+    156b:	7e f3 	jle	-13 <LDT0_SEL+0x1538>
+; /share/lan_main.c:102
+    156d:	eb c6 	jmp	-58 <LDT0_SEL+0x150d>
+; /share/lan_main.c:108
+    156f:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
+; /share/lan_main.c:110
+    1576:	83 45 ec 01 	addl	$1, -20(%ebp)
+; /share/lan_main.c:111
+    157a:	83 ec 0c 	subl	$12, %esp
+    157d:	68 2c 22 00 00 	pushl	$8748
+    1582:	e8 68 fc ff ff 	calll	-920 <LDT0_SEL+0x11c7>
+    1587:	83 c4 10 	addl	$16, %esp
+; /share/lan_main.c:112
+    158a:	83 ec 0c 	subl	$12, %esp
+    158d:	ff 75 ec 	pushl	-20(%ebp)
+    1590:	e8 86 fc ff ff 	calll	-890 <LDT0_SEL+0x11f3>
+    1595:	83 c4 10 	addl	$16, %esp
+; /share/lan_main.c:113
+    1598:	c7 45 e8 00 00 00 00 	movl	$0, -24(%ebp)
+    159f:	eb 04 	jmp	4 <LDT0_SEL+0x157d>
+    15a1:	83 45 e8 01 	addl	$1, -24(%ebp)
+    15a5:	81 7d e8 ff e0 f5 05 	cmpl	$99999999, -24(%ebp)
+    15ac:	7e f3 	jle	-13 <LDT0_SEL+0x1579>
+; /share/lan_main.c:110
+    15ae:	eb c6 	jmp	-58 <LDT0_SEL+0x154e>
+
+get_fs_byte:
+; /share/sys_call.c:5
+    15b0:	55 	pushl	%ebp
+    15b1:	89 e5 	movl	%esp, %ebp
+    15b3:	53 	pushl	%ebx
+; /share/sys_call.c:7
+    15b4:	8b 45 08 	movl	8(%ebp), %eax
+    15b7:	64 8a 00 	movb	%fs:(%eax), %al
+    15ba:	89 c3 	movl	%eax, %ebx
+; /share/sys_call.c:8
+    15bc:	89 d8 	movl	%ebx, %eax
+; /share/sys_call.c:9
+    15be:	5b 	popl	%ebx
+    15bf:	5d 	popl	%ebp
+    15c0:	c3 	retl
+
+_test_sys_call:
+; /share/sys_call.c:12
+    15c1:	55 	pushl	%ebp
+    15c2:	89 e5 	movl	%esp, %ebp
+    15c4:	83 ec 08 	subl	$8, %esp
+; /share/sys_call.c:13
+    15c7:	83 ec 0c 	subl	$12, %esp
+    15ca:	68 3b 22 00 00 	pushl	$8763
+    15cf:	e8 4b 0b 00 00 	calll	2891 <LDT0_SEL+0x20f7>
+    15d4:	83 c4 10 	addl	$16, %esp
+; /share/sys_call.c:14
+    15d7:	b8 00 00 00 00 	movl	$0, %eax
+; /share/sys_call.c:15
+    15dc:	c9 	leave
+    15dd:	c3 	retl
+
+_test_sys_call1:
+; /share/sys_call.c:18
+    15de:	55 	pushl	%ebp
+    15df:	89 e5 	movl	%esp, %ebp
+; /share/sys_call.c:19
+    15e1:	b8 00 00 00 00 	movl	$0, %eax
+; /share/sys_call.c:20
+    15e6:	5d 	popl	%ebp
+    15e7:	c3 	retl
+
+_test_sys_call2:
+; /share/sys_call.c:23
+    15e8:	55 	pushl	%ebp
+    15e9:	89 e5 	movl	%esp, %ebp
+    15eb:	83 ec 08 	subl	$8, %esp
+; /share/sys_call.c:24
+    15ee:	83 ec 0c 	subl	$12, %esp
+    15f1:	68 3f 22 00 00 	pushl	$8767
+    15f6:	e8 24 0b 00 00 	calll	2852 <LDT0_SEL+0x20f7>
+    15fb:	83 c4 10 	addl	$16, %esp
+; /share/sys_call.c:25
+    15fe:	b8 00 00 00 00 	movl	$0, %eax
+; /share/sys_call.c:26
+    1603:	c9 	leave
+    1604:	c3 	retl
+
+_sys_print_str:
+; /share/sys_call.c:29
+    1605:	55 	pushl	%ebp
+    1606:	89 e5 	movl	%esp, %ebp
+    1608:	83 ec 58 	subl	$88, %esp
+; /share/sys_call.c:31
+    160b:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    1612:	eb 0f 	jmp	15 <LDT0_SEL+0x15fb>
+; /share/sys_call.c:32
+    1614:	8d 55 b0 	leal	-80(%ebp), %edx
+    1617:	8b 45 f4 	movl	-12(%ebp), %eax
+    161a:	01 d0 	addl	%edx, %eax
+    161c:	c6 00 00 	movb	$0, (%eax)
+; /share/sys_call.c:31
+    161f:	83 45 f4 01 	addl	$1, -12(%ebp)
+    1623:	83 7d f4 3f 	cmpl	$63, -12(%ebp)
+    1627:	7e eb 	jle	-21 <LDT0_SEL+0x15ec>
+; /share/sys_call.c:34
+    1629:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+; /share/sys_call.c:36
+    1630:	8b 55 f0 	movl	-16(%ebp), %edx
+    1633:	8b 45 08 	movl	8(%ebp), %eax
+    1636:	01 d0 	addl	%edx, %eax
+    1638:	50 	pushl	%eax
+    1639:	e8 72 ff ff ff 	calll	-142 <LDT0_SEL+0x1588>
+    163e:	83 c4 04 	addl	$4, %esp
+    1641:	89 c1 	movl	%eax, %ecx
+    1643:	8d 55 b0 	leal	-80(%ebp), %edx
+    1646:	8b 45 f0 	movl	-16(%ebp), %eax
+    1649:	01 d0 	addl	%edx, %eax
+    164b:	88 08 	movb	%cl, (%eax)
+; /share/sys_call.c:37
+    164d:	8d 55 b0 	leal	-80(%ebp), %edx
+    1650:	8b 45 f0 	movl	-16(%ebp), %eax
+    1653:	01 d0 	addl	%edx, %eax
+    1655:	0f b6 00 	movzbl	(%eax), %eax
+    1658:	84 c0 	testb	%al, %al
+    165a:	74 06 	je	6 <LDT0_SEL+0x163a>
+; /share/sys_call.c:40
+    165c:	83 45 f0 01 	addl	$1, -16(%ebp)
+; /share/sys_call.c:36
+    1660:	eb ce 	jmp	-50 <LDT0_SEL+0x1608>
+; /share/sys_call.c:38
+    1662:	90 	nop
+; /share/sys_call.c:42
+    1663:	83 ec 0c 	subl	$12, %esp
+    1666:	8d 45 b0 	leal	-80(%ebp), %eax
+    1669:	50 	pushl	%eax
+    166a:	e8 b0 0a 00 00 	calll	2736 <LDT0_SEL+0x20f7>
+    166f:	83 c4 10 	addl	$16, %esp
+; /share/sys_call.c:43
+    1672:	b8 00 00 00 00 	movl	$0, %eax
+; /share/sys_call.c:44
+    1677:	c9 	leave
+    1678:	c3 	retl
+
+_sys_print_num:
+; /share/sys_call.c:47
+    1679:	55 	pushl	%ebp
+    167a:	89 e5 	movl	%esp, %ebp
+    167c:	81 ec 98 00 00 00 	subl	$152, %esp
+; /share/sys_call.c:49
+    1682:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+; /share/sys_call.c:50
+    1689:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    1690:	eb 0f 	jmp	15 <LDT0_SEL+0x1679>
+; /share/sys_call.c:51
+    1692:	8d 55 a8 	leal	-88(%ebp), %edx
+    1695:	8b 45 f0 	movl	-16(%ebp), %eax
+    1698:	01 d0 	addl	%edx, %eax
+    169a:	c6 00 00 	movb	$0, (%eax)
+; /share/sys_call.c:50
+    169d:	83 45 f0 01 	addl	$1, -16(%ebp)
+    16a1:	83 7d f0 3f 	cmpl	$63, -16(%ebp)
+    16a5:	7e eb 	jle	-21 <LDT0_SEL+0x166a>
+; /share/sys_call.c:53
+    16a7:	83 7d 08 00 	cmpl	$0, 8(%ebp)
+    16ab:	75 10 	jne	16 <LDT0_SEL+0x1695>
+; /share/sys_call.c:54
+    16ad:	8b 45 f4 	movl	-12(%ebp), %eax
+    16b0:	8d 50 01 	leal	1(%eax), %edx
+    16b3:	89 55 f4 	movl	%edx, -12(%ebp)
+    16b6:	c6 44 05 a8 30 	movb	$48, -88(%ebp,%eax)
+    16bb:	eb 17 	jmp	23 <LDT0_SEL+0x16ac>
+; /share/sys_call.c:55
+    16bd:	83 7d 08 00 	cmpl	$0, 8(%ebp)
+    16c1:	79 11 	jns	17 <LDT0_SEL+0x16ac>
+; /share/sys_call.c:56
+    16c3:	f7 5d 08 	negl	8(%ebp)
+; /share/sys_call.c:57
+    16c6:	8b 45 f4 	movl	-12(%ebp), %eax
+    16c9:	8d 50 01 	leal	1(%eax), %edx
+    16cc:	89 55 f4 	movl	%edx, -12(%ebp)
+    16cf:	c6 44 05 a8 2d 	movb	$45, -88(%ebp,%eax)
+; /share/sys_call.c:60
+    16d4:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
+; /share/sys_call.c:61
+    16db:	eb 55 	jmp	85 <LDT0_SEL+0x170a>
+; /share/sys_call.c:62
+    16dd:	8b 4d 08 	movl	8(%ebp), %ecx
+    16e0:	ba 67 66 66 66 	movl	$1717986919, %edx
+    16e5:	89 c8 	movl	%ecx, %eax
+    16e7:	f7 ea 	imull	%edx
+    16e9:	c1 fa 02 	sarl	$2, %edx
+    16ec:	89 c8 	movl	%ecx, %eax
+    16ee:	c1 f8 1f 	sarl	$31, %eax
+    16f1:	29 c2 	subl	%eax, %edx
+    16f3:	89 d0 	movl	%edx, %eax
+    16f5:	c1 e0 02 	shll	$2, %eax
+    16f8:	01 d0 	addl	%edx, %eax
+    16fa:	01 c0 	addl	%eax, %eax
+    16fc:	29 c1 	subl	%eax, %ecx
+    16fe:	89 ca 	movl	%ecx, %edx
+    1700:	89 d0 	movl	%edx, %eax
+    1702:	8d 48 30 	leal	48(%eax), %ecx
+    1705:	8b 45 ec 	movl	-20(%ebp), %eax
+    1708:	8d 50 01 	leal	1(%eax), %edx
+    170b:	89 55 ec 	movl	%edx, -20(%ebp)
+    170e:	89 ca 	movl	%ecx, %edx
+    1710:	88 94 05 68 ff ff ff 	movb	%dl, -152(%ebp,%eax)
+; /share/sys_call.c:63
+    1717:	8b 4d 08 	movl	8(%ebp), %ecx
+    171a:	ba 67 66 66 66 	movl	$1717986919, %edx
+    171f:	89 c8 	movl	%ecx, %eax
+    1721:	f7 ea 	imull	%edx
+    1723:	c1 fa 02 	sarl	$2, %edx
+    1726:	89 c8 	movl	%ecx, %eax
+    1728:	c1 f8 1f 	sarl	$31, %eax
+    172b:	29 c2 	subl	%eax, %edx
+    172d:	89 d0 	movl	%edx, %eax
+    172f:	89 45 08 	movl	%eax, 8(%ebp)
+; /share/sys_call.c:61
+    1732:	83 7d 08 00 	cmpl	$0, 8(%ebp)
+    1736:	7f a5 	jg	-91 <LDT0_SEL+0x16b5>
+; /share/sys_call.c:65
+    1738:	8b 45 ec 	movl	-20(%ebp), %eax
+    173b:	83 e8 01 	subl	$1, %eax
+    173e:	89 45 e8 	movl	%eax, -24(%ebp)
+    1741:	eb 1f 	jmp	31 <LDT0_SEL+0x173a>
+; /share/sys_call.c:66
+    1743:	8b 45 f4 	movl	-12(%ebp), %eax
+    1746:	8d 50 01 	leal	1(%eax), %edx
+    1749:	89 55 f4 	movl	%edx, -12(%ebp)
+    174c:	8d 8d 68 ff ff ff 	leal	-152(%ebp), %ecx
+    1752:	8b 55 e8 	movl	-24(%ebp), %edx
+    1755:	01 ca 	addl	%ecx, %edx
+    1757:	0f b6 12 	movzbl	(%edx), %edx
+    175a:	88 54 05 a8 	movb	%dl, -88(%ebp,%eax)
+; /share/sys_call.c:65
+    175e:	83 6d e8 01 	subl	$1, -24(%ebp)
+    1762:	83 7d e8 00 	cmpl	$0, -24(%ebp)
+    1766:	79 db 	jns	-37 <LDT0_SEL+0x171b>
+; /share/sys_call.c:68
+    1768:	83 ec 0c 	subl	$12, %esp
+    176b:	8d 45 a8 	leal	-88(%ebp), %eax
+    176e:	50 	pushl	%eax
+    176f:	e8 ab 09 00 00 	calll	2475 <LDT0_SEL+0x20f7>
+    1774:	83 c4 10 	addl	$16, %esp
+; /share/sys_call.c:69
+    1777:	b8 00 00 00 00 	movl	$0, %eax
+; /share/sys_call.c:70
+    177c:	c9 	leave
+    177d:	c3 	retl
+
+e0:
+; /share/intel_err_handle.c:4
+    177e:	55 	pushl	%ebp
+    177f:	89 e5 	movl	%esp, %ebp
+    1781:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:5
+    1784:	83 ec 0c 	subl	$12, %esp
+    1787:	68 43 22 00 00 	pushl	$8771
+    178c:	e8 8e 09 00 00 	calll	2446 <LDT0_SEL+0x20f7>
+    1791:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:6
+    1794:	90 	nop
+    1795:	c9 	leave
+    1796:	c3 	retl
+
+e1:
+; /share/intel_err_handle.c:9
+    1797:	55 	pushl	%ebp
+    1798:	89 e5 	movl	%esp, %ebp
+    179a:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:10
+    179d:	83 ec 0c 	subl	$12, %esp
+    17a0:	68 46 22 00 00 	pushl	$8774
+    17a5:	e8 75 09 00 00 	calll	2421 <LDT0_SEL+0x20f7>
+    17aa:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:11
+    17ad:	90 	nop
+    17ae:	c9 	leave
+    17af:	c3 	retl
+
+e2:
+; /share/intel_err_handle.c:14
+    17b0:	55 	pushl	%ebp
+    17b1:	89 e5 	movl	%esp, %ebp
+    17b3:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:15
+    17b6:	83 ec 0c 	subl	$12, %esp
+    17b9:	68 49 22 00 00 	pushl	$8777
+    17be:	e8 5c 09 00 00 	calll	2396 <LDT0_SEL+0x20f7>
+    17c3:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:16
+    17c6:	90 	nop
+    17c7:	c9 	leave
+    17c8:	c3 	retl
+
+e3:
+; /share/intel_err_handle.c:19
+    17c9:	55 	pushl	%ebp
+    17ca:	89 e5 	movl	%esp, %ebp
+    17cc:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:20
+    17cf:	83 ec 0c 	subl	$12, %esp
+    17d2:	68 4c 22 00 00 	pushl	$8780
+    17d7:	e8 43 09 00 00 	calll	2371 <LDT0_SEL+0x20f7>
+    17dc:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:21
+    17df:	90 	nop
+    17e0:	c9 	leave
+    17e1:	c3 	retl
+
+e4:
+; /share/intel_err_handle.c:24
+    17e2:	55 	pushl	%ebp
+    17e3:	89 e5 	movl	%esp, %ebp
+    17e5:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:25
+    17e8:	83 ec 0c 	subl	$12, %esp
+    17eb:	68 4f 22 00 00 	pushl	$8783
+    17f0:	e8 2a 09 00 00 	calll	2346 <LDT0_SEL+0x20f7>
+    17f5:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:26
+    17f8:	90 	nop
+    17f9:	c9 	leave
+    17fa:	c3 	retl
+
+e5:
+; /share/intel_err_handle.c:29
+    17fb:	55 	pushl	%ebp
+    17fc:	89 e5 	movl	%esp, %ebp
+    17fe:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:30
+    1801:	83 ec 0c 	subl	$12, %esp
+    1804:	68 52 22 00 00 	pushl	$8786
+    1809:	e8 11 09 00 00 	calll	2321 <LDT0_SEL+0x20f7>
+    180e:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:31
+    1811:	90 	nop
+    1812:	c9 	leave
+    1813:	c3 	retl
+
+e6:
+; /share/intel_err_handle.c:34
+    1814:	55 	pushl	%ebp
+    1815:	89 e5 	movl	%esp, %ebp
+    1817:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:35
+    181a:	83 ec 0c 	subl	$12, %esp
+    181d:	68 55 22 00 00 	pushl	$8789
+    1822:	e8 f8 08 00 00 	calll	2296 <LDT0_SEL+0x20f7>
+    1827:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:36
+    182a:	90 	nop
+    182b:	c9 	leave
+    182c:	c3 	retl
+
+e7:
+; /share/intel_err_handle.c:39
+    182d:	55 	pushl	%ebp
+    182e:	89 e5 	movl	%esp, %ebp
+    1830:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:40
+    1833:	83 ec 0c 	subl	$12, %esp
+    1836:	68 58 22 00 00 	pushl	$8792
+    183b:	e8 df 08 00 00 	calll	2271 <LDT0_SEL+0x20f7>
+    1840:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:41
+    1843:	90 	nop
+    1844:	c9 	leave
+    1845:	c3 	retl
+
+e8:
+; /share/intel_err_handle.c:44
+    1846:	55 	pushl	%ebp
+    1847:	89 e5 	movl	%esp, %ebp
+    1849:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:45
+    184c:	83 ec 0c 	subl	$12, %esp
+    184f:	68 5b 22 00 00 	pushl	$8795
+    1854:	e8 c6 08 00 00 	calll	2246 <LDT0_SEL+0x20f7>
+    1859:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:46
+    185c:	90 	nop
+    185d:	c9 	leave
+    185e:	c3 	retl
+
+e9:
+; /share/intel_err_handle.c:49
+    185f:	55 	pushl	%ebp
+    1860:	89 e5 	movl	%esp, %ebp
+    1862:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:50
+    1865:	83 ec 0c 	subl	$12, %esp
+    1868:	68 5e 22 00 00 	pushl	$8798
+    186d:	e8 ad 08 00 00 	calll	2221 <LDT0_SEL+0x20f7>
+    1872:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:51
+    1875:	90 	nop
+    1876:	c9 	leave
+    1877:	c3 	retl
+
+e10:
+; /share/intel_err_handle.c:54
+    1878:	55 	pushl	%ebp
+    1879:	89 e5 	movl	%esp, %ebp
+    187b:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:55
+    187e:	83 ec 0c 	subl	$12, %esp
+    1881:	68 61 22 00 00 	pushl	$8801
+    1886:	e8 94 08 00 00 	calll	2196 <LDT0_SEL+0x20f7>
+    188b:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:56
+    188e:	90 	nop
+    188f:	c9 	leave
+    1890:	c3 	retl
+
+e11:
+; /share/intel_err_handle.c:59
+    1891:	55 	pushl	%ebp
+    1892:	89 e5 	movl	%esp, %ebp
+    1894:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:60
+    1897:	83 ec 0c 	subl	$12, %esp
+    189a:	68 65 22 00 00 	pushl	$8805
+    189f:	e8 7b 08 00 00 	calll	2171 <LDT0_SEL+0x20f7>
+    18a4:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:61
+    18a7:	90 	nop
+    18a8:	c9 	leave
+    18a9:	c3 	retl
+
+e12:
+; /share/intel_err_handle.c:64
+    18aa:	55 	pushl	%ebp
+    18ab:	89 e5 	movl	%esp, %ebp
+    18ad:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:65
+    18b0:	83 ec 0c 	subl	$12, %esp
+    18b3:	68 69 22 00 00 	pushl	$8809
+    18b8:	e8 62 08 00 00 	calll	2146 <LDT0_SEL+0x20f7>
+    18bd:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:66
+    18c0:	90 	nop
+    18c1:	c9 	leave
+    18c2:	c3 	retl
+
+e13:
+; /share/intel_err_handle.c:69
+    18c3:	55 	pushl	%ebp
+    18c4:	89 e5 	movl	%esp, %ebp
+    18c6:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:70
+    18c9:	83 ec 0c 	subl	$12, %esp
+    18cc:	68 6d 22 00 00 	pushl	$8813
+    18d1:	e8 49 08 00 00 	calll	2121 <LDT0_SEL+0x20f7>
+    18d6:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:71
+    18d9:	90 	nop
+    18da:	c9 	leave
+    18db:	c3 	retl
+
+e15:
+; /share/intel_err_handle.c:74
+    18dc:	55 	pushl	%ebp
+    18dd:	89 e5 	movl	%esp, %ebp
+    18df:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:75
+    18e2:	83 ec 0c 	subl	$12, %esp
+    18e5:	68 71 22 00 00 	pushl	$8817
+    18ea:	e8 30 08 00 00 	calll	2096 <LDT0_SEL+0x20f7>
+    18ef:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:76
+    18f2:	90 	nop
+    18f3:	c9 	leave
+    18f4:	c3 	retl
+
+e16:
+; /share/intel_err_handle.c:79
+    18f5:	55 	pushl	%ebp
+    18f6:	89 e5 	movl	%esp, %ebp
+    18f8:	83 ec 08 	subl	$8, %esp
+; /share/intel_err_handle.c:80
+    18fb:	83 ec 0c 	subl	$12, %esp
+    18fe:	68 75 22 00 00 	pushl	$8821
+    1903:	e8 17 08 00 00 	calll	2071 <LDT0_SEL+0x20f7>
+    1908:	83 c4 10 	addl	$16, %esp
+; /share/intel_err_handle.c:81
+    190b:	90 	nop
+    190c:	c9 	leave
+    190d:	c3 	retl
+
+sched_init:
+; /share/sched.c:16
+    190e:	55 	pushl	%ebp
+    190f:	89 e5 	movl	%esp, %ebp
+    1911:	83 ec 18 	subl	$24, %esp
+; /share/sched.c:17
+    1914:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    191b:	eb 12 	jmp	18 <LDT0_SEL+0x1907>
+; /share/sched.c:18
+    191d:	8b 45 f4 	movl	-12(%ebp), %eax
+    1920:	c7 04 85 e0 28 00 00 00 00 00 00 	movl	$0, 10464(,%eax,4)
+; /share/sched.c:17
+    192b:	83 45 f4 01 	addl	$1, -12(%ebp)
+    192f:	83 7d f4 07 	cmpl	$7, -12(%ebp)
+    1933:	7e e8 	jle	-24 <LDT0_SEL+0x18f5>
+; /share/sched.c:20
+    1935:	c7 05 a4 28 00 00 02 00 00 00 	movl	$2, 10404
+; /share/sched.c:21
+    193f:	a1 78 28 00 00 	movl	10360, %eax
+    1944:	83 c0 01 	addl	$1, %eax
+    1947:	a3 78 28 00 00 	movl	%eax, 10360
+    194c:	a1 78 28 00 00 	movl	10360, %eax
+    1951:	a3 b4 28 00 00 	movl	%eax, 10420
+; /share/sched.c:22
+    1956:	c7 05 bc 28 00 00 00 00 00 00 	movl	$0, 10428
+; /share/sched.c:23
+    1960:	c7 05 c0 28 00 00 00 00 00 00 	movl	$0, 10432
+; /share/sched.c:24
+    196a:	c7 05 c4 28 00 00 ff 03 00 00 	movl	$1023, 10436
+; /share/sched.c:25
+    1974:	c7 05 c8 28 00 00 00 fa c0 00 	movl	$12646912, 10440
+; /share/sched.c:26
+    197e:	c7 05 cc 28 00 00 ff 03 00 00 	movl	$1023, 10444
+; /share/sched.c:27
+    1988:	c7 05 d0 28 00 00 00 f2 c0 00 	movl	$12644864, 10448
+; /share/sched.c:28
+    1992:	b8 88 0a 00 00 	movl	$2696, %eax
+    1997:	83 ec 08 	subl	$8, %esp
+    199a:	68 bc 28 00 00 	pushl	$10428
+    199f:	50 	pushl	%eax
+    19a0:	e8 4f e8 ff ff 	calll	-6065 <LDT0_SEL+0x1cc>
+    19a5:	83 c4 10 	addl	$16, %esp
+; /share/sched.c:29
+    19a8:	c7 05 e0 28 00 00 a0 28 00 00 	movl	$10400, 10464
+; /share/sched.c:30
+    19b2:	b8 28 00 00 00 	movl	$40, %eax
+    19b7:	0f 00 d0 	lldtw	%ax
+; /share/sched.c:31
+    19ba:	c7 05 a4 28 00 00 00 00 00 00 	movl	$0, 10404
+; /share/sched.c:32
+    19c4:	90 	nop
+    19c5:	c9 	leave
+    19c6:	c3 	retl
+
+schedule:
+; /share/sched.c:35
+    19c7:	55 	pushl	%ebp
+    19c8:	89 e5 	movl	%esp, %ebp
+    19ca:	83 ec 18 	subl	$24, %esp
+; /share/sched.c:36
+    19cd:	a1 80 28 00 00 	movl	10368, %eax
+    19d2:	89 45 f4 	movl	%eax, -12(%ebp)
+; /share/sched.c:38
+    19d5:	83 45 f4 01 	addl	$1, -12(%ebp)
+; /share/sched.c:39
+    19d9:	8b 45 f4 	movl	-12(%ebp), %eax
+    19dc:	99 	cltd
+    19dd:	c1 ea 1d 	shrl	$29, %edx
+    19e0:	01 d0 	addl	%edx, %eax
+    19e2:	83 e0 07 	andl	$7, %eax
+    19e5:	29 d0 	subl	%edx, %eax
+    19e7:	89 45 f4 	movl	%eax, -12(%ebp)
+; /share/sched.c:40
+    19ea:	8b 45 f4 	movl	-12(%ebp), %eax
+    19ed:	8b 04 85 e0 28 00 00 	movl	10464(,%eax,4), %eax
+    19f4:	85 c0 	testl	%eax, %eax
+    19f6:	74 dd 	je	-35 <LDT0_SEL+0x19ad>
+; /share/sched.c:41
+    19f8:	a1 74 28 00 00 	movl	10356, %eax
+    19fd:	8b 40 14 	movl	20(%eax), %eax
+    1a00:	39 45 f4 	cmpl	%eax, -12(%ebp)
+    1a03:	74 d0 	je	-48 <LDT0_SEL+0x19ad>
+; /share/sched.c:42
+    1a05:	8b 45 f4 	movl	-12(%ebp), %eax
+    1a08:	8b 04 85 e0 28 00 00 	movl	10464(,%eax,4), %eax
+    1a0f:	8b 40 04 	movl	4(%eax), %eax
+    1a12:	85 c0 	testl	%eax, %eax
+    1a14:	75 bf 	jne	-65 <LDT0_SEL+0x19ad>
+; /share/sched.c:43
+    1a16:	8b 45 f4 	movl	-12(%ebp), %eax
+    1a19:	a3 80 28 00 00 	movl	%eax, 10368
+; /share/sched.c:44
+    1a1e:	83 7d f4 00 	cmpl	$0, -12(%ebp)
+    1a22:	75 13 	jne	19 <LDT0_SEL+0x1a0f>
+; /share/sched.c:45
+    1a24:	b8 08 0f 00 00 	movl	$3848, %eax
+    1a29:	83 ec 0c 	subl	$12, %esp
+    1a2c:	50 	pushl	%eax
+    1a2d:	e8 03 e8 ff ff 	calll	-6141 <LDT0_SEL+0x20d>
+    1a32:	83 c4 10 	addl	$16, %esp
+    1a35:	eb 1b 	jmp	27 <LDT0_SEL+0x1a2a>
+; /share/sched.c:47
+    1a37:	8b 45 f4 	movl	-12(%ebp), %eax
+    1a3a:	8b 04 85 e0 28 00 00 	movl	10464(,%eax,4), %eax
+    1a41:	05 00 10 00 00 	addl	$4096, %eax
+    1a46:	83 ec 0c 	subl	$12, %esp
+    1a49:	50 	pushl	%eax
+    1a4a:	e8 e6 e7 ff ff 	calll	-6170 <LDT0_SEL+0x20d>
+    1a4f:	83 c4 10 	addl	$16, %esp
+; /share/sched.c:49
+    1a52:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+; /share/sched.c:50
+    1a59:	83 ec 0c 	subl	$12, %esp
+    1a5c:	8d 45 f0 	leal	-16(%ebp), %eax
+    1a5f:	50 	pushl	%eax
+    1a60:	e8 53 e7 ff ff 	calll	-6317 <LDT0_SEL+0x190>
+    1a65:	83 c4 10 	addl	$16, %esp
+; /share/sched.c:51
+    1a68:	a1 74 28 00 00 	movl	10356, %eax
+    1a6d:	8b 55 f0 	movl	-16(%ebp), %edx
+    1a70:	89 10 	movl	%edx, (%eax)
+; /share/sched.c:52
+    1a72:	8b 45 f4 	movl	-12(%ebp), %eax
+    1a75:	8b 04 85 e0 28 00 00 	movl	10464(,%eax,4), %eax
+    1a7c:	a3 74 28 00 00 	movl	%eax, 10356
+; /share/sched.c:53
+    1a81:	8b 45 f4 	movl	-12(%ebp), %eax
+    1a84:	8b 04 85 e0 28 00 00 	movl	10464(,%eax,4), %eax
+    1a8b:	8b 55 f4 	movl	-12(%ebp), %edx
+    1a8e:	83 c2 05 	addl	$5, %edx
+    1a91:	c1 e2 03 	shll	$3, %edx
+    1a94:	83 ec 08 	subl	$8, %esp
+    1a97:	50 	pushl	%eax
+    1a98:	52 	pushl	%edx
+    1a99:	e8 2d e7 ff ff 	calll	-6355 <LDT0_SEL+0x1a3>
+    1a9e:	83 c4 10 	addl	$16, %esp
+; /share/sched.c:54
+    1aa1:	90 	nop
+; /share/sched.c:59
+    1aa2:	c9 	leave
+    1aa3:	c3 	retl
+
+do_timer:
+; /share/sched.c:62
+    1aa4:	55 	pushl	%ebp
+    1aa5:	89 e5 	movl	%esp, %ebp
+    1aa7:	83 ec 08 	subl	$8, %esp
+; /share/sched.c:63
+    1aaa:	83 7d 08 08 	cmpl	$8, 8(%ebp)
+    1aae:	74 0b 	je	11 <LDT0_SEL+0x1a93>
+; /share/sched.c:64
+    1ab0:	83 7d 08 0f 	cmpl	$15, 8(%ebp)
+    1ab4:	75 05 	jne	5 <LDT0_SEL+0x1a93>
+; /share/sched.c:65
+    1ab6:	e8 0c ff ff ff 	calll	-244 <LDT0_SEL+0x199f>
+; /share/sched.c:68
+    1abb:	90 	nop
+    1abc:	c9 	leave
+    1abd:	c3 	retl
+
+get_data_base:
+; /share/fork.c:6
+    1abe:	55 	pushl	%ebp
+    1abf:	89 e5 	movl	%esp, %ebp
+    1ac1:	83 ec 10 	subl	$16, %esp
+; /share/fork.c:7
+    1ac4:	8b 45 08 	movl	8(%ebp), %eax
+    1ac7:	8b 40 2c 	movl	44(%eax), %eax
+    1aca:	c1 e8 10 	shrl	$16, %eax
+    1acd:	89 45 fc 	movl	%eax, -4(%ebp)
+; /share/fork.c:8
+    1ad0:	8b 45 08 	movl	8(%ebp), %eax
+    1ad3:	8b 40 30 	movl	48(%eax), %eax
+    1ad6:	c1 e0 10 	shll	$16, %eax
+    1ad9:	25 00 00 ff 00 	andl	$16711680, %eax
+    1ade:	09 45 fc 	orl	%eax, -4(%ebp)
+; /share/fork.c:9
+    1ae1:	8b 45 08 	movl	8(%ebp), %eax
+    1ae4:	8b 40 30 	movl	48(%eax), %eax
+    1ae7:	25 00 00 00 ff 	andl	$4278190080, %eax
+    1aec:	09 45 fc 	orl	%eax, -4(%ebp)
+; /share/fork.c:10
+    1aef:	8b 45 fc 	movl	-4(%ebp), %eax
+; /share/fork.c:11
+    1af2:	c9 	leave
+    1af3:	c3 	retl
+
+copy_mem:
+; /share/fork.c:14
+    1af4:	55 	pushl	%ebp
+    1af5:	89 e5 	movl	%esp, %ebp
+    1af7:	83 ec 28 	subl	$40, %esp
+; /share/fork.c:18
+    1afa:	b8 0f 00 00 00 	movl	$15, %eax
+    1aff:	0f 03 c0 	lsll	%eax, %eax
+    1b02:	40 	incl	%eax
+    1b03:	89 45 f4 	movl	%eax, -12(%ebp)
+    1b06:	8b 45 f4 	movl	-12(%ebp), %eax
+    1b09:	89 45 f0 	movl	%eax, -16(%ebp)
+; /share/fork.c:19
+    1b0c:	b8 17 00 00 00 	movl	$23, %eax
+    1b11:	0f 03 c0 	lsll	%eax, %eax
+    1b14:	40 	incl	%eax
+    1b15:	89 45 ec 	movl	%eax, -20(%ebp)
+    1b18:	8b 45 ec 	movl	-20(%ebp), %eax
+    1b1b:	89 45 e8 	movl	%eax, -24(%ebp)
+; /share/fork.c:20
+    1b1e:	a1 74 28 00 00 	movl	10356, %eax
+    1b23:	50 	pushl	%eax
+    1b24:	e8 95 ff ff ff 	calll	-107 <LDT0_SEL+0x1a96>
+    1b29:	83 c4 04 	addl	$4, %esp
+    1b2c:	89 45 e4 	movl	%eax, -28(%ebp)
+; /share/fork.c:21
+    1b2f:	8b 45 08 	movl	8(%ebp), %eax
+    1b32:	83 c0 10 	addl	$16, %eax
+    1b35:	c1 e0 16 	shll	$22, %eax
+    1b38:	89 45 e0 	movl	%eax, -32(%ebp)
+    1b3b:	8b 45 e0 	movl	-32(%ebp), %eax
+    1b3e:	89 45 dc 	movl	%eax, -36(%ebp)
+; /share/fork.c:22
+    1b41:	8b 45 0c 	movl	12(%ebp), %eax
+    1b44:	8b 55 e0 	movl	-32(%ebp), %edx
+    1b47:	89 50 18 	movl	%edx, 24(%eax)
+; /share/fork.c:23
+    1b4a:	8b 45 e0 	movl	-32(%ebp), %eax
+    1b4d:	8b 55 0c 	movl	12(%ebp), %edx
+    1b50:	83 c2 24 	addl	$36, %edx
+    1b53:	83 ec 08 	subl	$8, %esp
+    1b56:	50 	pushl	%eax
+    1b57:	52 	pushl	%edx
+    1b58:	e8 be e6 ff ff 	calll	-6466 <LDT0_SEL+0x1f3>
+    1b5d:	83 c4 10 	addl	$16, %esp
+; /share/fork.c:24
+    1b60:	8b 45 dc 	movl	-36(%ebp), %eax
+    1b63:	8b 55 0c 	movl	12(%ebp), %edx
+    1b66:	83 c2 2c 	addl	$44, %edx
+    1b69:	83 ec 08 	subl	$8, %esp
+    1b6c:	50 	pushl	%eax
+    1b6d:	52 	pushl	%edx
+    1b6e:	e8 a8 e6 ff ff 	calll	-6488 <LDT0_SEL+0x1f3>
+    1b73:	83 c4 10 	addl	$16, %esp
+; /share/fork.c:25
+    1b76:	8b 45 e8 	movl	-24(%ebp), %eax
+    1b79:	83 ec 04 	subl	$4, %esp
+    1b7c:	50 	pushl	%eax
+    1b7d:	ff 75 dc 	pushl	-36(%ebp)
+    1b80:	ff 75 e4 	pushl	-28(%ebp)
+    1b83:	e8 34 03 00 00 	calll	820 <LDT0_SEL+0x1e94>
+    1b88:	83 c4 10 	addl	$16, %esp
+; /share/fork.c:29
+    1b8b:	b8 00 00 00 00 	movl	$0, %eax
+; /share/fork.c:30
+    1b90:	c9 	leave
+    1b91:	c3 	retl
+
+find_empty_process:
+; /share/fork.c:33
+    1b92:	55 	pushl	%ebp
+    1b93:	89 e5 	movl	%esp, %ebp
+; /share/fork.c:34
+    1b95:	a1 78 28 00 00 	movl	10360, %eax
+    1b9a:	83 c0 01 	addl	$1, %eax
+    1b9d:	a3 78 28 00 00 	movl	%eax, 10360
+    1ba2:	a1 78 28 00 00 	movl	10360, %eax
+; /share/fork.c:35
+    1ba7:	5d 	popl	%ebp
+    1ba8:	c3 	retl
+
+copy_process:
+; /share/fork.c:41
+    1ba9:	55 	pushl	%ebp
+    1baa:	89 e5 	movl	%esp, %ebp
+    1bac:	83 ec 18 	subl	$24, %esp
+; /share/fork.c:42
+    1baf:	e8 c1 02 00 00 	calll	705 <LDT0_SEL+0x1e4d>
+    1bb4:	89 45 f4 	movl	%eax, -12(%ebp)
+; /share/fork.c:47
+    1bb7:	8b 15 74 28 00 00 	movl	10356, %edx
+    1bbd:	8b 45 f4 	movl	-12(%ebp), %eax
+    1bc0:	8b 0a 	movl	(%edx), %ecx
+    1bc2:	89 08 	movl	%ecx, (%eax)
+    1bc4:	8b 4a 04 	movl	4(%edx), %ecx
+    1bc7:	89 48 04 	movl	%ecx, 4(%eax)
+    1bca:	8b 4a 08 	movl	8(%edx), %ecx
+    1bcd:	89 48 08 	movl	%ecx, 8(%eax)
+    1bd0:	8b 4a 0c 	movl	12(%edx), %ecx
+    1bd3:	89 48 0c 	movl	%ecx, 12(%eax)
+    1bd6:	8b 4a 10 	movl	16(%edx), %ecx
+    1bd9:	89 48 10 	movl	%ecx, 16(%eax)
+    1bdc:	8b 4a 14 	movl	20(%edx), %ecx
+    1bdf:	89 48 14 	movl	%ecx, 20(%eax)
+    1be2:	8b 4a 18 	movl	24(%edx), %ecx
+    1be5:	89 48 18 	movl	%ecx, 24(%eax)
+    1be8:	8b 4a 1c 	movl	28(%edx), %ecx
+    1beb:	89 48 1c 	movl	%ecx, 28(%eax)
+    1bee:	8b 4a 20 	movl	32(%edx), %ecx
+    1bf1:	89 48 20 	movl	%ecx, 32(%eax)
+    1bf4:	8b 4a 24 	movl	36(%edx), %ecx
+    1bf7:	89 48 24 	movl	%ecx, 36(%eax)
+    1bfa:	8b 4a 28 	movl	40(%edx), %ecx
+    1bfd:	89 48 28 	movl	%ecx, 40(%eax)
+    1c00:	8b 4a 2c 	movl	44(%edx), %ecx
+    1c03:	89 48 2c 	movl	%ecx, 44(%eax)
+    1c06:	8b 52 30 	movl	48(%edx), %edx
+    1c09:	89 50 30 	movl	%edx, 48(%eax)
+; /share/fork.c:48
+    1c0c:	8b 45 f4 	movl	-12(%ebp), %eax
+    1c0f:	c7 40 04 02 00 00 00 	movl	$2, 4(%eax)
+; /share/fork.c:49
+    1c16:	8b 45 f4 	movl	-12(%ebp), %eax
+    1c19:	8b 55 08 	movl	8(%ebp), %edx
+    1c1c:	89 50 14 	movl	%edx, 20(%eax)
+; /share/fork.c:50
+    1c1f:	a1 78 28 00 00 	movl	10360, %eax
+    1c24:	8b 55 f4 	movl	-12(%ebp), %edx
+    1c27:	89 14 85 e0 28 00 00 	movl	%edx, 10464(,%eax,4)
+; /share/fork.c:51
+    1c2e:	8b 45 f4 	movl	-12(%ebp), %eax
+    1c31:	05 00 10 00 00 	addl	$4096, %eax
+    1c36:	89 45 f0 	movl	%eax, -16(%ebp)
+; /share/fork.c:52
+    1c39:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c3d:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c40:	8b 55 4c 	movl	76(%ebp), %edx
+    1c43:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:53
+    1c45:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c49:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c4c:	8b 55 48 	movl	72(%ebp), %edx
+    1c4f:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:54
+    1c51:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c55:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c58:	8b 55 44 	movl	68(%ebp), %edx
+    1c5b:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:55
+    1c5d:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c61:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c64:	8b 55 40 	movl	64(%ebp), %edx
+    1c67:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:56
+    1c69:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c6d:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c70:	8b 55 3c 	movl	60(%ebp), %edx
+    1c73:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:57
+    1c75:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c79:	ba f3 01 00 00 	movl	$499, %edx
+    1c7e:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c81:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:58
+    1c83:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c87:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c8a:	c7 00 00 00 00 00 	movl	$0, (%eax)
+; /share/fork.c:59
+    1c90:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1c94:	8b 45 f0 	movl	-16(%ebp), %eax
+    1c97:	8b 55 20 	movl	32(%ebp), %edx
+    1c9a:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:60
+    1c9c:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1ca0:	8b 45 f0 	movl	-16(%ebp), %eax
+    1ca3:	8b 55 24 	movl	36(%ebp), %edx
+    1ca6:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:61
+    1ca8:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1cac:	8b 45 f0 	movl	-16(%ebp), %eax
+    1caf:	8b 55 28 	movl	40(%ebp), %edx
+    1cb2:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:62
+    1cb4:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1cb8:	8b 45 f0 	movl	-16(%ebp), %eax
+    1cbb:	8b 55 0c 	movl	12(%ebp), %edx
+    1cbe:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:63
+    1cc0:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1cc4:	8b 45 f0 	movl	-16(%ebp), %eax
+    1cc7:	8b 55 14 	movl	20(%ebp), %edx
+    1cca:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:64
+    1ccc:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1cd0:	8b 45 f0 	movl	-16(%ebp), %eax
+    1cd3:	8b 55 10 	movl	16(%ebp), %edx
+    1cd6:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:65
+    1cd8:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1cdc:	8b 45 34 	movl	52(%ebp), %eax
+    1cdf:	0f b7 d0 	movzwl	%ax, %edx
+    1ce2:	8b 45 f0 	movl	-16(%ebp), %eax
+    1ce5:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:66
+    1ce7:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1ceb:	8b 45 38 	movl	56(%ebp), %eax
+    1cee:	0f b7 d0 	movzwl	%ax, %edx
+    1cf1:	8b 45 f0 	movl	-16(%ebp), %eax
+    1cf4:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:67
+    1cf6:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1cfa:	8b 45 30 	movl	48(%ebp), %eax
+    1cfd:	0f b7 d0 	movzwl	%ax, %edx
+    1d00:	8b 45 f0 	movl	-16(%ebp), %eax
+    1d03:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:68
+    1d05:	83 6d f0 04 	subl	$4, -16(%ebp)
+    1d09:	8b 45 18 	movl	24(%ebp), %eax
+    1d0c:	0f b7 d0 	movzwl	%ax, %edx
+    1d0f:	8b 45 f0 	movl	-16(%ebp), %eax
+    1d12:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:69
+    1d14:	8b 55 f0 	movl	-16(%ebp), %edx
+    1d17:	8b 45 f4 	movl	-12(%ebp), %eax
+    1d1a:	89 10 	movl	%edx, (%eax)
+; /share/fork.c:70
+    1d1c:	a1 78 28 00 00 	movl	10360, %eax
+    1d21:	83 ec 08 	subl	$8, %esp
+    1d24:	ff 75 f4 	pushl	-12(%ebp)
+    1d27:	50 	pushl	%eax
+    1d28:	e8 c7 fd ff ff 	calll	-569 <LDT0_SEL+0x1acc>
+    1d2d:	83 c4 10 	addl	$16, %esp
+; /share/fork.c:74
+    1d30:	8b 45 f4 	movl	-12(%ebp), %eax
+    1d33:	8d 50 1c 	leal	28(%eax), %edx
+    1d36:	a1 78 28 00 00 	movl	10360, %eax
+    1d3b:	83 c0 05 	addl	$5, %eax
+    1d3e:	c1 e0 03 	shll	$3, %eax
+    1d41:	05 60 0a 00 00 	addl	$2656, %eax
+    1d46:	83 ec 08 	subl	$8, %esp
+    1d49:	52 	pushl	%edx
+    1d4a:	50 	pushl	%eax
+    1d4b:	e8 a4 e4 ff ff 	calll	-7004 <LDT0_SEL+0x1cc>
+    1d50:	83 c4 10 	addl	$16, %esp
+; /share/fork.c:75
+    1d53:	8b 45 f4 	movl	-12(%ebp), %eax
+    1d56:	c7 40 04 00 00 00 00 	movl	$0, 4(%eax)
+; /share/fork.c:76
+    1d5d:	b8 01 00 00 00 	movl	$1, %eax
+; /share/fork.c:77
+    1d62:	c9 	leave
+    1d63:	c3 	retl
+
+setup_paging:
+; /share/mm.c:11
+    1d64:	55 	pushl	%ebp
+    1d65:	89 e5 	movl	%esp, %ebp
+    1d67:	83 ec 58 	subl	$88, %esp
+; /share/mm.c:12
+    1d6a:	c7 45 e8 00 80 00 00 	movl	$32768, -24(%ebp)
+; /share/mm.c:14
+    1d71:	8b 45 e8 	movl	-24(%ebp), %eax
+    1d74:	05 00 10 00 00 	addl	$4096, %eax
+    1d79:	89 45 a8 	movl	%eax, -88(%ebp)
+; /share/mm.c:15
+    1d7c:	c7 45 f4 01 00 00 00 	movl	$1, -12(%ebp)
+    1d83:	eb 1c 	jmp	28 <LDT0_SEL+0x1d79>
+; /share/mm.c:16
+    1d85:	8b 45 f4 	movl	-12(%ebp), %eax
+    1d88:	83 e8 01 	subl	$1, %eax
+    1d8b:	8b 44 85 a8 	movl	-88(%ebp,%eax,4), %eax
+    1d8f:	05 00 10 00 00 	addl	$4096, %eax
+    1d94:	89 c2 	movl	%eax, %edx
+    1d96:	8b 45 f4 	movl	-12(%ebp), %eax
+    1d99:	89 54 85 a8 	movl	%edx, -88(%ebp,%eax,4)
+; /share/mm.c:15
+    1d9d:	83 45 f4 01 	addl	$1, -12(%ebp)
+    1da1:	83 7d f4 0f 	cmpl	$15, -12(%ebp)
+    1da5:	7e de 	jle	-34 <LDT0_SEL+0x1d5d>
+; /share/mm.c:18
+    1da7:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    1dae:	eb 21 	jmp	33 <LDT0_SEL+0x1da9>
+; /share/mm.c:19
+    1db0:	8b 45 f0 	movl	-16(%ebp), %eax
+    1db3:	8b 44 85 a8 	movl	-88(%ebp,%eax,4), %eax
+    1db7:	89 c1 	movl	%eax, %ecx
+    1db9:	8b 45 f0 	movl	-16(%ebp), %eax
+    1dbc:	8d 14 85 00 00 00 00 	leal	(,%eax,4), %edx
+    1dc3:	8b 45 e8 	movl	-24(%ebp), %eax
+    1dc6:	01 d0 	addl	%edx, %eax
+    1dc8:	8d 51 07 	leal	7(%ecx), %edx
+    1dcb:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:18
+    1dcd:	83 45 f0 01 	addl	$1, -16(%ebp)
+    1dd1:	83 7d f0 0f 	cmpl	$15, -16(%ebp)
+    1dd5:	7e d9 	jle	-39 <LDT0_SEL+0x1d88>
+; /share/mm.c:21
+    1dd7:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
+    1dde:	eb 1c 	jmp	28 <LDT0_SEL+0x1dd4>
+; /share/mm.c:22
+    1de0:	8b 45 ec 	movl	-20(%ebp), %eax
+    1de3:	c1 e0 0c 	shll	$12, %eax
+    1de6:	8d 48 07 	leal	7(%eax), %ecx
+    1de9:	8b 45 a8 	movl	-88(%ebp), %eax
+    1dec:	8b 55 ec 	movl	-20(%ebp), %edx
+    1def:	c1 e2 02 	shll	$2, %edx
+    1df2:	01 d0 	addl	%edx, %eax
+    1df4:	89 ca 	movl	%ecx, %edx
+    1df6:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:21
+    1df8:	83 45 ec 01 	addl	$1, -20(%ebp)
+    1dfc:	81 7d ec ff 3f 00 00 	cmpl	$16383, -20(%ebp)
+    1e03:	7e db 	jle	-37 <LDT0_SEL+0x1db8>
+; /share/mm.c:24
+    1e05:	8b 45 e8 	movl	-24(%ebp), %eax
+    1e08:	83 ec 0c 	subl	$12, %esp
+    1e0b:	50 	pushl	%eax
+    1e0c:	e8 43 e3 ff ff 	calll	-7357 <LDT0_SEL+0x12c>
+    1e11:	83 c4 10 	addl	$16, %esp
+; /share/mm.c:25
+    1e14:	90 	nop
+    1e15:	c9 	leave
+    1e16:	c3 	retl
+
+init_mem_map:
+; /share/mm.c:28
+    1e17:	55 	pushl	%ebp
+    1e18:	89 e5 	movl	%esp, %ebp
+    1e1a:	83 ec 10 	subl	$16, %esp
+; /share/mm.c:29
+    1e1d:	c7 45 fc 00 00 00 00 	movl	$0, -4(%ebp)
+    1e24:	eb 0f 	jmp	15 <LDT0_SEL+0x1e0d>
+; /share/mm.c:30
+    1e26:	8b 45 fc 	movl	-4(%ebp), %eax
+    1e29:	05 00 29 00 00 	addl	$10496, %eax
+    1e2e:	c6 00 00 	movb	$0, (%eax)
+; /share/mm.c:29
+    1e31:	83 45 fc 01 	addl	$1, -4(%ebp)
+    1e35:	81 7d fc ff 3e 00 00 	cmpl	$16127, -4(%ebp)
+    1e3c:	7e e8 	jle	-24 <LDT0_SEL+0x1dfe>
+; /share/mm.c:32
+    1e3e:	c7 45 f8 00 00 00 00 	movl	$0, -8(%ebp)
+    1e45:	eb 0f 	jmp	15 <LDT0_SEL+0x1e2e>
+; /share/mm.c:33
+    1e47:	8b 45 f8 	movl	-8(%ebp), %eax
+    1e4a:	05 00 29 00 00 	addl	$10496, %eax
+    1e4f:	c6 00 64 	movb	$100, (%eax)
+; /share/mm.c:32
+    1e52:	83 45 f8 01 	addl	$1, -8(%ebp)
+    1e56:	81 7d f8 7f 03 00 00 	cmpl	$895, -8(%ebp)
+    1e5d:	7e e8 	jle	-24 <LDT0_SEL+0x1e1f>
+; /share/mm.c:35
+    1e5f:	90 	nop
+    1e60:	c9 	leave
+    1e61:	c3 	retl
+
+mm_init:
+; /share/mm.c:38
+    1e62:	55 	pushl	%ebp
+    1e63:	89 e5 	movl	%esp, %ebp
+    1e65:	83 ec 08 	subl	$8, %esp
+; /share/mm.c:39
+    1e68:	e8 aa ff ff ff 	calll	-86 <LDT0_SEL+0x1def>
+; /share/mm.c:40
+    1e6d:	e8 f2 fe ff ff 	calll	-270 <LDT0_SEL+0x1d3c>
+; /share/mm.c:41
+    1e72:	90 	nop
+    1e73:	c9 	leave
+    1e74:	c3 	retl
+
+get_free_page:
+; /share/mm.c:44
+    1e75:	55 	pushl	%ebp
+    1e76:	89 e5 	movl	%esp, %ebp
+    1e78:	83 ec 10 	subl	$16, %esp
+; /share/mm.c:45
+    1e7b:	c7 45 fc ff 3e 00 00 	movl	$16127, -4(%ebp)
+    1e82:	eb 2b 	jmp	43 <LDT0_SEL+0x1e87>
+; /share/mm.c:46
+    1e84:	8b 45 fc 	movl	-4(%ebp), %eax
+    1e87:	05 00 29 00 00 	addl	$10496, %eax
+    1e8c:	0f b6 00 	movzbl	(%eax), %eax
+    1e8f:	84 c0 	testb	%al, %al
+    1e91:	75 18 	jne	24 <LDT0_SEL+0x1e83>
+; /share/mm.c:47
+    1e93:	8b 45 fc 	movl	-4(%ebp), %eax
+    1e96:	05 00 29 00 00 	addl	$10496, %eax
+    1e9b:	c6 00 01 	movb	$1, (%eax)
+; /share/mm.c:48
+    1e9e:	8b 45 fc 	movl	-4(%ebp), %eax
+    1ea1:	05 00 01 00 00 	addl	$256, %eax
+    1ea6:	c1 e0 0c 	shll	$12, %eax
+    1ea9:	eb 0f 	jmp	15 <LDT0_SEL+0x1e92>
+; /share/mm.c:45
+    1eab:	83 6d fc 01 	subl	$1, -4(%ebp)
+    1eaf:	83 7d fc 00 	cmpl	$0, -4(%ebp)
+    1eb3:	79 cf 	jns	-49 <LDT0_SEL+0x1e5c>
+; /share/mm.c:51
+    1eb5:	b8 00 00 00 00 	movl	$0, %eax
+; /share/mm.c:52
+    1eba:	c9 	leave
+    1ebb:	c3 	retl
+
+copy_page_tables:
+; /share/mm.c:55
+    1ebc:	55 	pushl	%ebp
+    1ebd:	89 e5 	movl	%esp, %ebp
+    1ebf:	83 ec 20 	subl	$32, %esp
+; /share/mm.c:63
+    1ec2:	8b 45 08 	movl	8(%ebp), %eax
+    1ec5:	25 ff ff 3f 00 	andl	$4194303, %eax
+    1eca:	85 c0 	testl	%eax, %eax
+; /share/mm.c:66
+    1ecc:	8b 45 08 	movl	8(%ebp), %eax
+    1ecf:	c1 e8 14 	shrl	$20, %eax
+    1ed2:	25 fc 0f 00 00 	andl	$4092, %eax
+    1ed7:	05 00 80 00 00 	addl	$32768, %eax
+    1edc:	89 45 f4 	movl	%eax, -12(%ebp)
+; /share/mm.c:67
+    1edf:	8b 45 0c 	movl	12(%ebp), %eax
+    1ee2:	c1 e8 14 	shrl	$20, %eax
+    1ee5:	25 fc 0f 00 00 	andl	$4092, %eax
+    1eea:	05 00 80 00 00 	addl	$32768, %eax
+    1eef:	89 45 f0 	movl	%eax, -16(%ebp)
+; /share/mm.c:68
+    1ef2:	8b 45 10 	movl	16(%ebp), %eax
+    1ef5:	05 ff ff 3f 00 	addl	$4194303, %eax
+    1efa:	c1 e8 16 	shrl	$22, %eax
+    1efd:	89 45 10 	movl	%eax, 16(%ebp)
+; /share/mm.c:69
+    1f00:	e9 90 00 00 00 	jmp	144 <LDT0_SEL+0x1f6d>
+; /share/mm.c:70
+    1f05:	8b 45 f4 	movl	-12(%ebp), %eax
+    1f08:	8b 00 	movl	(%eax), %eax
+    1f0a:	25 00 f0 ff ff 	andl	$4294963200, %eax
+    1f0f:	89 45 fc 	movl	%eax, -4(%ebp)
+; /share/mm.c:71
+    1f12:	e8 5e ff ff ff 	calll	-162 <LDT0_SEL+0x1e4d>
+    1f17:	89 45 f8 	movl	%eax, -8(%ebp)
+; /share/mm.c:74
+    1f1a:	8b 45 f8 	movl	-8(%ebp), %eax
+    1f1d:	83 c8 07 	orl	$7, %eax
+    1f20:	89 c2 	movl	%eax, %edx
+    1f22:	8b 45 f0 	movl	-16(%ebp), %eax
+    1f25:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:75
+    1f27:	c7 45 ec 00 04 00 00 	movl	$1024, -20(%ebp)
+; /share/mm.c:76
+    1f2e:	eb 50 	jmp	80 <LDT0_SEL+0x1f58>
+; /share/mm.c:77
+    1f30:	8b 45 fc 	movl	-4(%ebp), %eax
+    1f33:	8b 00 	movl	(%eax), %eax
+    1f35:	89 45 e8 	movl	%eax, -24(%ebp)
+; /share/mm.c:78
+    1f38:	83 65 e8 fd 	andl	$-3, -24(%ebp)
+; /share/mm.c:79
+    1f3c:	8b 45 f8 	movl	-8(%ebp), %eax
+    1f3f:	8b 55 e8 	movl	-24(%ebp), %edx
+    1f42:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:80
+    1f44:	81 7d e8 00 00 10 00 	cmpl	$1048576, -24(%ebp)
+    1f4b:	76 2b 	jbe	43 <LDT0_SEL+0x1f50>
+; /share/mm.c:81
+    1f4d:	8b 45 fc 	movl	-4(%ebp), %eax
+    1f50:	8b 55 e8 	movl	-24(%ebp), %edx
+    1f53:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:82
+    1f55:	81 6d e8 00 00 10 00 	subl	$1048576, -24(%ebp)
+; /share/mm.c:83
+    1f5c:	c1 6d e8 0c 	shrl	$12, -24(%ebp)
+; /share/mm.c:84
+    1f60:	8b 45 e8 	movl	-24(%ebp), %eax
+    1f63:	05 00 29 00 00 	addl	$10496, %eax
+    1f68:	0f b6 00 	movzbl	(%eax), %eax
+    1f6b:	8d 50 01 	leal	1(%eax), %edx
+    1f6e:	8b 45 e8 	movl	-24(%ebp), %eax
+    1f71:	05 00 29 00 00 	addl	$10496, %eax
+    1f76:	88 10 	movb	%dl, (%eax)
+; /share/mm.c:76
+    1f78:	83 45 fc 04 	addl	$4, -4(%ebp)
+    1f7c:	83 45 f8 04 	addl	$4, -8(%ebp)
+    1f80:	8b 45 ec 	movl	-20(%ebp), %eax
+    1f83:	8d 50 ff 	leal	-1(%eax), %edx
+    1f86:	89 55 ec 	movl	%edx, -20(%ebp)
+    1f89:	85 c0 	testl	%eax, %eax
+    1f8b:	75 a3 	jne	-93 <LDT0_SEL+0x1f08>
+; /share/mm.c:69
+    1f8d:	83 45 f4 04 	addl	$4, -12(%ebp)
+    1f91:	83 45 f0 04 	addl	$4, -16(%ebp)
+    1f95:	8b 45 10 	movl	16(%ebp), %eax
+    1f98:	8d 50 ff 	leal	-1(%eax), %edx
+    1f9b:	89 55 10 	movl	%edx, 16(%ebp)
+    1f9e:	85 c0 	testl	%eax, %eax
+    1fa0:	0f 8f 5f ff ff ff 	jg	-161 <LDT0_SEL+0x1edd>
+; /share/mm.c:88
+    1fa6:	b8 00 80 00 00 	movl	$32768, %eax
+    1fab:	0f 22 d8 	movl	%eax, %cr3
+; /share/mm.c:89
+    1fae:	b8 00 00 00 00 	movl	$0, %eax
+; /share/mm.c:90
+    1fb3:	c9 	leave
+    1fb4:	c3 	retl
+
+copy_page:
+; /share/mm.c:93
+    1fb5:	55 	pushl	%ebp
+    1fb6:	89 e5 	movl	%esp, %ebp
+    1fb8:	83 ec 10 	subl	$16, %esp
+; /share/mm.c:94
+    1fbb:	81 65 08 00 f0 ff ff 	andl	$4294963200, 8(%ebp)
+; /share/mm.c:95
+    1fc2:	81 65 0c 00 f0 ff ff 	andl	$4294963200, 12(%ebp)
+; /share/mm.c:96
+    1fc9:	c7 45 fc 00 00 00 00 	movl	$0, -4(%ebp)
+    1fd0:	eb 1d 	jmp	29 <LDT0_SEL+0x1fc7>
+; /share/mm.c:97
+    1fd2:	8b 55 fc 	movl	-4(%ebp), %edx
+    1fd5:	8b 45 08 	movl	8(%ebp), %eax
+    1fd8:	01 d0 	addl	%edx, %eax
+    1fda:	89 c1 	movl	%eax, %ecx
+    1fdc:	8b 55 fc 	movl	-4(%ebp), %edx
+    1fdf:	8b 45 0c 	movl	12(%ebp), %eax
+    1fe2:	01 d0 	addl	%edx, %eax
+    1fe4:	89 c2 	movl	%eax, %edx
+    1fe6:	0f b6 01 	movzbl	(%ecx), %eax
+    1fe9:	88 02 	movb	%al, (%edx)
+; /share/mm.c:96
+    1feb:	83 45 fc 01 	addl	$1, -4(%ebp)
+    1fef:	81 7d fc ff 0f 00 00 	cmpl	$4095, -4(%ebp)
+    1ff6:	7e da 	jle	-38 <LDT0_SEL+0x1faa>
+; /share/mm.c:99
+    1ff8:	90 	nop
+    1ff9:	c9 	leave
+    1ffa:	c3 	retl
+
+un_wp_page:
+; /share/mm.c:102
+    1ffb:	55 	pushl	%ebp
+    1ffc:	89 e5 	movl	%esp, %ebp
+    1ffe:	83 ec 10 	subl	$16, %esp
+; /share/mm.c:103
+    2001:	8b 45 08 	movl	8(%ebp), %eax
+    2004:	8b 00 	movl	(%eax), %eax
+    2006:	25 00 f0 ff ff 	andl	$4294963200, %eax
+    200b:	89 45 fc 	movl	%eax, -4(%ebp)
+; /share/mm.c:104
+    200e:	81 7d fc ff ff 0f 00 	cmpl	$1048575, -4(%ebp)
+    2015:	76 2f 	jbe	47 <LDT0_SEL+0x201e>
+    2017:	8b 45 fc 	movl	-4(%ebp), %eax
+    201a:	2d 00 00 10 00 	subl	$1048576, %eax
+    201f:	c1 e8 0c 	shrl	$12, %eax
+    2022:	0f b6 80 00 29 00 00 	movzbl	10496(%eax), %eax
+    2029:	3c 01 	cmpb	$1, %al
+    202b:	75 19 	jne	25 <LDT0_SEL+0x201e>
+; /share/mm.c:105
+    202d:	8b 45 08 	movl	8(%ebp), %eax
+    2030:	8b 00 	movl	(%eax), %eax
+    2032:	83 c8 02 	orl	$2, %eax
+    2035:	89 c2 	movl	%eax, %edx
+    2037:	8b 45 08 	movl	8(%ebp), %eax
+    203a:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:106
+    203c:	b8 00 80 00 00 	movl	$32768, %eax
+    2041:	0f 22 d8 	movl	%eax, %cr3
+; /share/mm.c:107
+    2044:	eb 4f 	jmp	79 <LDT0_SEL+0x206d>
+; /share/mm.c:110
+    2046:	e8 2a fe ff ff 	calll	-470 <LDT0_SEL+0x1e4d>
+    204b:	89 45 f8 	movl	%eax, -8(%ebp)
+; /share/mm.c:114
+    204e:	81 7d fc ff ff 0f 00 	cmpl	$1048575, -4(%ebp)
+    2055:	76 1b 	jbe	27 <LDT0_SEL+0x204a>
+; /share/mm.c:115
+    2057:	8b 45 fc 	movl	-4(%ebp), %eax
+    205a:	2d 00 00 10 00 	subl	$1048576, %eax
+    205f:	c1 e8 0c 	shrl	$12, %eax
+    2062:	0f b6 90 00 29 00 00 	movzbl	10496(%eax), %edx
+    2069:	83 ea 01 	subl	$1, %edx
+    206c:	88 90 00 29 00 00 	movb	%dl, 10496(%eax)
+; /share/mm.c:117
+    2072:	ff 75 f8 	pushl	-8(%ebp)
+    2075:	ff 75 fc 	pushl	-4(%ebp)
+    2078:	e8 38 ff ff ff 	calll	-200 <LDT0_SEL+0x1f8d>
+    207d:	83 c4 08 	addl	$8, %esp
+; /share/mm.c:118
+    2080:	8b 45 f8 	movl	-8(%ebp), %eax
+    2083:	83 c8 07 	orl	$7, %eax
+    2086:	89 c2 	movl	%eax, %edx
+    2088:	8b 45 08 	movl	8(%ebp), %eax
+    208b:	89 10 	movl	%edx, (%eax)
+; /share/mm.c:119
+    208d:	b8 00 80 00 00 	movl	$32768, %eax
+    2092:	0f 22 d8 	movl	%eax, %cr3
+; /share/mm.c:120
+    2095:	c9 	leave
+    2096:	c3 	retl
+
+e14:
+; /share/mm.c:123
+    2097:	55 	pushl	%ebp
+    2098:	89 e5 	movl	%esp, %ebp
+    209a:	83 ec 10 	subl	$16, %esp
+; /share/mm.c:124
+    209d:	8b 45 08 	movl	8(%ebp), %eax
+    20a0:	c1 e8 0c 	shrl	$12, %eax
+    20a3:	25 ff 03 00 00 	andl	$1023, %eax
+    20a8:	89 45 fc 	movl	%eax, -4(%ebp)
+; /share/mm.c:125
+    20ab:	8b 45 08 	movl	8(%ebp), %eax
+    20ae:	c1 e8 16 	shrl	$22, %eax
+    20b1:	89 45 f8 	movl	%eax, -8(%ebp)
+; /share/mm.c:126
+    20b4:	8b 45 fc 	movl	-4(%ebp), %eax
+    20b7:	05 00 fc ff 3f 	addl	$1073740800, %eax
+    20bc:	8d 14 85 00 00 00 00 	leal	(,%eax,4), %edx
+    20c3:	8b 45 f8 	movl	-8(%ebp), %eax
+    20c6:	05 00 20 00 00 	addl	$8192, %eax
+    20cb:	c1 e0 02 	shll	$2, %eax
+    20ce:	8b 00 	movl	(%eax), %eax
+    20d0:	21 d0 	andl	%edx, %eax
+    20d2:	89 45 f4 	movl	%eax, -12(%ebp)
+; /share/mm.c:127
+    20d5:	ff 75 f4 	pushl	-12(%ebp)
+    20d8:	e8 1e ff ff ff 	calll	-226 <LDT0_SEL+0x1fd3>
+    20dd:	83 c4 04 	addl	$4, %esp
+; /share/mm.c:128
+    20e0:	90 	nop
+    20e1:	c9 	leave
+    20e2:	c3 	retl
+
+validate_screen:
+; /share/print_str.c:7
+    20e3:	55 	pushl	%ebp
+    20e4:	89 e5 	movl	%esp, %ebp
+    20e6:	83 ec 18 	subl	$24, %esp
+; /share/print_str.c:8
+    20e9:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    20f0:	eb 21 	jmp	33 <LDT0_SEL+0x20eb>
+; /share/print_str.c:9
+    20f2:	8b 45 f4 	movl	-12(%ebp), %eax
+    20f5:	05 20 68 00 00 	addl	$26656, %eax
+    20fa:	0f b6 00 	movzbl	(%eax), %eax
+    20fd:	0f be c0 	movsbl	%al, %eax
+    2100:	83 ec 08 	subl	$8, %esp
+    2103:	ff 75 f4 	pushl	-12(%ebp)
+    2106:	50 	pushl	%eax
+    2107:	e8 66 df ff ff 	calll	-8346 <LDT0_SEL+0x4a>
+    210c:	83 c4 10 	addl	$16, %esp
+; /share/print_str.c:8
+    210f:	83 45 f4 01 	addl	$1, -12(%ebp)
+    2113:	81 7d f4 cf 07 00 00 	cmpl	$1999, -12(%ebp)
+    211a:	7e d6 	jle	-42 <LDT0_SEL+0x20ca>
+; /share/print_str.c:11
+    211c:	90 	nop
+    211d:	c9 	leave
+    211e:	c3 	retl
+
+print_str:
+; /share/print_str.c:14
+    211f:	55 	pushl	%ebp
+    2120:	89 e5 	movl	%esp, %ebp
+    2122:	83 ec 28 	subl	$40, %esp
+; /share/print_str.c:15
+    2125:	a1 00 68 00 00 	movl	26624, %eax
+    212a:	83 f8 18 	cmpl	$24, %eax
+    212d:	0f 8e 8b 00 00 00 	jle	139 <LDT0_SEL+0x2196>
+; /share/print_str.c:16
+    2133:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    213a:	eb 50 	jmp	80 <LDT0_SEL+0x2164>
+; /share/print_str.c:17
+    213c:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    2143:	eb 3d 	jmp	61 <LDT0_SEL+0x215a>
+; /share/print_str.c:18
+    2145:	8b 45 f4 	movl	-12(%ebp), %eax
+    2148:	8d 50 01 	leal	1(%eax), %edx
+    214b:	89 d0 	movl	%edx, %eax
+    214d:	c1 e0 02 	shll	$2, %eax
+    2150:	01 d0 	addl	%edx, %eax
+    2152:	c1 e0 04 	shll	$4, %eax
+    2155:	89 c2 	movl	%eax, %edx
+    2157:	8b 45 f0 	movl	-16(%ebp), %eax
+    215a:	8d 0c 02 	leal	(%edx,%eax), %ecx
+    215d:	8b 55 f4 	movl	-12(%ebp), %edx
+    2160:	89 d0 	movl	%edx, %eax
+    2162:	c1 e0 02 	shll	$2, %eax
+    2165:	01 d0 	addl	%edx, %eax
+    2167:	c1 e0 04 	shll	$4, %eax
+    216a:	89 c2 	movl	%eax, %edx
+    216c:	8b 45 f0 	movl	-16(%ebp), %eax
+    216f:	01 c2 	addl	%eax, %edx
+    2171:	0f b6 81 20 68 00 00 	movzbl	26656(%ecx), %eax
+    2178:	88 82 20 68 00 00 	movb	%al, 26656(%edx)
+; /share/print_str.c:17
+    217e:	83 45 f0 01 	addl	$1, -16(%ebp)
+    2182:	83 7d f0 4f 	cmpl	$79, -16(%ebp)
+    2186:	7e bd 	jle	-67 <LDT0_SEL+0x211d>
+; /share/print_str.c:16
+    2188:	83 45 f4 01 	addl	$1, -12(%ebp)
+    218c:	83 7d f4 17 	cmpl	$23, -12(%ebp)
+    2190:	7e aa 	jle	-86 <LDT0_SEL+0x2114>
+; /share/print_str.c:21
+    2192:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
+    2199:	eb 13 	jmp	19 <LDT0_SEL+0x2186>
+; /share/print_str.c:22
+    219b:	8b 45 ec 	movl	-20(%ebp), %eax
+    219e:	05 80 07 00 00 	addl	$1920, %eax
+    21a3:	c6 80 20 68 00 00 00 	movb	$0, 26656(%eax)
+; /share/print_str.c:21
+    21aa:	83 45 ec 01 	addl	$1, -20(%ebp)
+    21ae:	83 7d ec 4f 	cmpl	$79, -20(%ebp)
+    21b2:	7e e7 	jle	-25 <LDT0_SEL+0x2173>
+; /share/print_str.c:24
+    21b4:	c7 05 00 68 00 00 18 00 00 00 	movl	$24, 26624
+; /share/print_str.c:26
+    21be:	a1 00 68 00 00 	movl	26624, %eax
+    21c3:	89 45 e4 	movl	%eax, -28(%ebp)
+; /share/print_str.c:27
+    21c6:	c7 45 e8 00 00 00 00 	movl	$0, -24(%ebp)
+; /share/print_str.c:28
+    21cd:	eb 2a 	jmp	42 <LDT0_SEL+0x21d1>
+; /share/print_str.c:29
+    21cf:	8b 55 e8 	movl	-24(%ebp), %edx
+    21d2:	8b 45 08 	movl	8(%ebp), %eax
+    21d5:	8d 0c 02 	leal	(%edx,%eax), %ecx
+    21d8:	8b 55 e4 	movl	-28(%ebp), %edx
+    21db:	89 d0 	movl	%edx, %eax
+    21dd:	c1 e0 02 	shll	$2, %eax
+    21e0:	01 d0 	addl	%edx, %eax
+    21e2:	c1 e0 04 	shll	$4, %eax
+    21e5:	89 c2 	movl	%eax, %edx
+    21e7:	8b 45 e8 	movl	-24(%ebp), %eax
+    21ea:	01 c2 	addl	%eax, %edx
+    21ec:	0f b6 01 	movzbl	(%ecx), %eax
+    21ef:	88 82 20 68 00 00 	movb	%al, 26656(%edx)
+; /share/print_str.c:30
+    21f5:	83 45 e8 01 	addl	$1, -24(%ebp)
+; /share/print_str.c:28
+    21f9:	8b 55 e8 	movl	-24(%ebp), %edx
+    21fc:	8b 45 08 	movl	8(%ebp), %eax
+    21ff:	01 d0 	addl	%edx, %eax
+    2201:	0f b6 00 	movzbl	(%eax), %eax
+    2204:	84 c0 	testb	%al, %al
+    2206:	75 c7 	jne	-57 <LDT0_SEL+0x21a7>
+; /share/print_str.c:32
+    2208:	a1 00 68 00 00 	movl	26624, %eax
+    220d:	83 c0 01 	addl	$1, %eax
+    2210:	a3 00 68 00 00 	movl	%eax, 26624
+; /share/print_str.c:33
+    2215:	e8 c9 fe ff ff 	calll	-311 <LDT0_SEL+0x20bb>
+; /share/print_str.c:34
+    221a:	90 	nop
+    221b:	c9 	leave
+    221c:	c3 	retl

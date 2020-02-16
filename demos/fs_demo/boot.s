@@ -12,11 +12,26 @@ load_system:
     xor bx, bx
     mov ax, 0200h+17    ;ah 读扇区功能号2 al读扇区数量 17
     int 013h
+    add bx, 8704        ; 8704=17*512
+    mov cx, 0001h
     jnc ok_load1
     jmp $
 
 ok_load1:
+    mov ax, 0200h+18    ;ah 读扇区功能号2 al读扇区数量 18
     mov dh, 1
+    int 013h
+    add bx, 9216        ; 9216=18*512
+    jnc ok_load2
+    jmp $
+ok_load2:
+    mov ax, 0200h+18    ;ah 读扇区功能号2 al读扇区数量 18
+    mov dh, 0
+    mov ch, 1
+    int 013h
+    add bx, 9216        ; 9216=18*512
+    jnc ok_load
+    jmp $
 
 ok_load:
     cli

@@ -10,3 +10,5 @@
     objdump -l lan_os > disasm.txt
     makefile 要加上 gcc -g
 
+### [bios int 0x13](https://blog.csdn.net/zxl3901/article/details/50072539)
+
