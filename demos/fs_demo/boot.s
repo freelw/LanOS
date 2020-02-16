@@ -12,26 +12,33 @@ load_system:
     xor bx, bx
     mov ax, 0200h+17    ;ah 读扇区功能号2 al读扇区数量 17
     int 013h
-    add bx, 8704        ; 8704=17*512
+    mov ax, 01220h
+    mov es, ax
     mov cx, 0001h
     jnc ok_load1
     jmp $
 
 ok_load1:
     mov ax, 0200h+18    ;ah 读扇区功能号2 al读扇区数量 18
-    mov dh, 1
+    xor dh, 1
+    and dh, 1
     int 013h
-    add bx, 9216        ; 9216=18*512
+    mov ax, es
+    add ax, 0240h
+    mov es, ax
     jnc ok_load2
     jmp $
+
 ok_load2:
-    mov ax, 0200h+18    ;ah 读扇区功能号2 al读扇区数量 18
-    mov dh, 0
-    mov ch, 1
-    int 013h
-    add bx, 9216        ; 9216=18*512
-    jnc ok_load
-    jmp $
+    test dh, dh
+    jz dontaddch
+    add ch, 1
+dontaddch:
+    mov ax, [index]
+    sub ax, 1
+    mov [index], ax
+    test ax, ax
+    jnz ok_load1
 
 ok_load:
     cli
@@ -50,6 +57,8 @@ ok_load:
     mov ax, 0x0001
     lmsw ax
     jmp dword 8:0
+index:
+    dw 63
 gdt:
     dw 0, 0, 0, 0           ;第一个描述符，没有用
     dw 0x07ff               ;代码段 从0地址开始
@@ -60,7 +69,6 @@ gdt:
     dw 0x0000
     dw 0x9200
     dw 0x00c0
-
 
 gdt_48:
     dw 0x7ff                ;2048/8=256个描述符
