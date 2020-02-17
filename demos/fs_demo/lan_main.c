@@ -35,11 +35,13 @@ extern void init_0();
 #define __NR_test_sys_call2 3
 #define __NR_s_print_str 4
 #define __NR_s_print_num 5
+#define __NR_s_read_file_content 6
 _syscall0(int, test_sys_call)
 _syscall0(int, fork1)
 _syscall0(int, test_sys_call2)
 _syscall1(int, s_print_str, char*, msg)
 _syscall1(int, s_print_num, int, num)
+_syscall2(int, s_read_file_content, char*, file_name, char*, buffer)
 
 void check_a20_valid()
 {
@@ -102,7 +104,7 @@ void lan_main()
 			i++;
 			s_print_str("process 1 cnt:");
 			s_print_num(i);
-			for (int i = 0; i < 100000000; ++ i);
+			for (int i = 0; 1 || i < 100000000; ++ i);
 		}
 	} else {
 		int j = 0;
@@ -110,7 +112,11 @@ void lan_main()
 			j++;
 			s_print_str("process 2 cnt:");
 			s_print_num(j);
-			for (int i = 0; i < 100000000; ++ i);
+			char buffer[64] = {0};
+			s_read_file_content("hello_fs", buffer);
+			s_print_str("hello_fs content is:");
+			s_print_str(buffer);
+			for (int i = 0; 1 || i < 100000000; ++ i);
 		}
 	}
 }
