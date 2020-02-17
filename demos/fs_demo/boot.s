@@ -58,7 +58,7 @@ ok_load:
     lmsw ax
     jmp dword 8:0
 index:
-    dw 80
+    dw 105              ;这里105是极限 位置末尾是0xfe600 接近1M，再读一个循环，内存回卷
 gdt:
     dw 0, 0, 0, 0           ;第一个描述符，没有用
     dw 0x07ff               ;代码段 从0地址开始
