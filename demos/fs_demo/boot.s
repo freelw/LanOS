@@ -58,7 +58,7 @@ ok_load:
     lmsw ax
     jmp dword 8:0
 index:
-    dw 63
+    dw 80
 gdt:
     dw 0, 0, 0, 0           ;第一个描述符，没有用
     dw 0x07ff               ;代码段 从0地址开始

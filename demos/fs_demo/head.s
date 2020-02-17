@@ -64,6 +64,9 @@ write_char:
     mov ebx, [esp+20]
     shl ebx, 1
     mov byte [gs:ebx], al
+    add ebx, 1
+    mov al, 0x70
+    mov byte [gs:ebx], al
     pop dword eax
     pop dword ebx
     pop gs
