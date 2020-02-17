@@ -20,6 +20,7 @@ async function main() {
     let fs_header = zero_buffer(4);
     const file_cnt = file_list.length;
     fs_header.writeInt32LE(file_cnt);
+    let file_buffer = zero_buffer(0);
     for (let i = 0; i < file_cnt; ++ i) {
         const path = `${__dirname}/../root_fs/${file_list[i]}`;
         const content = fs.readFileSync(path);
@@ -30,23 +31,16 @@ async function main() {
         file_length_buffer.writeInt32LE(content_length);
         Buffer.from(file_list[i]).copy(file_name_buffer);
         fs_header = Buffer.concat([fs_header, file_length_buffer, file_name_buffer]);
+        const file_pad = zero_buffer(20*1024-content_length);
+        file_buffer = Buffer.concat([file_buffer, content, file_pad]);
     }
+    const fs_header_pad = zero_buffer(124-fs_header.length);
+    fs_header = Buffer.concat([fs_header, fs_header_pad]);
     console.log('fs_header length : ', fs_header.length);
-
-    /*const page_dir_start = 0x8000;
-    const header_start_pos = page_dir_start - 120;
-    console.log('header_start_pos : ', header_start_pos);
-    const buffer_0 = zero_buffer(120-fs_header.length);
-    const buffer_before_fs_header = vfd_content.slice(0, header_start_pos);
-    const buffer_after_fs_header = vfd_content.slice(page_dir_start);
-    const final_buffer = Buffer.concat([buffer_before_fs_header, fs_header, buffer_0, buffer_after_fs_header]);*/
-
-    const start = 0x8ffff;
-    //const start = 0xee7ff;
+    const start = 0x5df84; // 0x90000-200k-124 在内存中的位置应该是0x5df84-0x200+0x10000=0x6dd84
     const p0 = vfd_content.slice(0, start);
-    const p1 = zero_buffer(1);
-    p1.writeUInt8(0x22);
-    const p2 = vfd_content.slice(start+1);
+    const p1 = Buffer.concat([fs_header, file_buffer]);
+    const p2 = vfd_content.slice(start+p1.length);
     const final_buffer = Buffer.concat([p0, p1, p2]);
     fs.writeFileSync(vfd_path, final_buffer);
     process.exit();
