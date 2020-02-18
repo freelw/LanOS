@@ -8,6 +8,7 @@ unsigned char mem_map[PAGEING_PAGES];
 extern void assign_cr3_cr0(unsigned long);
 extern void print_str(char *s);
 extern void print_num(int num);
+extern void panic(char *msg);
 
 void setup_paging()
 {
@@ -63,7 +64,7 @@ int copy_page_tables(unsigned long from,unsigned long to,long size)
 	unsigned long nr;
 
 	if ((from&0x3fffff) || (to&0x3fffff)) {
-        //todo panic
+		panic("copy page talbes error 0");
     }
 	from_dir = (unsigned long *) (((from>>20) & 0xffc)+PAGE_DIR); /* _pg_dir 和linux0.12定义不同，我们是从0x8000开始 */
 	to_dir = (unsigned long *) (((to>>20) & 0xffc)+PAGE_DIR);
@@ -71,7 +72,7 @@ int copy_page_tables(unsigned long from,unsigned long to,long size)
 	for( ; size-->0 ; from_dir++,to_dir++) {
 		from_page_table = (unsigned long *) (0xfffff000 & *from_dir);
 		if (!(to_page_table = (unsigned long *) get_free_page())) {
-            //todo panic
+            panic("copy page talbes error 1");
         }
 		*to_dir = ((unsigned long) to_page_table) | 7;
 		nr = 1024;
@@ -111,7 +112,7 @@ void un_wp_page(unsigned long * table_entry)
 
 	unsigned long new_page = get_free_page();
 	if (!new_page) {
-		//todo panic
+		panic("un_wp_page error 0");
 	}
 	if (old_page >= LOW_MEM) {
 		mem_map[MAP_NR(old_page)]--;

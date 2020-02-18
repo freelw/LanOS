@@ -58,3 +58,9 @@ void print_num(int num)
     print_str(buf);
 }
 
+void panic(char *msg)
+{
+    print_str(msg);
+    while(1);
+}
+
