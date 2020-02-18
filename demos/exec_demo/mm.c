@@ -54,6 +54,52 @@ unsigned long get_free_page()
     return 0;
 }
 
+void free_page(unsigned long addr)
+{
+	if (addr < LOW_MEM) {
+		return;
+	}
+	addr -= LOW_MEM;
+	addr >>= 12;
+	if (mem_map[addr]--) {
+		return;
+	}
+	mem_map[addr]=0;
+	panic("trying to free free page");
+}
+
+int free_page_tables(unsigned long from, unsigned long size)
+{
+	if (from & 0x3fffff)
+		panic("free_page_tables called with wrong alignment");
+	if (!from)
+		panic("Trying to free up swapper memory space");
+	size = (size + 0x3fffff) >> 22;
+	unsigned long *dir = (unsigned long *) (((from>>20) & 0xffc)+PAGE_DIR);
+	for ( ; size-->0 ; dir++) {
+		if (!(1 & *dir))
+			continue;
+		unsigned long *pg_table = (unsigned long *) (0xfffff000 & *dir);
+		for (unsigned long nr=0 ; nr<1024 ; nr++) {
+			if (*pg_table) {
+				if (1 & *pg_table){
+					free_page(0xfffff000 & *pg_table);
+				} else {
+					//swap_free(*pg_table >> 1);
+					panic("swap free");
+				}
+				*pg_table = 0;
+			}
+			pg_table++;
+		}
+		free_page(0xfffff000 & *dir);
+		*dir = 0;
+	}
+	invalidate();
+	return 0;
+}
+
+
 int copy_page_tables(unsigned long from,unsigned long to,long size)
 {
     unsigned long * from_page_table;

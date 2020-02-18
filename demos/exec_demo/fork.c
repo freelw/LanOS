@@ -1,6 +1,8 @@
 #include "mm.h"
 #include "sched.h"
 
+extern void panic(char *msg);
+
 extern void first_return_from_kernel();
 unsigned long get_data_base(struct task_struct *s)
 {
@@ -25,6 +27,7 @@ int copy_mem(int nr,struct task_struct * p)
 	if (copy_page_tables(old_data_base,new_data_base,data_limit)) {
 		// todo
 		// free_page_tables
+		panic("copy page tables failed.");
 	}
 	return 0;
 }

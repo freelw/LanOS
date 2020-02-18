@@ -12,6 +12,7 @@ __asm__("movl %%eax,%%cr3"::"a" (PAGE_DIR))
 
 extern void mm_init();
 extern unsigned long get_free_page();
+extern int free_page_tables(unsigned long from, unsigned long size);
 extern int copy_page_tables(unsigned long from,unsigned long to,long size);
 
 #endif

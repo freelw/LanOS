@@ -370,7 +370,6 @@ init_stack:         ;从这里开始是一个48位操作数
     dd init_stack   ;32位代表初始的esp
     dw 0x10         ;16位栈的段选择符，lss之后会加载到ss中
 
-
 _e0:
     call e0
     iret

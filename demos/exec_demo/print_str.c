@@ -3,6 +3,14 @@
 char screen_buff[SCREEN_LEN];
 int cur_l = 0;
 extern void write_char(char ch, int pos);
+
+void init_screen_buff()
+{
+    for (int i = 0; i < SCREEN_LEN; ++ i) { 
+        screen_buff[i] = 0;
+    }
+}
+
 void validate_screen()
 {
     for (int i = 0; i < SCREEN_LEN; ++ i) {

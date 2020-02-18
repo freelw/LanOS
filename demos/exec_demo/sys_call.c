@@ -1,3 +1,5 @@
+#include "sched.h"
+
 typedef int (*sys_call)();
 extern void print_str(char *s);
 extern void print_num(int num);
@@ -61,6 +63,29 @@ int equal_str(char *file_name, char *name)
     return 0;
 }
 
+int get_file_index_by_name(char *file_name)
+{
+    int *p_cnt = 0x6dd84;
+    char *meta_start = 0x6dd84+4;
+    int file_cnt = *p_cnt;
+    for (int i = 0; i < file_cnt; ++ i) {
+        int *p_length = meta_start+12*i;
+        char *name = meta_start+12*i+4;
+        if (0 == equal_str(file_name, name)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+char *get_file_buffer(int index, int *plength)
+{
+    char *file_buffer_start = 0x6de00;
+    char *meta_start = 0x6dd84+4;
+    *plength = *((int*)(meta_start+12*index));
+    return file_buffer_start+20*1024*index;
+}
+
 int _sys_read_file_content(char *_u_file_name, char *_u_buffer)
 {
     char file_name[64];
@@ -70,21 +95,13 @@ int _sys_read_file_content(char *_u_file_name, char *_u_buffer)
     for (int i = 0; i < 8; ++ i) {
         file_name[i] = get_fs_byte(_u_file_name+i);
     }
-    print_str("input file_name is:");
-    print_str(file_name);
-    int *p_cnt = 0x6dd84;
-    char *meta_start = 0x6dd84+4;
-    int file_cnt = *p_cnt;
-    char *file_buffer_start = 0x6de00;
-    for (int i = 0; i < file_cnt; ++ i) {
-        char *start = file_buffer_start+20*1024*i;
-        int *p_length = meta_start+12*i;
-        char *name = meta_start+12*i+4;
-        if (0 == equal_str(file_name, name)) {
-            print_str("equal succ");
-            for (int j = 0; j < *p_length; ++ j) {
-                put_fs_byte(start[j], _u_buffer+j);
-            }
+
+    int index = get_file_index_by_name(file_name);
+    if (index >= 0) {
+        int length = 0;
+        char *start = get_file_buffer(index, &length);
+        for (int i = 0; i < length; ++ i) {
+            put_fs_byte(start[i], _u_buffer+i);
         }
     }
     return 0;
@@ -105,6 +122,9 @@ int _sys_exec(char *_u_file_name)
     for (int i = 0; i < 8; ++ i) {
         file_name[i] = get_fs_byte(_u_file_name+i);
     }
+    unsigned long data_limit = get_limit(0x17);
+    unsigned long data_base = get_data_base(current);
+    free_page_tables(data_base, data_limit);
     return 0;
 }
 
