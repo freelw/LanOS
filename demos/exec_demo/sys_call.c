@@ -86,6 +86,15 @@ char *get_file_buffer(int index, unsigned long *plength)
     return file_buffer_start+20*1024*index;
 }
 
+void bread(unsigned long page, int Knum, int fs_index)
+{
+    unsigned long length = 0;
+    char *f_start = get_file_buffer(fs_index, &length);
+    for (int i = 0; i < 1024; ++ i) {
+        ((char*)page)[i] = (char*)(f_start+Knum*1024)[i];
+    }
+}
+
 int _sys_read_file_content(char *_u_file_name, char *_u_buffer)
 {
     char file_name[64];
@@ -112,7 +121,7 @@ int _sys_print_num(int num)
     return 0;
 }
 
-int _sys_exec(char *_u_file_name)
+int _sys_exec(char *_u_file_name, unsigned long eip_pos)
 {
     char file_name[64];
     for (int i = 0; i < 64; ++ i) {
@@ -125,11 +134,14 @@ int _sys_exec(char *_u_file_name)
     unsigned long data_base = get_data_base(current);
     int index = get_file_index_by_name(file_name);
     if (index >= 0) {
+        current->fs_index = index;
         get_file_buffer(index, &(current->end_data));
         print_str("sys_exec file size : ");
         print_num(current->end_data);
     }
     free_page_tables(data_base, data_limit);
+    *((unsigned long*)(eip_pos)) = 0; // 我们的应用程序的main从0x0开始
+    *((unsigned long*)(eip_pos+12)) = data_limit; // esp 顶死
     return 0;
 }
 

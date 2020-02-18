@@ -69,6 +69,8 @@ void print_num(int num)
 void panic(char *msg)
 {
     print_str(msg);
-    while(1);
+    while(1) {
+        validate_screen();
+    }
 }
 

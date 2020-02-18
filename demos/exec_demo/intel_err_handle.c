@@ -1,4 +1,5 @@
 extern void print_str(char *s);
+extern void panic(char *msg);
 
 void e0()
 {
@@ -62,12 +63,12 @@ void e11()
 
 void e12()
 {
-    print_str("e12");
+    panic("e12");
 }
 
 void e13()
 {
-    print_str("e13");
+    panic("e13");
 }
 
 void e15()

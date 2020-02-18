@@ -26,6 +26,7 @@ struct task_struct {
 	long pid;
 	unsigned long start_code;
 	unsigned long end_data;
+	unsigned long fs_index;
 	struct desc_struct ldt[3];
 };
 

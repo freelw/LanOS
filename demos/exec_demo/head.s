@@ -235,9 +235,15 @@ sys_print_str:
     ret
 
 sys_exec:
+    push dword eax
+    mov eax, esp
+    add eax, 36
+    push dword eax
     push dword ebx
     call _sys_exec
     pop dword ebx
+    add esp, 4
+    pop dword eax
     ret
 
 get_esp0_when_switch:

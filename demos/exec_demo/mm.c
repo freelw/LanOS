@@ -167,10 +167,58 @@ void un_wp_page(unsigned long * table_entry)
 	invalidate();
 }
 
+unsigned long put_page(unsigned long page,unsigned long address)
+{
+	if (page < LOW_MEM)
+		panic("Trying to put page LOW_MEM");
+	if (mem_map[(page-LOW_MEM)>>12] != 1)
+		panic("mem_map disagrees.");
+	unsigned long page_table_index = (address>>22)&0x3ff;
+	unsigned long *page_table = (unsigned long*)(page_table_index*4+PAGE_DIR);
+	if ((*page_table)&1) {
+		page_table = (unsigned long *) (0xfffff000 & *page_table);
+	} else {
+		unsigned long tmp;
+		if (!(tmp=get_free_page())) {
+			return 0;
+		}
+		*page_table = tmp | 7;
+		page_table = (unsigned long *) tmp;
+	}
+	page_table[(address>>12) & 0x3ff] = page | 7;
+	return page;
+}
+
+void get_empty_page(unsigned long address)
+{
+	unsigned long tmp;
+
+	if (!(tmp=get_free_page()) || !put_page(tmp,address)) {
+		panic("get empty page error.");
+	}
+}
+
 void do_no_page(unsigned long address)
 {
 	address &= 0xfffff000;
 	unsigned long tmp = address - current->start_code;
+	unsigned long page_table_index = (address>>22)&0x3ff;
+	unsigned long page = 0xfffff000&(*(unsigned long*)(page_table_index*4+PAGE_DIR));
+	if (page & 1) {
+		panic("do no page swap.");
+	}	
+	if (tmp >= current->end_data) {
+		get_empty_page(address);
+		return ;
+	}
+	if (!(page = get_free_page())) {
+		panic("do no page get free page error.");
+	}
+	int Knum = tmp/1024 + 1;
+	bread(page, Knum, current->fs_index);
+	if (!put_page(page, address)) {
+		panic("do no page put page error.");
+	}
 	invalidate();
 }
 
