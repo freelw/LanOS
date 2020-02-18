@@ -78,11 +78,11 @@ int get_file_index_by_name(char *file_name)
     return -1;
 }
 
-char *get_file_buffer(int index, int *plength)
+char *get_file_buffer(int index, unsigned long *plength)
 {
     char *file_buffer_start = 0x6de00;
     char *meta_start = 0x6dd84+4;
-    *plength = *((int*)(meta_start+12*index));
+    *plength = *((unsigned long*)(meta_start+12*index));
     return file_buffer_start+20*1024*index;
 }
 
@@ -95,10 +95,9 @@ int _sys_read_file_content(char *_u_file_name, char *_u_buffer)
     for (int i = 0; i < 8; ++ i) {
         file_name[i] = get_fs_byte(_u_file_name+i);
     }
-
     int index = get_file_index_by_name(file_name);
     if (index >= 0) {
-        int length = 0;
+        unsigned long length = 0;
         char *start = get_file_buffer(index, &length);
         for (int i = 0; i < length; ++ i) {
             put_fs_byte(start[i], _u_buffer+i);
@@ -124,6 +123,12 @@ int _sys_exec(char *_u_file_name)
     }
     unsigned long data_limit = get_limit(0x17);
     unsigned long data_base = get_data_base(current);
+    int index = get_file_index_by_name(file_name);
+    if (index >= 0) {
+        get_file_buffer(index, &(current->end_data));
+        print_str("sys_exec file size : ");
+        print_num(current->end_data);
+    }
     free_page_tables(data_base, data_limit);
     return 0;
 }

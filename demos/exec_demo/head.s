@@ -235,6 +235,9 @@ sys_print_str:
     ret
 
 sys_exec:
+    push dword ebx
+    call _sys_exec
+    pop dword ebx
     ret
 
 get_esp0_when_switch:

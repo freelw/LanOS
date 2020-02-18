@@ -1,3 +1,4 @@
+#include "sched.h"
 #include "mm.h"
 
 #define PAGEING_PAGES (63*1024*1024)/(4*1024)
@@ -99,7 +100,6 @@ int free_page_tables(unsigned long from, unsigned long size)
 	return 0;
 }
 
-
 int copy_page_tables(unsigned long from,unsigned long to,long size)
 {
     unsigned long * from_page_table;
@@ -155,7 +155,6 @@ void un_wp_page(unsigned long * table_entry)
 		invalidate();
 		return;
 	}
-
 	unsigned long new_page = get_free_page();
 	if (!new_page) {
 		panic("un_wp_page error 0");
@@ -168,12 +167,24 @@ void un_wp_page(unsigned long * table_entry)
 	invalidate();
 }
 
+void do_no_page(unsigned long address)
+{
+	address &= 0xfffff000;
+	unsigned long tmp = address - current->start_code;
+	invalidate();
+}
+
 void e14(unsigned long address, unsigned long error_code)
 {
 	print_str("e14 error code is:");
 	print_num(error_code);
-	unsigned long page_index = (address>>12)&0x3ff;
-	unsigned long page_table_index = (address>>22)&0x3ff;
-	unsigned long *table_entry = page_index*4 + 0xfffff000&(*(unsigned long*)(page_table_index*4+PAGE_DIR));
-    un_wp_page(table_entry);
+	print_num(address);
+	if (error_code & 1) {
+		unsigned long page_index = (address>>12)&0x3ff;
+		unsigned long page_table_index = (address>>22)&0x3ff;
+		unsigned long *table_entry = page_index*4 + 0xfffff000&(*(unsigned long*)(page_table_index*4+PAGE_DIR));
+		un_wp_page(table_entry);
+	} else {
+		do_no_page(address);
+	}
 }

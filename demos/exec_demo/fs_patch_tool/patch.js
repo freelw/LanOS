@@ -1,7 +1,8 @@
 const fs = require('fs');
 
 const file_list = [
-    'hello_fs'
+    'hello_fs',
+    'test'
 ];
 
 function zero_buffer(size) {
