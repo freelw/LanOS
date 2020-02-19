@@ -2283,7 +2283,7 @@ _e14:
     118d:	50 	pushl	%eax
     118e:	b8 10 00 00 00 	movl	$16, %eax
     1193:	8e d8 	movl	%eax, %ds
-    1195:	e8 1f 16 00 00 	calll	5663 <LDT0_SEL+0x2791>
+    1195:	e8 1c 16 00 00 	calll	5660 <LDT0_SEL+0x278e>
     119a:	83 c4 04 	addl	$4, %esp
     119d:	5b 	popl	%ebx
     119e:	1f 	popl	%ds
@@ -2660,7 +2660,7 @@ lan_main:
 ; /share/lan_main.c:91
     157b:	e8 e2 06 00 00 	calll	1762 <LDT0_SEL+0x1c3a>
 ; /share/lan_main.c:92
-    1580:	e8 cb 12 00 00 	calll	4811 <LDT0_SEL+0x2828>
+    1580:	e8 c8 12 00 00 	calll	4808 <LDT0_SEL+0x2825>
 ; /share/lan_main.c:93
     1585:	fb 	sti
 ; /share/lan_main.c:94
@@ -2803,7 +2803,7 @@ _test_sys_call:
 ; /share/sys_call.c:21
     16c2:	83 ec 0c 	subl	$12, %esp
     16c5:	68 24 2b 00 00 	pushl	$11044
-    16ca:	e8 e7 11 00 00 	calll	4583 <LDT0_SEL+0x288e>
+    16ca:	e8 e4 11 00 00 	calll	4580 <LDT0_SEL+0x288b>
     16cf:	83 c4 10 	addl	$16, %esp
 ; /share/sys_call.c:22
     16d2:	b8 00 00 00 00 	movl	$0, %eax
@@ -2829,7 +2829,7 @@ _test_sys_call2:
 ; /share/sys_call.c:32
     16e9:	83 ec 0c 	subl	$12, %esp
     16ec:	68 28 2b 00 00 	pushl	$11048
-    16f1:	e8 c0 11 00 00 	calll	4544 <LDT0_SEL+0x288e>
+    16f1:	e8 bd 11 00 00 	calll	4541 <LDT0_SEL+0x288b>
     16f6:	83 c4 10 	addl	$16, %esp
 ; /share/sys_call.c:33
     16f9:	b8 00 00 00 00 	movl	$0, %eax
@@ -2885,7 +2885,7 @@ _sys_print_str:
     175e:	83 ec 0c 	subl	$12, %esp
     1761:	8d 45 b0 	leal	-80(%ebp), %eax
     1764:	50 	pushl	%eax
-    1765:	e8 4c 11 00 00 	calll	4428 <LDT0_SEL+0x288e>
+    1765:	e8 49 11 00 00 	calll	4425 <LDT0_SEL+0x288b>
     176a:	83 c4 10 	addl	$16, %esp
 ; /share/sys_call.c:51
     176d:	b8 00 00 00 00 	movl	$0, %eax
@@ -3161,7 +3161,7 @@ _sys_print_num:
 ; /share/sys_call.c:120
     19b7:	83 ec 0c 	subl	$12, %esp
     19ba:	ff 75 08 	pushl	8(%ebp)
-    19bd:	e8 f2 0f 00 00 	calll	4082 <LDT0_SEL+0x298c>
+    19bd:	e8 ef 0f 00 00 	calll	4079 <LDT0_SEL+0x2989>
     19c2:	83 c4 10 	addl	$16, %esp
 ; /share/sys_call.c:121
     19c5:	b8 00 00 00 00 	movl	$0, %eax
@@ -3244,14 +3244,14 @@ _sys_exec:
 ; /share/sys_call.c:139
     1a80:	83 ec 0c 	subl	$12, %esp
     1a83:	68 2c 2b 00 00 	pushl	$11052
-    1a88:	e8 29 0e 00 00 	calll	3625 <LDT0_SEL+0x288e>
+    1a88:	e8 26 0e 00 00 	calll	3622 <LDT0_SEL+0x288b>
     1a8d:	83 c4 10 	addl	$16, %esp
 ; /share/sys_call.c:140
     1a90:	a1 40 35 00 00 	movl	13632, %eax
     1a95:	8b 40 1c 	movl	28(%eax), %eax
     1a98:	83 ec 0c 	subl	$12, %esp
     1a9b:	50 	pushl	%eax
-    1a9c:	e8 13 0f 00 00 	calll	3859 <LDT0_SEL+0x298c>
+    1a9c:	e8 10 0f 00 00 	calll	3856 <LDT0_SEL+0x2989>
     1aa1:	83 c4 10 	addl	$16, %esp
 ; /share/sys_call.c:142
     1aa4:	83 ec 08 	subl	$8, %esp
@@ -3282,7 +3282,7 @@ e0:
 ; /share/intel_err_handle.c:6
     1ad8:	83 ec 0c 	subl	$12, %esp
     1adb:	68 42 2b 00 00 	pushl	$11074
-    1ae0:	e8 d1 0d 00 00 	calll	3537 <LDT0_SEL+0x288e>
+    1ae0:	e8 ce 0d 00 00 	calll	3534 <LDT0_SEL+0x288b>
     1ae5:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:7
     1ae8:	90 	nop
@@ -3297,7 +3297,7 @@ e1:
 ; /share/intel_err_handle.c:11
     1af1:	83 ec 0c 	subl	$12, %esp
     1af4:	68 45 2b 00 00 	pushl	$11077
-    1af9:	e8 b8 0d 00 00 	calll	3512 <LDT0_SEL+0x288e>
+    1af9:	e8 b5 0d 00 00 	calll	3509 <LDT0_SEL+0x288b>
     1afe:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:12
     1b01:	90 	nop
@@ -3312,7 +3312,7 @@ e2:
 ; /share/intel_err_handle.c:16
     1b0a:	83 ec 0c 	subl	$12, %esp
     1b0d:	68 48 2b 00 00 	pushl	$11080
-    1b12:	e8 9f 0d 00 00 	calll	3487 <LDT0_SEL+0x288e>
+    1b12:	e8 9c 0d 00 00 	calll	3484 <LDT0_SEL+0x288b>
     1b17:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:17
     1b1a:	90 	nop
@@ -3327,7 +3327,7 @@ e3:
 ; /share/intel_err_handle.c:21
     1b23:	83 ec 0c 	subl	$12, %esp
     1b26:	68 4b 2b 00 00 	pushl	$11083
-    1b2b:	e8 86 0d 00 00 	calll	3462 <LDT0_SEL+0x288e>
+    1b2b:	e8 83 0d 00 00 	calll	3459 <LDT0_SEL+0x288b>
     1b30:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:22
     1b33:	90 	nop
@@ -3342,7 +3342,7 @@ e4:
 ; /share/intel_err_handle.c:26
     1b3c:	83 ec 0c 	subl	$12, %esp
     1b3f:	68 4e 2b 00 00 	pushl	$11086
-    1b44:	e8 6d 0d 00 00 	calll	3437 <LDT0_SEL+0x288e>
+    1b44:	e8 6a 0d 00 00 	calll	3434 <LDT0_SEL+0x288b>
     1b49:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:27
     1b4c:	90 	nop
@@ -3357,7 +3357,7 @@ e5:
 ; /share/intel_err_handle.c:31
     1b55:	83 ec 0c 	subl	$12, %esp
     1b58:	68 51 2b 00 00 	pushl	$11089
-    1b5d:	e8 54 0d 00 00 	calll	3412 <LDT0_SEL+0x288e>
+    1b5d:	e8 51 0d 00 00 	calll	3409 <LDT0_SEL+0x288b>
     1b62:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:32
     1b65:	90 	nop
@@ -3372,7 +3372,7 @@ e6:
 ; /share/intel_err_handle.c:36
     1b6e:	83 ec 0c 	subl	$12, %esp
     1b71:	68 54 2b 00 00 	pushl	$11092
-    1b76:	e8 3b 0d 00 00 	calll	3387 <LDT0_SEL+0x288e>
+    1b76:	e8 38 0d 00 00 	calll	3384 <LDT0_SEL+0x288b>
     1b7b:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:37
     1b7e:	90 	nop
@@ -3387,7 +3387,7 @@ e7:
 ; /share/intel_err_handle.c:41
     1b87:	83 ec 0c 	subl	$12, %esp
     1b8a:	68 57 2b 00 00 	pushl	$11095
-    1b8f:	e8 22 0d 00 00 	calll	3362 <LDT0_SEL+0x288e>
+    1b8f:	e8 1f 0d 00 00 	calll	3359 <LDT0_SEL+0x288b>
     1b94:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:42
     1b97:	90 	nop
@@ -3402,7 +3402,7 @@ e8:
 ; /share/intel_err_handle.c:46
     1ba0:	83 ec 0c 	subl	$12, %esp
     1ba3:	68 5a 2b 00 00 	pushl	$11098
-    1ba8:	e8 09 0d 00 00 	calll	3337 <LDT0_SEL+0x288e>
+    1ba8:	e8 06 0d 00 00 	calll	3334 <LDT0_SEL+0x288b>
     1bad:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:47
     1bb0:	90 	nop
@@ -3417,7 +3417,7 @@ e9:
 ; /share/intel_err_handle.c:51
     1bb9:	83 ec 0c 	subl	$12, %esp
     1bbc:	68 5d 2b 00 00 	pushl	$11101
-    1bc1:	e8 f0 0c 00 00 	calll	3312 <LDT0_SEL+0x288e>
+    1bc1:	e8 ed 0c 00 00 	calll	3309 <LDT0_SEL+0x288b>
     1bc6:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:52
     1bc9:	90 	nop
@@ -3432,7 +3432,7 @@ e10:
 ; /share/intel_err_handle.c:56
     1bd2:	83 ec 0c 	subl	$12, %esp
     1bd5:	68 60 2b 00 00 	pushl	$11104
-    1bda:	e8 d7 0c 00 00 	calll	3287 <LDT0_SEL+0x288e>
+    1bda:	e8 d4 0c 00 00 	calll	3284 <LDT0_SEL+0x288b>
     1bdf:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:57
     1be2:	90 	nop
@@ -3447,7 +3447,7 @@ e11:
 ; /share/intel_err_handle.c:61
     1beb:	83 ec 0c 	subl	$12, %esp
     1bee:	68 64 2b 00 00 	pushl	$11108
-    1bf3:	e8 be 0c 00 00 	calll	3262 <LDT0_SEL+0x288e>
+    1bf3:	e8 bb 0c 00 00 	calll	3259 <LDT0_SEL+0x288b>
     1bf8:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:62
     1bfb:	90 	nop
@@ -3462,7 +3462,7 @@ e12:
 ; /share/intel_err_handle.c:66
     1c04:	83 ec 0c 	subl	$12, %esp
     1c07:	68 68 2b 00 00 	pushl	$11112
-    1c0c:	e8 a4 0e 00 00 	calll	3748 <LDT0_SEL+0x2a8d>
+    1c0c:	e8 a1 0e 00 00 	calll	3745 <LDT0_SEL+0x2a8a>
     1c11:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:67
     1c14:	90 	nop
@@ -3477,7 +3477,7 @@ e13:
 ; /share/intel_err_handle.c:71
     1c1d:	83 ec 0c 	subl	$12, %esp
     1c20:	68 6c 2b 00 00 	pushl	$11116
-    1c25:	e8 8b 0e 00 00 	calll	3723 <LDT0_SEL+0x2a8d>
+    1c25:	e8 88 0e 00 00 	calll	3720 <LDT0_SEL+0x2a8a>
     1c2a:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:72
     1c2d:	90 	nop
@@ -3492,7 +3492,7 @@ e15:
 ; /share/intel_err_handle.c:76
     1c36:	83 ec 0c 	subl	$12, %esp
     1c39:	68 70 2b 00 00 	pushl	$11120
-    1c3e:	e8 73 0c 00 00 	calll	3187 <LDT0_SEL+0x288e>
+    1c3e:	e8 70 0c 00 00 	calll	3184 <LDT0_SEL+0x288b>
     1c43:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:77
     1c46:	90 	nop
@@ -3507,7 +3507,7 @@ e16:
 ; /share/intel_err_handle.c:81
     1c4f:	83 ec 0c 	subl	$12, %esp
     1c52:	68 74 2b 00 00 	pushl	$11124
-    1c57:	e8 5a 0c 00 00 	calll	3162 <LDT0_SEL+0x288e>
+    1c57:	e8 57 0c 00 00 	calll	3159 <LDT0_SEL+0x288b>
     1c5c:	83 c4 10 	addl	$16, %esp
 ; /share/intel_err_handle.c:82
     1c5f:	90 	nop
@@ -3768,7 +3768,7 @@ copy_mem:
 ; /share/fork.c:30
     1ee3:	83 ec 0c 	subl	$12, %esp
     1ee6:	68 78 2b 00 00 	pushl	$11128
-    1eeb:	e8 c5 0b 00 00 	calll	3013 <LDT0_SEL+0x2a8d>
+    1eeb:	e8 c2 0b 00 00 	calll	3010 <LDT0_SEL+0x2a8a>
     1ef0:	83 c4 10 	addl	$16, %esp
 ; /share/fork.c:32
     1ef3:	b8 00 00 00 00 	movl	$0, %eax
@@ -4144,7 +4144,7 @@ free_page:
 ; /share/mm.c:69
     2272:	83 ec 0c 	subl	$12, %esp
     2275:	68 94 2b 00 00 	pushl	$11156
-    227a:	e8 36 08 00 00 	calll	2102 <LDT0_SEL+0x2a8d>
+    227a:	e8 33 08 00 00 	calll	2099 <LDT0_SEL+0x2a8a>
     227f:	83 c4 10 	addl	$16, %esp
     2282:	eb 04 	jmp	4 <LDT0_SEL+0x2260>
 ; /share/mm.c:61
@@ -4169,7 +4169,7 @@ free_page_tables:
 ; /share/mm.c:75
     229c:	83 ec 0c 	subl	$12, %esp
     229f:	68 b0 2b 00 00 	pushl	$11184
-    22a4:	e8 0c 08 00 00 	calll	2060 <LDT0_SEL+0x2a8d>
+    22a4:	e8 09 08 00 00 	calll	2057 <LDT0_SEL+0x2a8a>
     22a9:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:76
     22ac:	83 7d 08 00 	cmpl	$0, 8(%ebp)
@@ -4177,7 +4177,7 @@ free_page_tables:
 ; /share/mm.c:77
     22b2:	83 ec 0c 	subl	$12, %esp
     22b5:	68 e0 2b 00 00 	pushl	$11232
-    22ba:	e8 f6 07 00 00 	calll	2038 <LDT0_SEL+0x2a8d>
+    22ba:	e8 f3 07 00 00 	calll	2035 <LDT0_SEL+0x2a8a>
     22bf:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:78
     22c2:	8b 45 0c 	movl	12(%ebp), %eax
@@ -4229,7 +4229,7 @@ free_page_tables:
 ; /share/mm.c:90
     233b:	83 ec 0c 	subl	$12, %esp
     233e:	68 07 2c 00 00 	pushl	$11271
-    2343:	e8 6d 07 00 00 	calll	1901 <LDT0_SEL+0x2a8d>
+    2343:	e8 6a 07 00 00 	calll	1898 <LDT0_SEL+0x2a8a>
     2348:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:92
     234b:	8b 45 f0 	movl	-16(%ebp), %eax
@@ -4287,7 +4287,7 @@ copy_page_tables:
 ; /share/mm.c:113
     23c9:	83 ec 0c 	subl	$12, %esp
     23cc:	68 11 2c 00 00 	pushl	$11281
-    23d1:	e8 df 06 00 00 	calll	1759 <LDT0_SEL+0x2a8d>
+    23d1:	e8 dc 06 00 00 	calll	1756 <LDT0_SEL+0x2a8a>
     23d6:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:115
     23d9:	8b 45 08 	movl	8(%ebp), %eax
@@ -4321,7 +4321,7 @@ copy_page_tables:
 ; /share/mm.c:121
     242d:	83 ec 0c 	subl	$12, %esp
     2430:	68 2a 2c 00 00 	pushl	$11306
-    2435:	e8 7b 06 00 00 	calll	1659 <LDT0_SEL+0x2a8d>
+    2435:	e8 78 06 00 00 	calll	1656 <LDT0_SEL+0x2a8a>
     243a:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:123
     243d:	8b 45 f0 	movl	-16(%ebp), %eax
@@ -4459,7 +4459,7 @@ un_wp_page:
 ; /share/mm.c:160
     2577:	83 ec 0c 	subl	$12, %esp
     257a:	68 43 2c 00 00 	pushl	$11331
-    257f:	e8 31 05 00 00 	calll	1329 <LDT0_SEL+0x2a8d>
+    257f:	e8 2e 05 00 00 	calll	1326 <LDT0_SEL+0x2a8a>
     2584:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:162
     2587:	81 7d f4 ff ff 0f 00 	cmpl	$1048575, -12(%ebp)
@@ -4501,7 +4501,7 @@ put_page:
 ; /share/mm.c:173
     25e2:	83 ec 0c 	subl	$12, %esp
     25e5:	68 56 2c 00 00 	pushl	$11350
-    25ea:	e8 c6 04 00 00 	calll	1222 <LDT0_SEL+0x2a8d>
+    25ea:	e8 c3 04 00 00 	calll	1219 <LDT0_SEL+0x2a8a>
     25ef:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:174
     25f2:	8b 45 08 	movl	8(%ebp), %eax
@@ -4513,7 +4513,7 @@ put_page:
 ; /share/mm.c:175
     2608:	83 ec 0c 	subl	$12, %esp
     260b:	68 71 2c 00 00 	pushl	$11377
-    2610:	e8 a0 04 00 00 	calll	1184 <LDT0_SEL+0x2a8d>
+    2610:	e8 9d 04 00 00 	calll	1181 <LDT0_SEL+0x2a8a>
     2615:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:176
     2618:	8b 45 0c 	movl	12(%ebp), %eax
@@ -4589,7 +4589,7 @@ get_empty_page:
 ; /share/mm.c:197
     26bf:	83 ec 0c 	subl	$12, %esp
     26c2:	68 84 2c 00 00 	pushl	$11396
-    26c7:	e8 e9 03 00 00 	calll	1001 <LDT0_SEL+0x2a8d>
+    26c7:	e8 e6 03 00 00 	calll	998 <LDT0_SEL+0x2a8a>
     26cc:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:199
     26cf:	90 	nop
@@ -4629,7 +4629,7 @@ do_no_page:
 ; /share/mm.c:208
     2719:	83 ec 0c 	subl	$12, %esp
     271c:	68 9a 2c 00 00 	pushl	$11418
-    2721:	e8 8f 03 00 00 	calll	911 <LDT0_SEL+0x2a8d>
+    2721:	e8 8c 03 00 00 	calll	908 <LDT0_SEL+0x2a8a>
     2726:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:210
     2729:	a1 40 35 00 00 	movl	13632, %eax
@@ -4642,7 +4642,7 @@ do_no_page:
     273c:	e8 55 ff ff ff 	calll	-171 <LDT0_SEL+0x266e>
     2741:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:212
-    2744:	eb 71 	jmp	113 <LDT0_SEL+0x278f>
+    2744:	eb 6e 	jmp	110 <LDT0_SEL+0x278c>
 ; /share/mm.c:214
     2746:	e8 9e fa ff ff 	calll	-1378 <LDT0_SEL+0x21c1>
     274b:	89 45 ec 	movl	%eax, -20(%ebp)
@@ -4651,367 +4651,366 @@ do_no_page:
 ; /share/mm.c:215
     2754:	83 ec 0c 	subl	$12, %esp
     2757:	68 ac 2c 00 00 	pushl	$11436
-    275c:	e8 54 03 00 00 	calll	852 <LDT0_SEL+0x2a8d>
+    275c:	e8 51 03 00 00 	calll	849 <LDT0_SEL+0x2a8a>
     2761:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:217
     2764:	8b 45 f4 	movl	-12(%ebp), %eax
     2767:	c1 e8 0a 	shrl	$10, %eax
-    276a:	83 c0 01 	addl	$1, %eax
-    276d:	89 45 e8 	movl	%eax, -24(%ebp)
+    276a:	89 45 e8 	movl	%eax, -24(%ebp)
 ; /share/mm.c:218
-    2770:	a1 40 35 00 00 	movl	13632, %eax
-    2775:	8b 40 20 	movl	32(%eax), %eax
-    2778:	83 ec 04 	subl	$4, %esp
-    277b:	50 	pushl	%eax
-    277c:	ff 75 e8 	pushl	-24(%ebp)
-    277f:	ff 75 ec 	pushl	-20(%ebp)
-    2782:	e8 13 f1 ff ff 	calll	-3821 <LDT0_SEL+0x1872>
-    2787:	83 c4 10 	addl	$16, %esp
+    276d:	a1 40 35 00 00 	movl	13632, %eax
+    2772:	8b 40 20 	movl	32(%eax), %eax
+    2775:	83 ec 04 	subl	$4, %esp
+    2778:	50 	pushl	%eax
+    2779:	ff 75 e8 	pushl	-24(%ebp)
+    277c:	ff 75 ec 	pushl	-20(%ebp)
+    277f:	e8 16 f1 ff ff 	calll	-3818 <LDT0_SEL+0x1872>
+    2784:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:219
-    278a:	83 ec 08 	subl	$8, %esp
-    278d:	ff 75 08 	pushl	8(%ebp)
-    2790:	ff 75 ec 	pushl	-20(%ebp)
-    2793:	e8 3b fe ff ff 	calll	-453 <LDT0_SEL+0x25ab>
-    2798:	83 c4 10 	addl	$16, %esp
-    279b:	85 c0 	testl	%eax, %eax
-    279d:	75 10 	jne	16 <LDT0_SEL+0x2787>
+    2787:	83 ec 08 	subl	$8, %esp
+    278a:	ff 75 08 	pushl	8(%ebp)
+    278d:	ff 75 ec 	pushl	-20(%ebp)
+    2790:	e8 3e fe ff ff 	calll	-450 <LDT0_SEL+0x25ab>
+    2795:	83 c4 10 	addl	$16, %esp
+    2798:	85 c0 	testl	%eax, %eax
+    279a:	75 10 	jne	16 <LDT0_SEL+0x2784>
 ; /share/mm.c:220
-    279f:	83 ec 0c 	subl	$12, %esp
-    27a2:	68 cc 2c 00 00 	pushl	$11468
-    27a7:	e8 09 03 00 00 	calll	777 <LDT0_SEL+0x2a8d>
-    27ac:	83 c4 10 	addl	$16, %esp
+    279c:	83 ec 0c 	subl	$12, %esp
+    279f:	68 cc 2c 00 00 	pushl	$11468
+    27a4:	e8 09 03 00 00 	calll	777 <LDT0_SEL+0x2a8a>
+    27a9:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:222
-    27af:	b8 00 80 00 00 	movl	$32768, %eax
-    27b4:	0f 22 d8 	movl	%eax, %cr3
+    27ac:	b8 00 80 00 00 	movl	$32768, %eax
+    27b1:	0f 22 d8 	movl	%eax, %cr3
 ; /share/mm.c:223
-    27b7:	c9 	leave
-    27b8:	c3 	retl
+    27b4:	c9 	leave
+    27b5:	c3 	retl
 
 e14:
 ; /share/mm.c:226
-    27b9:	55 	pushl	%ebp
-    27ba:	89 e5 	movl	%esp, %ebp
-    27bc:	83 ec 18 	subl	$24, %esp
+    27b6:	55 	pushl	%ebp
+    27b7:	89 e5 	movl	%esp, %ebp
+    27b9:	83 ec 18 	subl	$24, %esp
 ; /share/mm.c:227
-    27bf:	83 ec 0c 	subl	$12, %esp
-    27c2:	68 e7 2c 00 00 	pushl	$11495
-    27c7:	e8 ea 00 00 00 	calll	234 <LDT0_SEL+0x288e>
-    27cc:	83 c4 10 	addl	$16, %esp
+    27bc:	83 ec 0c 	subl	$12, %esp
+    27bf:	68 e7 2c 00 00 	pushl	$11495
+    27c4:	e8 ea 00 00 00 	calll	234 <LDT0_SEL+0x288b>
+    27c9:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:228
-    27cf:	8b 45 0c 	movl	12(%ebp), %eax
-    27d2:	83 ec 0c 	subl	$12, %esp
-    27d5:	50 	pushl	%eax
-    27d6:	e8 d9 01 00 00 	calll	473 <LDT0_SEL+0x298c>
-    27db:	83 c4 10 	addl	$16, %esp
+    27cc:	8b 45 0c 	movl	12(%ebp), %eax
+    27cf:	83 ec 0c 	subl	$12, %esp
+    27d2:	50 	pushl	%eax
+    27d3:	e8 d9 01 00 00 	calll	473 <LDT0_SEL+0x2989>
+    27d8:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:229
-    27de:	8b 45 08 	movl	8(%ebp), %eax
-    27e1:	83 ec 0c 	subl	$12, %esp
-    27e4:	50 	pushl	%eax
-    27e5:	e8 ca 01 00 00 	calll	458 <LDT0_SEL+0x298c>
-    27ea:	83 c4 10 	addl	$16, %esp
+    27db:	8b 45 08 	movl	8(%ebp), %eax
+    27de:	83 ec 0c 	subl	$12, %esp
+    27e1:	50 	pushl	%eax
+    27e2:	e8 ca 01 00 00 	calll	458 <LDT0_SEL+0x2989>
+    27e7:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:230
-    27ed:	8b 45 0c 	movl	12(%ebp), %eax
-    27f0:	83 e0 01 	andl	$1, %eax
-    27f3:	85 c0 	testl	%eax, %eax
-    27f5:	74 48 	je	72 <LDT0_SEL+0x2817>
+    27ea:	8b 45 0c 	movl	12(%ebp), %eax
+    27ed:	83 e0 01 	andl	$1, %eax
+    27f0:	85 c0 	testl	%eax, %eax
+    27f2:	74 48 	je	72 <LDT0_SEL+0x2814>
 ; /share/mm.c:231
-    27f7:	8b 45 08 	movl	8(%ebp), %eax
-    27fa:	c1 e8 0c 	shrl	$12, %eax
-    27fd:	25 ff 03 00 00 	andl	$1023, %eax
-    2802:	89 45 f4 	movl	%eax, -12(%ebp)
+    27f4:	8b 45 08 	movl	8(%ebp), %eax
+    27f7:	c1 e8 0c 	shrl	$12, %eax
+    27fa:	25 ff 03 00 00 	andl	$1023, %eax
+    27ff:	89 45 f4 	movl	%eax, -12(%ebp)
 ; /share/mm.c:232
-    2805:	8b 45 08 	movl	8(%ebp), %eax
-    2808:	c1 e8 16 	shrl	$22, %eax
-    280b:	89 45 f0 	movl	%eax, -16(%ebp)
+    2802:	8b 45 08 	movl	8(%ebp), %eax
+    2805:	c1 e8 16 	shrl	$22, %eax
+    2808:	89 45 f0 	movl	%eax, -16(%ebp)
 ; /share/mm.c:233
-    280e:	8b 45 f4 	movl	-12(%ebp), %eax
-    2811:	05 00 fc ff 3f 	addl	$1073740800, %eax
-    2816:	8d 14 85 00 00 00 00 	leal	(,%eax,4), %edx
-    281d:	8b 45 f0 	movl	-16(%ebp), %eax
-    2820:	05 00 20 00 00 	addl	$8192, %eax
-    2825:	c1 e0 02 	shll	$2, %eax
-    2828:	8b 00 	movl	(%eax), %eax
-    282a:	21 d0 	andl	%edx, %eax
-    282c:	89 45 ec 	movl	%eax, -20(%ebp)
+    280b:	8b 45 f4 	movl	-12(%ebp), %eax
+    280e:	05 00 fc ff 3f 	addl	$1073740800, %eax
+    2813:	8d 14 85 00 00 00 00 	leal	(,%eax,4), %edx
+    281a:	8b 45 f0 	movl	-16(%ebp), %eax
+    281d:	05 00 20 00 00 	addl	$8192, %eax
+    2822:	c1 e0 02 	shll	$2, %eax
+    2825:	8b 00 	movl	(%eax), %eax
+    2827:	21 d0 	andl	%edx, %eax
+    2829:	89 45 ec 	movl	%eax, -20(%ebp)
 ; /share/mm.c:234
-    282f:	83 ec 0c 	subl	$12, %esp
-    2832:	ff 75 ec 	pushl	-20(%ebp)
-    2835:	e8 e4 fc ff ff 	calll	-796 <LDT0_SEL+0x24f6>
-    283a:	83 c4 10 	addl	$16, %esp
+    282c:	83 ec 0c 	subl	$12, %esp
+    282f:	ff 75 ec 	pushl	-20(%ebp)
+    2832:	e8 e7 fc ff ff 	calll	-793 <LDT0_SEL+0x24f6>
+    2837:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:238
-    283d:	eb 0e 	jmp	14 <LDT0_SEL+0x2825>
+    283a:	eb 0e 	jmp	14 <LDT0_SEL+0x2822>
 ; /share/mm.c:236
-    283f:	83 ec 0c 	subl	$12, %esp
-    2842:	ff 75 08 	pushl	8(%ebp)
-    2845:	e8 88 fe ff ff 	calll	-376 <LDT0_SEL+0x26aa>
-    284a:	83 c4 10 	addl	$16, %esp
+    283c:	83 ec 0c 	subl	$12, %esp
+    283f:	ff 75 08 	pushl	8(%ebp)
+    2842:	e8 8b fe ff ff 	calll	-373 <LDT0_SEL+0x26aa>
+    2847:	83 c4 10 	addl	$16, %esp
 ; /share/mm.c:238
-    284d:	90 	nop
-    284e:	c9 	leave
-    284f:	c3 	retl
+    284a:	90 	nop
+    284b:	c9 	leave
+    284c:	c3 	retl
 
 init_screen_buff:
 ; /share/print_str.c:8
-    2850:	55 	pushl	%ebp
-    2851:	89 e5 	movl	%esp, %ebp
-    2853:	83 ec 10 	subl	$16, %esp
+    284d:	55 	pushl	%ebp
+    284e:	89 e5 	movl	%esp, %ebp
+    2850:	83 ec 10 	subl	$16, %esp
 ; /share/print_str.c:9
-    2856:	c7 45 fc 00 00 00 00 	movl	$0, -4(%ebp)
-    285d:	eb 0f 	jmp	15 <LDT0_SEL+0x2846>
+    2853:	c7 45 fc 00 00 00 00 	movl	$0, -4(%ebp)
+    285a:	eb 0f 	jmp	15 <LDT0_SEL+0x2843>
 ; /share/print_str.c:10
-    285f:	8b 45 fc 	movl	-4(%ebp), %eax
-    2862:	05 00 75 00 00 	addl	$29952, %eax
-    2867:	c6 00 00 	movb	$0, (%eax)
+    285c:	8b 45 fc 	movl	-4(%ebp), %eax
+    285f:	05 00 75 00 00 	addl	$29952, %eax
+    2864:	c6 00 00 	movb	$0, (%eax)
 ; /share/print_str.c:9
-    286a:	83 45 fc 01 	addl	$1, -4(%ebp)
-    286e:	81 7d fc cf 07 00 00 	cmpl	$1999, -4(%ebp)
-    2875:	7e e8 	jle	-24 <LDT0_SEL+0x2837>
+    2867:	83 45 fc 01 	addl	$1, -4(%ebp)
+    286b:	81 7d fc cf 07 00 00 	cmpl	$1999, -4(%ebp)
+    2872:	7e e8 	jle	-24 <LDT0_SEL+0x2834>
 ; /share/print_str.c:12
-    2877:	90 	nop
-    2878:	c9 	leave
-    2879:	c3 	retl
+    2874:	90 	nop
+    2875:	c9 	leave
+    2876:	c3 	retl
 
 validate_screen:
 ; /share/print_str.c:15
-    287a:	55 	pushl	%ebp
-    287b:	89 e5 	movl	%esp, %ebp
-    287d:	83 ec 18 	subl	$24, %esp
+    2877:	55 	pushl	%ebp
+    2878:	89 e5 	movl	%esp, %ebp
+    287a:	83 ec 18 	subl	$24, %esp
 ; /share/print_str.c:16
-    2880:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
-    2887:	eb 21 	jmp	33 <LDT0_SEL+0x2882>
+    287d:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    2884:	eb 21 	jmp	33 <LDT0_SEL+0x287f>
 ; /share/print_str.c:17
-    2889:	8b 45 f4 	movl	-12(%ebp), %eax
-    288c:	05 00 75 00 00 	addl	$29952, %eax
-    2891:	0f b6 00 	movzbl	(%eax), %eax
-    2894:	0f be c0 	movsbl	%al, %eax
-    2897:	83 ec 08 	subl	$8, %esp
-    289a:	ff 75 f4 	pushl	-12(%ebp)
-    289d:	50 	pushl	%eax
-    289e:	e8 cf d7 ff ff 	calll	-10289 <LDT0_SEL+0x4a>
-    28a3:	83 c4 10 	addl	$16, %esp
+    2886:	8b 45 f4 	movl	-12(%ebp), %eax
+    2889:	05 00 75 00 00 	addl	$29952, %eax
+    288e:	0f b6 00 	movzbl	(%eax), %eax
+    2891:	0f be c0 	movsbl	%al, %eax
+    2894:	83 ec 08 	subl	$8, %esp
+    2897:	ff 75 f4 	pushl	-12(%ebp)
+    289a:	50 	pushl	%eax
+    289b:	e8 d2 d7 ff ff 	calll	-10286 <LDT0_SEL+0x4a>
+    28a0:	83 c4 10 	addl	$16, %esp
 ; /share/print_str.c:16
-    28a6:	83 45 f4 01 	addl	$1, -12(%ebp)
-    28aa:	81 7d f4 cf 07 00 00 	cmpl	$1999, -12(%ebp)
-    28b1:	7e d6 	jle	-42 <LDT0_SEL+0x2861>
+    28a3:	83 45 f4 01 	addl	$1, -12(%ebp)
+    28a7:	81 7d f4 cf 07 00 00 	cmpl	$1999, -12(%ebp)
+    28ae:	7e d6 	jle	-42 <LDT0_SEL+0x285e>
 ; /share/print_str.c:19
-    28b3:	90 	nop
-    28b4:	c9 	leave
-    28b5:	c3 	retl
+    28b0:	90 	nop
+    28b1:	c9 	leave
+    28b2:	c3 	retl
 
 print_str:
 ; /share/print_str.c:22
-    28b6:	55 	pushl	%ebp
-    28b7:	89 e5 	movl	%esp, %ebp
-    28b9:	83 ec 28 	subl	$40, %esp
+    28b3:	55 	pushl	%ebp
+    28b4:	89 e5 	movl	%esp, %ebp
+    28b6:	83 ec 28 	subl	$40, %esp
 ; /share/print_str.c:23
-    28bc:	a1 e0 74 00 00 	movl	29920, %eax
-    28c1:	83 f8 18 	cmpl	$24, %eax
-    28c4:	0f 8e 8b 00 00 00 	jle	139 <LDT0_SEL+0x292d>
+    28b9:	a1 e0 74 00 00 	movl	29920, %eax
+    28be:	83 f8 18 	cmpl	$24, %eax
+    28c1:	0f 8e 8b 00 00 00 	jle	139 <LDT0_SEL+0x292a>
 ; /share/print_str.c:24
-    28ca:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
-    28d1:	eb 50 	jmp	80 <LDT0_SEL+0x28fb>
+    28c7:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    28ce:	eb 50 	jmp	80 <LDT0_SEL+0x28f8>
 ; /share/print_str.c:25
-    28d3:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
-    28da:	eb 3d 	jmp	61 <LDT0_SEL+0x28f1>
+    28d0:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    28d7:	eb 3d 	jmp	61 <LDT0_SEL+0x28ee>
 ; /share/print_str.c:26
-    28dc:	8b 45 f4 	movl	-12(%ebp), %eax
-    28df:	8d 50 01 	leal	1(%eax), %edx
-    28e2:	89 d0 	movl	%edx, %eax
-    28e4:	c1 e0 02 	shll	$2, %eax
-    28e7:	01 d0 	addl	%edx, %eax
-    28e9:	c1 e0 04 	shll	$4, %eax
-    28ec:	89 c2 	movl	%eax, %edx
-    28ee:	8b 45 f0 	movl	-16(%ebp), %eax
-    28f1:	8d 0c 02 	leal	(%edx,%eax), %ecx
-    28f4:	8b 55 f4 	movl	-12(%ebp), %edx
-    28f7:	89 d0 	movl	%edx, %eax
-    28f9:	c1 e0 02 	shll	$2, %eax
-    28fc:	01 d0 	addl	%edx, %eax
-    28fe:	c1 e0 04 	shll	$4, %eax
-    2901:	89 c2 	movl	%eax, %edx
-    2903:	8b 45 f0 	movl	-16(%ebp), %eax
-    2906:	01 c2 	addl	%eax, %edx
-    2908:	0f b6 81 00 75 00 00 	movzbl	29952(%ecx), %eax
-    290f:	88 82 00 75 00 00 	movb	%al, 29952(%edx)
+    28d9:	8b 45 f4 	movl	-12(%ebp), %eax
+    28dc:	8d 50 01 	leal	1(%eax), %edx
+    28df:	89 d0 	movl	%edx, %eax
+    28e1:	c1 e0 02 	shll	$2, %eax
+    28e4:	01 d0 	addl	%edx, %eax
+    28e6:	c1 e0 04 	shll	$4, %eax
+    28e9:	89 c2 	movl	%eax, %edx
+    28eb:	8b 45 f0 	movl	-16(%ebp), %eax
+    28ee:	8d 0c 02 	leal	(%edx,%eax), %ecx
+    28f1:	8b 55 f4 	movl	-12(%ebp), %edx
+    28f4:	89 d0 	movl	%edx, %eax
+    28f6:	c1 e0 02 	shll	$2, %eax
+    28f9:	01 d0 	addl	%edx, %eax
+    28fb:	c1 e0 04 	shll	$4, %eax
+    28fe:	89 c2 	movl	%eax, %edx
+    2900:	8b 45 f0 	movl	-16(%ebp), %eax
+    2903:	01 c2 	addl	%eax, %edx
+    2905:	0f b6 81 00 75 00 00 	movzbl	29952(%ecx), %eax
+    290c:	88 82 00 75 00 00 	movb	%al, 29952(%edx)
 ; /share/print_str.c:25
-    2915:	83 45 f0 01 	addl	$1, -16(%ebp)
-    2919:	83 7d f0 4f 	cmpl	$79, -16(%ebp)
-    291d:	7e bd 	jle	-67 <LDT0_SEL+0x28b4>
+    2912:	83 45 f0 01 	addl	$1, -16(%ebp)
+    2916:	83 7d f0 4f 	cmpl	$79, -16(%ebp)
+    291a:	7e bd 	jle	-67 <LDT0_SEL+0x28b1>
 ; /share/print_str.c:24
-    291f:	83 45 f4 01 	addl	$1, -12(%ebp)
-    2923:	83 7d f4 17 	cmpl	$23, -12(%ebp)
-    2927:	7e aa 	jle	-86 <LDT0_SEL+0x28ab>
+    291c:	83 45 f4 01 	addl	$1, -12(%ebp)
+    2920:	83 7d f4 17 	cmpl	$23, -12(%ebp)
+    2924:	7e aa 	jle	-86 <LDT0_SEL+0x28a8>
 ; /share/print_str.c:29
-    2929:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
-    2930:	eb 13 	jmp	19 <LDT0_SEL+0x291d>
+    2926:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
+    292d:	eb 13 	jmp	19 <LDT0_SEL+0x291a>
 ; /share/print_str.c:30
-    2932:	8b 45 ec 	movl	-20(%ebp), %eax
-    2935:	05 80 07 00 00 	addl	$1920, %eax
-    293a:	c6 80 00 75 00 00 00 	movb	$0, 29952(%eax)
+    292f:	8b 45 ec 	movl	-20(%ebp), %eax
+    2932:	05 80 07 00 00 	addl	$1920, %eax
+    2937:	c6 80 00 75 00 00 00 	movb	$0, 29952(%eax)
 ; /share/print_str.c:29
-    2941:	83 45 ec 01 	addl	$1, -20(%ebp)
-    2945:	83 7d ec 4f 	cmpl	$79, -20(%ebp)
-    2949:	7e e7 	jle	-25 <LDT0_SEL+0x290a>
+    293e:	83 45 ec 01 	addl	$1, -20(%ebp)
+    2942:	83 7d ec 4f 	cmpl	$79, -20(%ebp)
+    2946:	7e e7 	jle	-25 <LDT0_SEL+0x2907>
 ; /share/print_str.c:32
-    294b:	c7 05 e0 74 00 00 18 00 00 00 	movl	$24, 29920
+    2948:	c7 05 e0 74 00 00 18 00 00 00 	movl	$24, 29920
 ; /share/print_str.c:34
-    2955:	a1 e0 74 00 00 	movl	29920, %eax
-    295a:	89 45 e4 	movl	%eax, -28(%ebp)
+    2952:	a1 e0 74 00 00 	movl	29920, %eax
+    2957:	89 45 e4 	movl	%eax, -28(%ebp)
 ; /share/print_str.c:35
-    295d:	c7 45 e8 00 00 00 00 	movl	$0, -24(%ebp)
+    295a:	c7 45 e8 00 00 00 00 	movl	$0, -24(%ebp)
 ; /share/print_str.c:36
-    2964:	eb 2a 	jmp	42 <LDT0_SEL+0x2968>
+    2961:	eb 2a 	jmp	42 <LDT0_SEL+0x2965>
 ; /share/print_str.c:37
-    2966:	8b 55 e8 	movl	-24(%ebp), %edx
-    2969:	8b 45 08 	movl	8(%ebp), %eax
-    296c:	8d 0c 02 	leal	(%edx,%eax), %ecx
-    296f:	8b 55 e4 	movl	-28(%ebp), %edx
-    2972:	89 d0 	movl	%edx, %eax
-    2974:	c1 e0 02 	shll	$2, %eax
-    2977:	01 d0 	addl	%edx, %eax
-    2979:	c1 e0 04 	shll	$4, %eax
-    297c:	89 c2 	movl	%eax, %edx
-    297e:	8b 45 e8 	movl	-24(%ebp), %eax
-    2981:	01 c2 	addl	%eax, %edx
-    2983:	0f b6 01 	movzbl	(%ecx), %eax
-    2986:	88 82 00 75 00 00 	movb	%al, 29952(%edx)
+    2963:	8b 55 e8 	movl	-24(%ebp), %edx
+    2966:	8b 45 08 	movl	8(%ebp), %eax
+    2969:	8d 0c 02 	leal	(%edx,%eax), %ecx
+    296c:	8b 55 e4 	movl	-28(%ebp), %edx
+    296f:	89 d0 	movl	%edx, %eax
+    2971:	c1 e0 02 	shll	$2, %eax
+    2974:	01 d0 	addl	%edx, %eax
+    2976:	c1 e0 04 	shll	$4, %eax
+    2979:	89 c2 	movl	%eax, %edx
+    297b:	8b 45 e8 	movl	-24(%ebp), %eax
+    297e:	01 c2 	addl	%eax, %edx
+    2980:	0f b6 01 	movzbl	(%ecx), %eax
+    2983:	88 82 00 75 00 00 	movb	%al, 29952(%edx)
 ; /share/print_str.c:38
-    298c:	83 45 e8 01 	addl	$1, -24(%ebp)
+    2989:	83 45 e8 01 	addl	$1, -24(%ebp)
 ; /share/print_str.c:36
-    2990:	8b 55 e8 	movl	-24(%ebp), %edx
-    2993:	8b 45 08 	movl	8(%ebp), %eax
-    2996:	01 d0 	addl	%edx, %eax
-    2998:	0f b6 00 	movzbl	(%eax), %eax
-    299b:	84 c0 	testb	%al, %al
-    299d:	75 c7 	jne	-57 <LDT0_SEL+0x293e>
+    298d:	8b 55 e8 	movl	-24(%ebp), %edx
+    2990:	8b 45 08 	movl	8(%ebp), %eax
+    2993:	01 d0 	addl	%edx, %eax
+    2995:	0f b6 00 	movzbl	(%eax), %eax
+    2998:	84 c0 	testb	%al, %al
+    299a:	75 c7 	jne	-57 <LDT0_SEL+0x293b>
 ; /share/print_str.c:40
-    299f:	a1 e0 74 00 00 	movl	29920, %eax
-    29a4:	83 c0 01 	addl	$1, %eax
-    29a7:	a3 e0 74 00 00 	movl	%eax, 29920
+    299c:	a1 e0 74 00 00 	movl	29920, %eax
+    29a1:	83 c0 01 	addl	$1, %eax
+    29a4:	a3 e0 74 00 00 	movl	%eax, 29920
 ; /share/print_str.c:41
-    29ac:	e8 c9 fe ff ff 	calll	-311 <LDT0_SEL+0x2852>
+    29a9:	e8 c9 fe ff ff 	calll	-311 <LDT0_SEL+0x284f>
 ; /share/print_str.c:42
-    29b1:	90 	nop
-    29b2:	c9 	leave
-    29b3:	c3 	retl
+    29ae:	90 	nop
+    29af:	c9 	leave
+    29b0:	c3 	retl
 
 print_num:
 ; /share/print_str.c:45
-    29b4:	55 	pushl	%ebp
-    29b5:	89 e5 	movl	%esp, %ebp
-    29b7:	81 ec 98 00 00 00 	subl	$152, %esp
+    29b1:	55 	pushl	%ebp
+    29b2:	89 e5 	movl	%esp, %ebp
+    29b4:	81 ec 98 00 00 00 	subl	$152, %esp
 ; /share/print_str.c:47
-    29bd:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
+    29ba:	c7 45 f4 00 00 00 00 	movl	$0, -12(%ebp)
 ; /share/print_str.c:48
-    29c4:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
-    29cb:	eb 0f 	jmp	15 <LDT0_SEL+0x29b4>
+    29c1:	c7 45 f0 00 00 00 00 	movl	$0, -16(%ebp)
+    29c8:	eb 0f 	jmp	15 <LDT0_SEL+0x29b1>
 ; /share/print_str.c:49
-    29cd:	8d 55 a8 	leal	-88(%ebp), %edx
-    29d0:	8b 45 f0 	movl	-16(%ebp), %eax
-    29d3:	01 d0 	addl	%edx, %eax
-    29d5:	c6 00 00 	movb	$0, (%eax)
+    29ca:	8d 55 a8 	leal	-88(%ebp), %edx
+    29cd:	8b 45 f0 	movl	-16(%ebp), %eax
+    29d0:	01 d0 	addl	%edx, %eax
+    29d2:	c6 00 00 	movb	$0, (%eax)
 ; /share/print_str.c:48
-    29d8:	83 45 f0 01 	addl	$1, -16(%ebp)
-    29dc:	83 7d f0 3f 	cmpl	$63, -16(%ebp)
-    29e0:	7e eb 	jle	-21 <LDT0_SEL+0x29a5>
+    29d5:	83 45 f0 01 	addl	$1, -16(%ebp)
+    29d9:	83 7d f0 3f 	cmpl	$63, -16(%ebp)
+    29dd:	7e eb 	jle	-21 <LDT0_SEL+0x29a2>
 ; /share/print_str.c:51
-    29e2:	83 7d 08 00 	cmpl	$0, 8(%ebp)
-    29e6:	75 10 	jne	16 <LDT0_SEL+0x29d0>
+    29df:	83 7d 08 00 	cmpl	$0, 8(%ebp)
+    29e3:	75 10 	jne	16 <LDT0_SEL+0x29cd>
 ; /share/print_str.c:52
-    29e8:	8b 45 f4 	movl	-12(%ebp), %eax
-    29eb:	8d 50 01 	leal	1(%eax), %edx
-    29ee:	89 55 f4 	movl	%edx, -12(%ebp)
-    29f1:	c6 44 05 a8 30 	movb	$48, -88(%ebp,%eax)
-    29f6:	eb 17 	jmp	23 <LDT0_SEL+0x29e7>
+    29e5:	8b 45 f4 	movl	-12(%ebp), %eax
+    29e8:	8d 50 01 	leal	1(%eax), %edx
+    29eb:	89 55 f4 	movl	%edx, -12(%ebp)
+    29ee:	c6 44 05 a8 30 	movb	$48, -88(%ebp,%eax)
+    29f3:	eb 17 	jmp	23 <LDT0_SEL+0x29e4>
 ; /share/print_str.c:53
-    29f8:	83 7d 08 00 	cmpl	$0, 8(%ebp)
-    29fc:	79 11 	jns	17 <LDT0_SEL+0x29e7>
+    29f5:	83 7d 08 00 	cmpl	$0, 8(%ebp)
+    29f9:	79 11 	jns	17 <LDT0_SEL+0x29e4>
 ; /share/print_str.c:54
-    29fe:	f7 5d 08 	negl	8(%ebp)
+    29fb:	f7 5d 08 	negl	8(%ebp)
 ; /share/print_str.c:55
-    2a01:	8b 45 f4 	movl	-12(%ebp), %eax
-    2a04:	8d 50 01 	leal	1(%eax), %edx
-    2a07:	89 55 f4 	movl	%edx, -12(%ebp)
-    2a0a:	c6 44 05 a8 2d 	movb	$45, -88(%ebp,%eax)
+    29fe:	8b 45 f4 	movl	-12(%ebp), %eax
+    2a01:	8d 50 01 	leal	1(%eax), %edx
+    2a04:	89 55 f4 	movl	%edx, -12(%ebp)
+    2a07:	c6 44 05 a8 2d 	movb	$45, -88(%ebp,%eax)
 ; /share/print_str.c:58
-    2a0f:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
+    2a0c:	c7 45 ec 00 00 00 00 	movl	$0, -20(%ebp)
 ; /share/print_str.c:59
-    2a16:	eb 55 	jmp	85 <LDT0_SEL+0x2a45>
+    2a13:	eb 55 	jmp	85 <LDT0_SEL+0x2a42>
 ; /share/print_str.c:60
-    2a18:	8b 4d 08 	movl	8(%ebp), %ecx
-    2a1b:	ba 67 66 66 66 	movl	$1717986919, %edx
-    2a20:	89 c8 	movl	%ecx, %eax
-    2a22:	f7 ea 	imull	%edx
-    2a24:	c1 fa 02 	sarl	$2, %edx
-    2a27:	89 c8 	movl	%ecx, %eax
-    2a29:	c1 f8 1f 	sarl	$31, %eax
-    2a2c:	29 c2 	subl	%eax, %edx
-    2a2e:	89 d0 	movl	%edx, %eax
-    2a30:	c1 e0 02 	shll	$2, %eax
-    2a33:	01 d0 	addl	%edx, %eax
-    2a35:	01 c0 	addl	%eax, %eax
-    2a37:	29 c1 	subl	%eax, %ecx
-    2a39:	89 ca 	movl	%ecx, %edx
-    2a3b:	89 d0 	movl	%edx, %eax
-    2a3d:	8d 48 30 	leal	48(%eax), %ecx
-    2a40:	8b 45 ec 	movl	-20(%ebp), %eax
-    2a43:	8d 50 01 	leal	1(%eax), %edx
-    2a46:	89 55 ec 	movl	%edx, -20(%ebp)
-    2a49:	89 ca 	movl	%ecx, %edx
-    2a4b:	88 94 05 68 ff ff ff 	movb	%dl, -152(%ebp,%eax)
+    2a15:	8b 4d 08 	movl	8(%ebp), %ecx
+    2a18:	ba 67 66 66 66 	movl	$1717986919, %edx
+    2a1d:	89 c8 	movl	%ecx, %eax
+    2a1f:	f7 ea 	imull	%edx
+    2a21:	c1 fa 02 	sarl	$2, %edx
+    2a24:	89 c8 	movl	%ecx, %eax
+    2a26:	c1 f8 1f 	sarl	$31, %eax
+    2a29:	29 c2 	subl	%eax, %edx
+    2a2b:	89 d0 	movl	%edx, %eax
+    2a2d:	c1 e0 02 	shll	$2, %eax
+    2a30:	01 d0 	addl	%edx, %eax
+    2a32:	01 c0 	addl	%eax, %eax
+    2a34:	29 c1 	subl	%eax, %ecx
+    2a36:	89 ca 	movl	%ecx, %edx
+    2a38:	89 d0 	movl	%edx, %eax
+    2a3a:	8d 48 30 	leal	48(%eax), %ecx
+    2a3d:	8b 45 ec 	movl	-20(%ebp), %eax
+    2a40:	8d 50 01 	leal	1(%eax), %edx
+    2a43:	89 55 ec 	movl	%edx, -20(%ebp)
+    2a46:	89 ca 	movl	%ecx, %edx
+    2a48:	88 94 05 68 ff ff ff 	movb	%dl, -152(%ebp,%eax)
 ; /share/print_str.c:61
-    2a52:	8b 4d 08 	movl	8(%ebp), %ecx
-    2a55:	ba 67 66 66 66 	movl	$1717986919, %edx
-    2a5a:	89 c8 	movl	%ecx, %eax
-    2a5c:	f7 ea 	imull	%edx
-    2a5e:	c1 fa 02 	sarl	$2, %edx
-    2a61:	89 c8 	movl	%ecx, %eax
-    2a63:	c1 f8 1f 	sarl	$31, %eax
-    2a66:	29 c2 	subl	%eax, %edx
-    2a68:	89 d0 	movl	%edx, %eax
-    2a6a:	89 45 08 	movl	%eax, 8(%ebp)
+    2a4f:	8b 4d 08 	movl	8(%ebp), %ecx
+    2a52:	ba 67 66 66 66 	movl	$1717986919, %edx
+    2a57:	89 c8 	movl	%ecx, %eax
+    2a59:	f7 ea 	imull	%edx
+    2a5b:	c1 fa 02 	sarl	$2, %edx
+    2a5e:	89 c8 	movl	%ecx, %eax
+    2a60:	c1 f8 1f 	sarl	$31, %eax
+    2a63:	29 c2 	subl	%eax, %edx
+    2a65:	89 d0 	movl	%edx, %eax
+    2a67:	89 45 08 	movl	%eax, 8(%ebp)
 ; /share/print_str.c:59
-    2a6d:	83 7d 08 00 	cmpl	$0, 8(%ebp)
-    2a71:	7f a5 	jg	-91 <LDT0_SEL+0x29f0>
+    2a6a:	83 7d 08 00 	cmpl	$0, 8(%ebp)
+    2a6e:	7f a5 	jg	-91 <LDT0_SEL+0x29ed>
 ; /share/print_str.c:63
-    2a73:	8b 45 ec 	movl	-20(%ebp), %eax
-    2a76:	83 e8 01 	subl	$1, %eax
-    2a79:	89 45 e8 	movl	%eax, -24(%ebp)
-    2a7c:	eb 1f 	jmp	31 <LDT0_SEL+0x2a75>
+    2a70:	8b 45 ec 	movl	-20(%ebp), %eax
+    2a73:	83 e8 01 	subl	$1, %eax
+    2a76:	89 45 e8 	movl	%eax, -24(%ebp)
+    2a79:	eb 1f 	jmp	31 <LDT0_SEL+0x2a72>
 ; /share/print_str.c:64
-    2a7e:	8b 45 f4 	movl	-12(%ebp), %eax
-    2a81:	8d 50 01 	leal	1(%eax), %edx
-    2a84:	89 55 f4 	movl	%edx, -12(%ebp)
-    2a87:	8d 8d 68 ff ff ff 	leal	-152(%ebp), %ecx
-    2a8d:	8b 55 e8 	movl	-24(%ebp), %edx
-    2a90:	01 ca 	addl	%ecx, %edx
-    2a92:	0f b6 12 	movzbl	(%edx), %edx
-    2a95:	88 54 05 a8 	movb	%dl, -88(%ebp,%eax)
+    2a7b:	8b 45 f4 	movl	-12(%ebp), %eax
+    2a7e:	8d 50 01 	leal	1(%eax), %edx
+    2a81:	89 55 f4 	movl	%edx, -12(%ebp)
+    2a84:	8d 8d 68 ff ff ff 	leal	-152(%ebp), %ecx
+    2a8a:	8b 55 e8 	movl	-24(%ebp), %edx
+    2a8d:	01 ca 	addl	%ecx, %edx
+    2a8f:	0f b6 12 	movzbl	(%edx), %edx
+    2a92:	88 54 05 a8 	movb	%dl, -88(%ebp,%eax)
 ; /share/print_str.c:63
-    2a99:	83 6d e8 01 	subl	$1, -24(%ebp)
-    2a9d:	83 7d e8 00 	cmpl	$0, -24(%ebp)
-    2aa1:	79 db 	jns	-37 <LDT0_SEL+0x2a56>
+    2a96:	83 6d e8 01 	subl	$1, -24(%ebp)
+    2a9a:	83 7d e8 00 	cmpl	$0, -24(%ebp)
+    2a9e:	79 db 	jns	-37 <LDT0_SEL+0x2a53>
 ; /share/print_str.c:66
-    2aa3:	83 ec 0c 	subl	$12, %esp
-    2aa6:	8d 45 a8 	leal	-88(%ebp), %eax
-    2aa9:	50 	pushl	%eax
-    2aaa:	e8 07 fe ff ff 	calll	-505 <LDT0_SEL+0x288e>
-    2aaf:	83 c4 10 	addl	$16, %esp
+    2aa0:	83 ec 0c 	subl	$12, %esp
+    2aa3:	8d 45 a8 	leal	-88(%ebp), %eax
+    2aa6:	50 	pushl	%eax
+    2aa7:	e8 07 fe ff ff 	calll	-505 <LDT0_SEL+0x288b>
+    2aac:	83 c4 10 	addl	$16, %esp
 ; /share/print_str.c:67
-    2ab2:	90 	nop
-    2ab3:	c9 	leave
-    2ab4:	c3 	retl
+    2aaf:	90 	nop
+    2ab0:	c9 	leave
+    2ab1:	c3 	retl
 
 panic:
 ; /share/print_str.c:70
-    2ab5:	55 	pushl	%ebp
-    2ab6:	89 e5 	movl	%esp, %ebp
-    2ab8:	83 ec 08 	subl	$8, %esp
+    2ab2:	55 	pushl	%ebp
+    2ab3:	89 e5 	movl	%esp, %ebp
+    2ab5:	83 ec 08 	subl	$8, %esp
 ; /share/print_str.c:71
-    2abb:	83 ec 0c 	subl	$12, %esp
-    2abe:	ff 75 08 	pushl	8(%ebp)
-    2ac1:	e8 f0 fd ff ff 	calll	-528 <LDT0_SEL+0x288e>
-    2ac6:	83 c4 10 	addl	$16, %esp
+    2ab8:	83 ec 0c 	subl	$12, %esp
+    2abb:	ff 75 08 	pushl	8(%ebp)
+    2abe:	e8 f0 fd ff ff 	calll	-528 <LDT0_SEL+0x288b>
+    2ac3:	83 c4 10 	addl	$16, %esp
 ; /share/print_str.c:73
-    2ac9:	e8 ac fd ff ff 	calll	-596 <LDT0_SEL+0x2852>
-    2ace:	eb f9 	jmp	-7 <LDT0_SEL+0x2aa1>
+    2ac6:	e8 ac fd ff ff 	calll	-596 <LDT0_SEL+0x284f>
+    2acb:	eb f9 	jmp	-7 <LDT0_SEL+0x2a9e>

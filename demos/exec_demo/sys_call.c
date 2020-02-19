@@ -140,7 +140,7 @@ int _sys_exec(char *_u_file_name, unsigned long eip_pos)
         print_num(current->end_data);
     }
     free_page_tables(data_base, data_limit);
-    *((unsigned long*)(eip_pos)) = 0; // 我们的应用程序的main从0x0开始
+    *((unsigned long*)(eip_pos)) = 0; // 我们的应用程序的main从0x0开始 注意，应用程序的main一定要是第一个函数！！！
     *((unsigned long*)(eip_pos+12)) = data_limit; // esp 顶死
     return 0;
 }

@@ -214,7 +214,7 @@ void do_no_page(unsigned long address)
 	if (!(page = get_free_page())) {
 		panic("do no page get free page error.");
 	}
-	int Knum = tmp/1024 + 1;
+	int Knum = tmp/1024;
 	bread(page, Knum, current->fs_index);
 	if (!put_page(page, address)) {
 		panic("do no page put page error.");

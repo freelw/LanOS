@@ -2,59 +2,51 @@
 test_elf:	file format ELF32-i386
 
 Disassembly of section .text:
-s_print_str:
-; /share/lan_main.c:15
+lan_main:
+; /share/lan_main.c:17
        0:	55 	pushl	%ebp
        1:	89 e5 	movl	%esp, %ebp
-       3:	53 	pushl	%ebx
-       4:	83 ec 10 	subl	$16, %esp
-       7:	8b 55 08 	movl	8(%ebp), %edx
-       a:	b8 04 00 00 00 	movl	$4, %eax
-       f:	89 d3 	movl	%edx, %ebx
-      11:	cd 80 	int	$128
-      13:	89 45 f8 	movl	%eax, -8(%ebp)
-      16:	83 7d f8 00 	cmpl	$0, -8(%ebp)
-      1a:	78 05 	js	5 <lan_main.c+0x21>
-      1c:	8b 45 f8 	movl	-8(%ebp), %eax
-      1f:	eb 05 	jmp	5 <lan_main.c+0x26>
-      21:	b8 ff ff ff ff 	movl	$4294967295, %eax
-      26:	83 c4 10 	addl	$16, %esp
-      29:	5b 	popl	%ebx
-      2a:	5d 	popl	%ebp
-      2b:	c3 	retl
+; /share/lan_main.c:20
+       3:	eb fe 	jmp	-2 <lan_main.c+0x3>
+
+s_print_str:
+; /share/lan_main.c:24
+       5:	55 	pushl	%ebp
+       6:	89 e5 	movl	%esp, %ebp
+       8:	53 	pushl	%ebx
+       9:	83 ec 10 	subl	$16, %esp
+       c:	8b 55 08 	movl	8(%ebp), %edx
+       f:	b8 04 00 00 00 	movl	$4, %eax
+      14:	89 d3 	movl	%edx, %ebx
+      16:	cd 80 	int	$128
+      18:	89 45 f8 	movl	%eax, -8(%ebp)
+      1b:	83 7d f8 00 	cmpl	$0, -8(%ebp)
+      1f:	78 05 	js	5 <lan_main.c+0x26>
+      21:	8b 45 f8 	movl	-8(%ebp), %eax
+      24:	eb 05 	jmp	5 <lan_main.c+0x2b>
+      26:	b8 ff ff ff ff 	movl	$4294967295, %eax
+      2b:	83 c4 10 	addl	$16, %esp
+      2e:	5b 	popl	%ebx
+      2f:	5d 	popl	%ebp
+      30:	c3 	retl
 
 s_print_num:
-; /share/lan_main.c:16
-      2c:	55 	pushl	%ebp
-      2d:	89 e5 	movl	%esp, %ebp
-      2f:	53 	pushl	%ebx
-      30:	83 ec 10 	subl	$16, %esp
-      33:	b8 05 00 00 00 	movl	$5, %eax
-      38:	8b 55 08 	movl	8(%ebp), %edx
-      3b:	89 d3 	movl	%edx, %ebx
-      3d:	cd 80 	int	$128
-      3f:	89 45 f8 	movl	%eax, -8(%ebp)
-      42:	83 7d f8 00 	cmpl	$0, -8(%ebp)
-      46:	78 05 	js	5 <lan_main.c+0x4d>
-      48:	8b 45 f8 	movl	-8(%ebp), %eax
-      4b:	eb 05 	jmp	5 <lan_main.c+0x52>
-      4d:	b8 ff ff ff ff 	movl	$4294967295, %eax
-      52:	83 c4 10 	addl	$16, %esp
-      55:	5b 	popl	%ebx
-      56:	5d 	popl	%ebp
-      57:	c3 	retl
-
-lan_main:
-; /share/lan_main.c:19
-      58:	55 	pushl	%ebp
-      59:	89 e5 	movl	%esp, %ebp
-; /share/lan_main.c:20
-      5b:	68 77 00 00 00 	pushl	$119
-      60:	e8 9b ff ff ff 	calll	-101 <lan_main.c>
-      65:	83 c4 04 	addl	$4, %esp
-; /share/lan_main.c:21
-      68:	68 de 00 00 00 	pushl	$222
-      6d:	e8 ba ff ff ff 	calll	-70 <lan_main.c+0x2c>
-      72:	83 c4 04 	addl	$4, %esp
-; /share/lan_main.c:22
-      75:	eb fe 	jmp	-2 <lan_main.c+0x75>
+; /share/lan_main.c:25
+      31:	55 	pushl	%ebp
+      32:	89 e5 	movl	%esp, %ebp
+      34:	53 	pushl	%ebx
+      35:	83 ec 10 	subl	$16, %esp
+      38:	b8 05 00 00 00 	movl	$5, %eax
+      3d:	8b 55 08 	movl	8(%ebp), %edx
+      40:	89 d3 	movl	%edx, %ebx
+      42:	cd 80 	int	$128
+      44:	89 45 f8 	movl	%eax, -8(%ebp)
+      47:	83 7d f8 00 	cmpl	$0, -8(%ebp)
+      4b:	78 05 	js	5 <lan_main.c+0x52>
+      4d:	8b 45 f8 	movl	-8(%ebp), %eax
+      50:	eb 05 	jmp	5 <lan_main.c+0x57>
+      52:	b8 ff ff ff ff 	movl	$4294967295, %eax
+      57:	83 c4 10 	addl	$16, %esp
+      5a:	5b 	popl	%ebx
+      5b:	5d 	popl	%ebp
+      5c:	c3 	retl

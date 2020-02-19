@@ -10,14 +10,16 @@ if (__res >= 0) \
 return -1; \
 }
 
+int s_print_str(char*);
+int s_print_num(int);
+
+void lan_main()
+{
+    s_print_str("im test");
+    s_print_num(222);
+    while(1);
+}
 #define __NR_s_print_str 4
 #define __NR_s_print_num 5
 _syscall1(int, s_print_str, char*, msg)
 _syscall1(int, s_print_num, int, num)
-
-void lan_main()
-{
-    //s_print_str("im test");
-    //s_print_num(222);
-    while(1);
-}
