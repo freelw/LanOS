@@ -17,7 +17,7 @@ _syscall1(int, s_print_num, int, num)
 
 void lan_main()
 {
-    s_print_str("im test");
-    s_print_num(222);
+    //s_print_str("im test");
+    //s_print_num(222);
     while(1);
 }
