@@ -23,6 +23,7 @@ extern void _e14();
 extern void _e15();
 extern void _e16();
 extern void init_screen_buff();
+extern void init_keyboard();
 
 #include "mm.h"
 #include "sched.h"
@@ -90,6 +91,7 @@ void lan_main()
 	set_trap_gate(16,&_e16);
 	sched_init();
 	init_screen_buff();
+	init_keyboard();
 	sti();
 	move_to_user_mode();
 

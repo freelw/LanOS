@@ -7,11 +7,11 @@ LDT0_SEL equ 0x28
 
 global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault, set_tss0_esp0
 global assign_cr3_cr0, system_call, set_ldt_desc, set_base, sys_fork, switch_to, sys_print_str, sys_print_num, sys_read_file_content, sys_exec, _keyboard_interrupt
-extern lan_main, do_timer, sys_call_table, find_empty_process, copy_process, _sys_print_str, _sys_print_num, _sys_read_file_content, _sys_exec 
+extern lan_main, do_timer, sys_call_table, find_empty_process, copy_process, _sys_print_str, _sys_print_num, _sys_read_file_content, _sys_exec, keyboard_interrupt
 
 global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
 extern e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16
-global first_return_from_kernel, get_esp0_when_switch, krn_stk0
+global first_return_from_kernel, get_esp0_when_switch, krn_stk0, screen_buff
 
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
@@ -247,6 +247,26 @@ sys_exec:
     ret
 
 _keyboard_interrupt:
+    push word ds
+    push word es
+    push word fs
+    push dword eax
+    push dword edx
+    push dword ecx
+    push dword ebx
+    mov dword edx, 0x10
+    mov ds, dx
+    mov es, dx
+    mov dword edx, 0x17
+    mov fs, dx
+    call keyboard_interrupt
+    pop dword ebx
+    pop dword ecx
+    pop dword edx
+    pop dword eax
+    pop word fs
+    pop word es
+    pop word ds
     iret
 
 get_esp0_when_switch:
@@ -381,6 +401,9 @@ krn_stk0:
 init_stack:         ;从这里开始是一个48位操作数
     dd init_stack   ;32位代表初始的esp
     dw 0x10         ;16位栈的段选择符，lss之后会加载到ss中
+
+screen_buff:
+    times 500 dd 0
 
 _e0:
     call e0
