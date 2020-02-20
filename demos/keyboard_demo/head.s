@@ -11,7 +11,7 @@ extern lan_main, do_timer, sys_call_table, find_empty_process, copy_process, _sy
 
 global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
 extern e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16
-global first_return_from_kernel, get_esp0_when_switch, krn_stk0, pg_dir
+global first_return_from_kernel, get_esp0_when_switch, krn_stk0
 
 start_up32:
     mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
@@ -476,8 +476,3 @@ _e15:
 _e16:
     call e16
     iret
-
-times 0x8000  - ($-$$) db 0
-pg_dir:
-    dd 0
-
