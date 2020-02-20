@@ -8,10 +8,10 @@ LDT0_SEL equ 0x28
 global write_char, open_a20, gdt, idt, init_latch, init_8259A, timer_interrupt, page_fault, set_tss0_esp0
 global assign_cr3_cr0, system_call, set_ldt_desc, set_base, sys_fork, switch_to, sys_print_str
 global sys_print_num, sys_read_file_content, sys_exec, _keyboard_interrupt, sys_get_keyboard_code_buffer
-global sys_clean_keyboard_code_buffer, sys_print_shell_line
+global sys_clean_keyboard_code_buffer, sys_print_shell_line, sys_list_files
 extern lan_main, do_timer, sys_call_table, find_empty_process, copy_process, _sys_print_str, _sys_print_num
 extern _sys_read_file_content, _sys_exec, keyboard_interrupt, _sys_get_keyboard_code_buffer, _sys_clean_keyboard_code_buffer
-extern _sys_print_shell_line
+extern _sys_print_shell_line, _sys_list_files
 
 global _e0, _e1, _e2, _e3, _e4, _e5, _e6, _e7, _e8, _e9, _e10, _e11, _e12, _e13, _e14, _e15, _e16
 extern e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16
@@ -237,6 +237,7 @@ sys_get_keyboard_code_buffer:
     call _sys_get_keyboard_code_buffer
     pop dword ebx
     ret
+
 sys_print_str:
     push dword ebx
     call _sys_print_str
@@ -262,6 +263,12 @@ sys_clean_keyboard_code_buffer:
 sys_print_shell_line:
     push dword ebx
     call _sys_print_shell_line
+    pop dword ebx
+    ret
+
+sys_list_files:
+    push dword ebx
+    call _sys_list_files
     pop dword ebx
     ret
 

@@ -171,6 +171,15 @@ void _sys_print_shell_line(char *shell_content)
     print_shell_line(buffer);
 }
 
+void _sys_list_files(char *_u_buffer)
+{
+    char *meta_start_with_cnt = 0x6dd84;
+    char buffer[124];
+    for (int i = 0; i < 124; ++ i) {
+        put_fs_byte(meta_start_with_cnt[i], _u_buffer+i);
+    }
+}
+
 extern void sys_fork();
 extern void sys_print_str();
 extern void sys_print_num();
@@ -179,6 +188,7 @@ extern void sys_exec();
 extern void sys_get_keyboard_code_buffer();
 extern void sys_clean_keyboard_code_buffer();
 extern void sys_print_shell_line();
+extern void sys_list_files();
 
 extern sys_call sys_call_table[] = {
     _test_sys_call,
@@ -192,4 +202,5 @@ extern sys_call sys_call_table[] = {
     sys_get_keyboard_code_buffer,
     sys_clean_keyboard_code_buffer,
     sys_print_shell_line,
+    sys_list_files,
 };
