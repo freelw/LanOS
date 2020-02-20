@@ -33,23 +33,25 @@ _v; \
 
 struct pair
 {
-    unsigned char code;
-    char ch;
+    unsigned long code, ch;
 };
 
 #define CODE_MAP_LEN 40
 #define CODES_LEN 256
 
-int input_code_index = 0;
+int input_code_index;
 char codes[CODES_LEN];
-struct pair code_map[CODE_MAP_LEN] = {
-    {0x2, '1'},
-    {0x10, 'q'},
-    {0x14, 't'},
-    {0x12, 'e'},
-    {0x1f, 's'},
-    {0x1c, 'E'}, //回车
-};
+struct pair code_map[CODE_MAP_LEN];
+
+void get_codes(char *buffer)
+{
+    for (int i = 0; i < CODES_LEN; ++ i) {
+        buffer[i] = 0;
+    }
+    for (int i = 0; i < input_code_index; ++ i) {
+        buffer[i] = codes[i];
+    }
+}
 
 void parse_code(unsigned char code)
 {
@@ -71,9 +73,12 @@ void keyboard_interrupt()
 
 void init_keyboard()
 {
+    input_code_index = 0;
     for (int i = 0; i < CODES_LEN; ++ i) {
         codes[i] = 0;
     }
+    code_map[0].code = 0x14;
+    code_map[0].ch = 't';
     set_trap_gate(0x21,&_keyboard_interrupt);
 	outb_p(inb_p(0x21)&0xfd,0x21);
 	unsigned char a=inb_p(0x61);

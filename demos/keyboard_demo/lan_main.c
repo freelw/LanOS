@@ -38,6 +38,7 @@ extern void init_keyboard();
 #define __NR_s_print_num 5
 #define __NR_s_read_file_content 6
 #define __NR_s_exec 7
+#define __NR_s_get_keyboad_buffer 8
 _syscall0(int, test_sys_call)
 _syscall0(int, fork1)
 _syscall0(int, test_sys_call2)
@@ -45,6 +46,7 @@ _syscall1(int, s_print_str, char*, msg)
 _syscall1(int, s_print_num, int, num)
 _syscall2(int, s_read_file_content, char*, file_name, char*, buffer)
 _syscall1(int, s_exec, char*, file_name)
+_syscall1(int, s_get_keyboad_buffer, char*, buffer)
 
 void check_a20_valid()
 {
@@ -59,6 +61,16 @@ void check_a20_valid()
 			//write_char('e');
 		}
 	}
+}
+
+int equal_buffer(char *a, char *b, int len)
+{
+	for (int i = 0; i < len; ++ i) {
+		if (a[i] != b[i]) {
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void lan_main()
@@ -125,9 +137,26 @@ void lan_main()
 				for (int i = 0; 1 || i < 100000000; ++ i);
 			}
 		} else {
-			s_print_str("process 3 started.");
-			s_exec("test");
-			while(1);
+			if (fork1()) {
+				s_print_str("process 3 started.");
+				s_exec("test");
+				while(1);
+			} else {
+				s_print_str("process 4 started.");
+				char buffer0[256];
+				char buffer1[256];
+				char *cur_buffer = buffer0;
+				char *last_buffer = buffer1;
+				while (1) {
+					s_get_keyboad_buffer(cur_buffer);
+					if (0 != equal_buffer(cur_buffer, last_buffer, 256)) {
+						s_print_str(cur_buffer);
+					}
+					char *tmp = cur_buffer;
+					cur_buffer = last_buffer;
+					last_buffer = cur_buffer;
+				}
+			}
 		}
 	}
 }

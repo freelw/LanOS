@@ -3,6 +3,7 @@
 typedef int (*sys_call)();
 extern void print_str(char *s);
 extern void print_num(int num);
+extern void get_codes(char *buffer);
 
 unsigned char get_fs_byte(const char * addr)
 {
@@ -145,12 +146,23 @@ int _sys_exec(char *_u_file_name, unsigned long eip_pos)
     return 0;
 }
 
+void _sys_get_keyboard_code_buffer(char *_u_buffer)
+{
+    char buffer[256];
+    get_codes(buffer);
+    for (int i = 0; i < 256; ++ i) {
+        put_fs_byte(buffer[i], _u_buffer+i);
+    }
+}
+
 extern void sys_fork();
 extern void sys_print_str();
 extern void sys_print_num();
 extern void sys_read_file_content();
 extern void sys_exec();
+extern void sys_get_keyboard_code_buffer();
 
 extern sys_call sys_call_table[] = {
-    _test_sys_call, sys_fork, _test_sys_call1, _test_sys_call2, sys_print_str, sys_print_num, sys_read_file_content, sys_exec
+    _test_sys_call, sys_fork, _test_sys_call1, _test_sys_call2, sys_print_str, sys_print_num, sys_read_file_content, sys_exec,
+    sys_get_keyboard_code_buffer
 };
