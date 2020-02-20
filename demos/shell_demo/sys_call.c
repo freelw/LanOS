@@ -139,6 +139,8 @@ int _sys_exec(char *_u_file_name, unsigned long eip_pos)
     if (index >= 0) {
         current->fs_index = index;
         get_file_buffer(index, &(current->end_data));
+    } else {
+        return -1;
     }
     free_page_tables(data_base, data_limit);
     *((unsigned long*)(eip_pos)) = 0; // 我们的应用程序的main从0x0开始 注意，应用程序的main一定要是第一个函数！！！

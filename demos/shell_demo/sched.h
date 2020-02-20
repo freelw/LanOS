@@ -69,8 +69,8 @@ __asm__("lsll %1,%0\n\tincl %0":"=r" (__limit):"r" (segment)); \
 __limit;})
 
 extern struct task_struct *task[NR_TASKS];
+extern int task_used[NR_TASKS];
 extern struct task_struct *current;
-extern long last_pid;
 extern void sched_init();
 extern void set_ldt_desc(char* n, char* addr);
 extern void set_base(char* n, char* addr);

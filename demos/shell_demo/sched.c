@@ -2,9 +2,9 @@
 #include "sched.h"
 
 struct task_struct * task[NR_TASKS];
+int task_used[NR_TASKS];
 struct task_struct init_task;
 struct task_struct *current = (struct task_struct *)&init_task;
-long last_pid = -1;
 long last_sched_i = 0;
 
 extern void switch_to(unsigned long, struct task_struct *);
@@ -16,9 +16,11 @@ void sched_init()
 {
     for (int i = 0; i < NR_TASKS; ++ i) {
         task[i] = 0;
+        task_used[i] = 0;
     }
+    task_used[0] = 1;
     init_task.state = TASK_UNINTERRUPTIBLE;
-    init_task.pid = ++ last_pid;
+    init_task.pid = 0;
     init_task.ldt[0].a = 0;
     init_task.ldt[0].b = 0;
     init_task.ldt[1].a = 0x3ff;

@@ -83,6 +83,8 @@ void lan_main()
 				s_clean_keyboard();
 				if (!fork1()) {
 					s_exec(buffer0);
+					s_print_str("no exec file");
+					while(1);
 				}
 			}
 			s_print_shell(buffer0);

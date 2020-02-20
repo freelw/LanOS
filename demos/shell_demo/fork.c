@@ -34,7 +34,13 @@ int copy_mem(int nr,struct task_struct * p)
 
 int find_empty_process()
 {
-	return ++ last_pid;
+	for (int i = 0; i < NR_TASKS; ++ i) {
+		if (!task_used[i]) {
+			task_used[i] = 1;
+			return i;
+		}
+	}
+	return -1;
 }
 
 int copy_process(long eax, long ebp,long edi,long esi,long gs,long none,
@@ -42,6 +48,9 @@ int copy_process(long eax, long ebp,long edi,long esi,long gs,long none,
 		long fs,long es,long ds,
 		long eip,long cs,long eflags,long esp,long ss)
 {
+	if (eax < 0) {
+		panic("no emtpy task.");
+	}
     struct task_struct *p = (struct task_struct *)get_free_page();
 
 	if (!p) {
@@ -50,7 +59,7 @@ int copy_process(long eax, long ebp,long edi,long esi,long gs,long none,
 	*p = *current;
 	p->state = TASK_UNINTERRUPTIBLE;
 	p->pid = eax;
-	task[last_pid] = p;
+	task[eax] = p;
 	long * krnstack = (long *)(PAGE_SIZE+(long)p);
 	*(--krnstack) = ss;
 	*(--krnstack) = esp;
@@ -70,11 +79,11 @@ int copy_process(long eax, long ebp,long edi,long esi,long gs,long none,
 	*(--krnstack) = fs & 0xffff;
 	*(--krnstack) = gs & 0xffff;
 	p->kernel_stack = krnstack;
-	if (copy_mem(last_pid, p)) {
+	if (copy_mem(eax, p)) {
 		//todo:
 		//abort
 	}
-	set_ldt_desc(gdt+last_pid+FIRST_LDT_ENTRY, &(p->ldt));
+	set_ldt_desc(gdt+eax+FIRST_LDT_ENTRY, &(p->ldt));
 	p->state = TASK_RUNNING;
     return 1;
 }
