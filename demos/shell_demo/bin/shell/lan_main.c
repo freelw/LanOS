@@ -52,12 +52,22 @@ int s_get_keyboad_buffer(char*);
 int equal_buffer(char *a, char *b, int len);
 int s_clean_keyboard();
 int s_exec(char*);
+int s_print_shell(char*);
 
 void lan_main()
 {
+	s_print_str("--------------------------");
+	s_print_str("|                        |");
+	s_print_str("| welcome to lan_os 0.1! |");
+	s_print_str("|                        |");
+	s_print_str("--------------------------");
     s_print_str("shell started.");
     char buffer0[256];
     char buffer1[256];
+	for (int i = 0; i < 256; ++ i) {
+		buffer0[i] = buffer1[i] = 0;
+	}
+	s_print_shell(buffer0);
     while (1) {
         s_get_keyboad_buffer(buffer0);
         if (0 != equal_buffer(buffer0, buffer1, 256)) {
@@ -69,13 +79,11 @@ void lan_main()
 					break;
 				}
 			}
-			s_print_str("user get key board:");
 			if (enter) {
-				s_print_str("executing:");
 				s_clean_keyboard();
 				s_exec(buffer0);
 			}
-			s_print_str(buffer0);
+			s_print_shell(buffer0);
         }
         for (int i = 0; i < 256; ++ i) {
             buffer1[i] = buffer0[i];
@@ -103,6 +111,7 @@ int equal_buffer(char *a, char *b, int len)
 #define __NR_s_exec 7
 #define __NR_s_get_keyboad_buffer 8
 #define __NR_s_clean_keyboard 9
+#define __NR_s_print_shell 10
 _syscall0(int, test_sys_call)
 _syscall0(int, fork1)
 _syscall0(int, test_sys_call2)
@@ -112,3 +121,4 @@ _syscall2(int, s_read_file_content, char*, file_name, char*, buffer)
 _syscall1(int, s_exec, char*, file_name)
 _syscall1(int, s_get_keyboad_buffer, char*, buffer)
 _syscall0(int, s_clean_keyboard)
+_syscall1(int, s_print_shell, char*, buffer)

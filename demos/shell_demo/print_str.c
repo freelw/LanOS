@@ -1,4 +1,4 @@
-#define MAX_L 24
+#define MAX_L 23
 #define SCREEN_LEN 2000
 char screen_buff[SCREEN_LEN];
 int cur_l = 0;
@@ -8,6 +8,9 @@ void init_screen_buff()
 {
     for (int i = 0; i < SCREEN_LEN; ++ i) { 
         screen_buff[i] = 0;
+    }
+    for (int i = 80*23; i < 80*24; ++ i) {
+        screen_buff[i] = '-';
     }
 }
 
@@ -108,3 +111,17 @@ void panic(char *msg)
     }
 }
 
+void print_shell_line(char *buffer)
+{
+    int start = 24*80;
+    screen_buff[start++] = 's';
+    screen_buff[start++] = 'h';
+    screen_buff[start++] = 'e';
+    screen_buff[start++] = 'l';
+    screen_buff[start++] = 'l';
+    screen_buff[start++] = '>';
+    for (int i = start; i < 25*80; ++ i){
+        screen_buff[i] = buffer[i-start];
+    }
+    validate_screen();
+}

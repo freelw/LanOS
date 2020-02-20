@@ -5,6 +5,7 @@ extern void print_str(char *s);
 extern void print_num(int num);
 extern void get_codes(char *buffer);
 extern void clean_keyboard_buffer();
+extern void print_shell_line(char *buffer);
 
 unsigned char get_fs_byte(const char * addr)
 {
@@ -138,8 +139,6 @@ int _sys_exec(char *_u_file_name, unsigned long eip_pos)
     if (index >= 0) {
         current->fs_index = index;
         get_file_buffer(index, &(current->end_data));
-        print_str("sys_exec file size : ");
-        print_num(current->end_data);
     }
     free_page_tables(data_base, data_limit);
     *((unsigned long*)(eip_pos)) = 0; // 我们的应用程序的main从0x0开始 注意，应用程序的main一定要是第一个函数！！！
@@ -161,6 +160,15 @@ void _sys_clean_keyboard_code_buffer()
     clean_keyboard_buffer();
 }
 
+void _sys_print_shell_line(char *shell_content)
+{
+    char buffer[256];
+    for (int i = 0; i < 256; ++ i) {
+        buffer[i] = get_fs_byte(shell_content+i);
+    }
+    print_shell_line(buffer);
+}
+
 extern void sys_fork();
 extern void sys_print_str();
 extern void sys_print_num();
@@ -168,6 +176,7 @@ extern void sys_read_file_content();
 extern void sys_exec();
 extern void sys_get_keyboard_code_buffer();
 extern void sys_clean_keyboard_code_buffer();
+extern void sys_print_shell_line();
 
 extern sys_call sys_call_table[] = {
     _test_sys_call,
@@ -179,5 +188,6 @@ extern sys_call sys_call_table[] = {
     sys_read_file_content,
     sys_exec,
     sys_get_keyboard_code_buffer,
-    sys_clean_keyboard_code_buffer
+    sys_clean_keyboard_code_buffer,
+    sys_print_shell_line,
 };

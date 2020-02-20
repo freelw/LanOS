@@ -15,7 +15,8 @@ int s_print_num(int);
 
 void lan_main()
 {
-    s_print_str("im test");
+    s_print_str("I am a test executable file !");
+    s_print_str("I can print a number.");
     s_print_num(222);
     while(1);
 }

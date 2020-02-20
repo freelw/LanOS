@@ -224,9 +224,6 @@ void do_no_page(unsigned long address)
 
 void e14(unsigned long address, unsigned long error_code)
 {
-	print_str("e14 error code is:");
-	print_num(error_code);
-	print_num(address);
 	if (error_code & 1) {
 		unsigned long page_index = (address>>12)&0x3ff;
 		unsigned long page_table_index = (address>>22)&0x3ff;
