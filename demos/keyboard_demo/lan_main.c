@@ -145,16 +145,16 @@ void lan_main()
 				s_print_str("process 4 started.");
 				char buffer0[256];
 				char buffer1[256];
-				char *cur_buffer = buffer0;
-				char *last_buffer = buffer1;
+				
 				while (1) {
-					s_get_keyboad_buffer(cur_buffer);
-					if (0 != equal_buffer(cur_buffer, last_buffer, 256)) {
-						s_print_str(cur_buffer);
+					s_get_keyboad_buffer(buffer0);
+					if (0 != equal_buffer(buffer0, buffer1, 256)) {
+						s_print_str("user get key board:");
+						s_print_str(buffer0);
 					}
-					char *tmp = cur_buffer;
-					cur_buffer = last_buffer;
-					last_buffer = cur_buffer;
+					for (int i = 0; i < 256; ++ i) {
+						buffer1[i] = buffer0[i];
+					}
 				}
 			}
 		}
