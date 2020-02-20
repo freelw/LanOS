@@ -51,6 +51,7 @@ int s_print_num(int);
 int s_get_keyboad_buffer(char*);
 int equal_buffer(char *a, char *b, int len);
 int s_clean_keyboard();
+int s_exec(char*);
 
 void lan_main()
 {
@@ -72,6 +73,7 @@ void lan_main()
 			if (enter) {
 				s_print_str("executing:");
 				s_clean_keyboard();
+				s_exec(buffer0);
 			}
 			s_print_str(buffer0);
         }
