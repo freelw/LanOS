@@ -53,6 +53,7 @@ int equal_buffer(char *a, char *b, int len);
 int s_clean_keyboard();
 int s_exec(char*);
 int s_print_shell(char*);
+int fork1();
 
 void lan_main()
 {
@@ -67,7 +68,6 @@ void lan_main()
 	for (int i = 0; i < 256; ++ i) {
 		buffer0[i] = buffer1[i] = 0;
 	}
-	s_print_shell(buffer0);
     while (1) {
         s_get_keyboad_buffer(buffer0);
         if (0 != equal_buffer(buffer0, buffer1, 256)) {
@@ -81,7 +81,9 @@ void lan_main()
 			}
 			if (enter) {
 				s_clean_keyboard();
-				s_exec(buffer0);
+				if (!fork1()) {
+					s_exec(buffer0);
+				}
 			}
 			s_print_shell(buffer0);
         }
