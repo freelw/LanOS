@@ -1,7 +1,6 @@
 #define MAX_L 24
 #define SCREEN_LEN 2000
 char screen_buff[SCREEN_LEN];
-extern char pg_dir[4096*17];
 int cur_l = 0;
 extern void write_char(char ch, int pos);
 
