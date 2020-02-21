@@ -5,6 +5,7 @@ const file_list = [
     'test',
     'lan_sh',
     'ls',
+    'loop',
 ];
 
 function zero_buffer(size) {
