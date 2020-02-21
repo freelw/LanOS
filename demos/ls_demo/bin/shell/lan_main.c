@@ -68,6 +68,7 @@ void lan_main()
 	for (int i = 0; i < 256; ++ i) {
 		buffer0[i] = buffer1[i] = 0;
 	}
+	s_print_shell(buffer0);
     while (1) {
         s_get_keyboad_buffer(buffer0);
         if (0 != equal_buffer(buffer0, buffer1, 256)) {
