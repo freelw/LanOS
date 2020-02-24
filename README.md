@@ -31,8 +31,17 @@
 * [fork+写时复制](https://github.com/freelw/LanOS/blob/master/demos/cp_on_write/readme.md)
 
 ## Todo
-1. ~~print_str 实现~~
-2. ~~print_num 实现~~
-3. lan_fs 实现
-4. exec 实现
+1. ~~print_str 实现~~ done 20200224
+2. ~~print_num 实现~~ done 20200224
+3. ~~lan_fs 实现~~ done 20200224
+4. ~~exec 实现~~ done 20200224
+5. exit 实现
 
+## 最终效果展示
+
+### 有简单的shell和文件系统，可以执行ls程序
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/ls.gif)
+### 支持exec系统调用，可以执行应用程序
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/exec.gif)
+### 在一个可执行程序运行的过程中，执行另一个程序，说明支持多任务调度
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/multitask.gif)
