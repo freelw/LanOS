@@ -45,3 +45,8 @@
 ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/exec.gif)
 ### 在一个可执行程序运行的过程中，执行另一个程序，说明支持多任务调度
 ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/multitask.gif)
+### loop程序的实现
+![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/loop.png)
+[详见这里](https://github.com/freelw/LanOS/blob/master/demos/ls_demo/bin/loop/lan_main.c)
+### 最终demo链接
+[详见这里](https://github.com/freelw/LanOS/tree/master/demos/ls_demo)
