@@ -54,6 +54,7 @@ int s_clean_keyboard();
 int s_exec(char*);
 int s_print_shell(char*);
 int fork1();
+int s_exit();
 
 void lan_main()
 {
@@ -84,8 +85,7 @@ void lan_main()
 				s_clean_keyboard();
 				if (!fork1()) {
 					s_exec(buffer0);
-					s_print_str("no exec file");
-					while(1);
+					s_exit();
 				}
 			}
 			s_print_shell(buffer0);
@@ -117,6 +117,7 @@ int equal_buffer(char *a, char *b, int len)
 #define __NR_s_get_keyboad_buffer 8
 #define __NR_s_clean_keyboard 9
 #define __NR_s_print_shell 10
+#define __NR_s_exit 12
 _syscall0(int, test_sys_call)
 _syscall0(int, fork1)
 _syscall0(int, test_sys_call2)
@@ -127,3 +128,4 @@ _syscall1(int, s_exec, char*, file_name)
 _syscall1(int, s_get_keyboad_buffer, char*, buffer)
 _syscall0(int, s_clean_keyboard)
 _syscall1(int, s_print_shell, char*, buffer)
+_syscall0(int, s_exit)
