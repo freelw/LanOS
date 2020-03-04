@@ -48,6 +48,6 @@
 ### loop程序的实现
 ![](https://raw.githubusercontent.com/freelw/LanOS/master/demos/pic/loop.png)
 
-[详见这里](https://github.com/freelw/LanOS/blob/master/demos/ls_demo/bin/loop/lan_main.c)
+[详见这里](https://github.com/freelw/LanOS/blob/master/demos/exit_demo/bin/loop/lan_main.c)
 ### 最终demo链接
-[详见这里](https://github.com/freelw/LanOS/tree/master/demos/ls_demo)
+[详见这里](https://github.com/freelw/LanOS/tree/master/demos/exit_demo)
