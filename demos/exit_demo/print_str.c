@@ -1,11 +1,14 @@
+#include "mm.h"
 #define MAX_L 23
 #define SCREEN_LEN 2000
-char screen_buff[SCREEN_LEN];
-int cur_l = 0;
+extern char* screen_buff;
+extern int cur_l;
 extern void write_char(char ch, int pos);
 
 void init_screen_buff()
 {
+    cur_l = 0;
+    screen_buff = (char*)get_free_page();
     for (int i = 0; i < SCREEN_LEN; ++ i) { 
         screen_buff[i] = 0;
     }

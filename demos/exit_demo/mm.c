@@ -50,6 +50,10 @@ unsigned long get_free_page()
     for (int i = PAGEING_PAGES-1; i >= 0; -- i) {
         if (0 == mem_map[i]) {
             mem_map[i] = 1;
+			unsigned char *free_page = LOW_MEM+i*4096;
+			for (int j = 0; j < 4096; ++ j) {
+				free_page[j] = 0;
+			}
             return LOW_MEM+i*4096;
         }
     }
@@ -202,12 +206,18 @@ void get_empty_page(unsigned long address)
 void do_no_page(unsigned long address)
 {
 	address &= 0xfffff000;
-	unsigned long tmp = address - current->start_code;
+	unsigned long tmp;
 	unsigned long page_table_index = (address>>22)&0x3ff;
-	unsigned long page = 0xfffff000&(*(unsigned long*)(page_table_index*4+PAGE_DIR));
+	unsigned long page = *(unsigned long*)(page_table_index*4+PAGE_DIR);
 	if (page & 1) {
-		panic("do no page swap.");
-	}	
+		page &= 0xfffff000;
+		page += (address >> 10) & 0xffc;
+		tmp = *(unsigned long*)(page);
+		if (tmp && !(1&tmp)) {
+			panic("do no page swap.");
+		}
+	}
+	tmp = address - current->start_code;
 	if (tmp >= current->end_data) {
 		get_empty_page(address);
 		return ;
