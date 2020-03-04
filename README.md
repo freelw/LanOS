@@ -36,7 +36,7 @@
 2. ~~print_num 实现~~ done 20200224
 3. ~~lan_fs 实现~~ done 20200224
 4. ~~exec 实现~~ done 20200224
-5. exit 实现
+5. ~~exit 实现~~ done 20200304
 
 ## 最终效果展示
 
