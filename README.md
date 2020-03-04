@@ -29,6 +29,7 @@
 * [跳转到用户态](https://github.com/freelw/LanOS/blob/master/demos/user_mode_demo/readme.md)
 * [初步调试fork](https://github.com/freelw/LanOS/blob/master/demos/fork_demo/readme.md)
 * [fork+写时复制](https://github.com/freelw/LanOS/blob/master/demos/cp_on_write/readme.md)
+* [关于全局变量](https://github.com/freelw/LanOS/blob/master/demos/exit_demo/readme.md)
 
 ## Todo
 1. ~~print_str 实现~~ done 20200224
