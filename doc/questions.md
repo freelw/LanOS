@@ -12,3 +12,5 @@
 
 ### [bios int 0x13](https://blog.csdn.net/zxl3901/article/details/50072539)
 
+### [内核中断号列表](http://www.360doc.com/content/11/0506/08/6580811_114716856.shtml)
+
