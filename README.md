@@ -52,3 +52,22 @@
 [详见这里](https://github.com/freelw/LanOS/blob/master/demos/exit_demo/bin/loop/lan_main.c)
 ### 最终demo链接
 [详见这里](https://github.com/freelw/LanOS/tree/master/demos/exit_demo)
+
+### 历史demo顺序
+1. [asm_int_80](https://github.com/freelw/LanOS/tree/master/demos/asm_int_80)
+2. [asm_call_c](https://github.com/freelw/LanOS/tree/master/demos/asm_call_c)
+3. [lds_test](https://github.com/freelw/LanOS/tree/master/demos/lds_test)
+4. [protect_mode_demo](https://github.com/freelw/LanOS/tree/master/demos/protect_mode_demo)
+5. [protect_mode_cpp_demo](https://github.com/freelw/LanOS/tree/master/demos/protect_mode_cpp_demo)
+6. [a20_not_open](https://github.com/freelw/LanOS/tree/master/demos/a20_not_open)
+7. [a20_open](https://github.com/freelw/LanOS/tree/master/demos/a20_open)
+8. [mm](https://github.com/freelw/LanOS/tree/master/demos/mm)
+9. [user_mode_demo](https://github.com/freelw/LanOS/tree/master/demos/user_mode_demo)
+10. [fork_demo](https://github.com/freelw/LanOS/tree/master/demos/fork_demo)
+11. [cp_on_write](https://github.com/freelw/LanOS/tree/master/demos/cp_on_write)
+12. [print_str_demo](https://github.com/freelw/LanOS/tree/master/demos/print_str_demo)
+13. [fs_demo](https://github.com/freelw/LanOS/tree/master/demos/fs_demo)
+14. [exec_demo](https://github.com/freelw/LanOS/tree/master/demos/exec_demo)
+15. [shell_demo](https://github.com/freelw/LanOS/tree/master/demos/shell_demo)
+16. [ls_demo](https://github.com/freelw/LanOS/tree/master/demos/ls_demo)
+17. [exit_demo](https://github.com/freelw/LanOS/tree/master/demos/exit_demo)
