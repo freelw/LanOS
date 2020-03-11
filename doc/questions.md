@@ -14,3 +14,7 @@
 
 ### [内核中断号列表](http://www.360doc.com/content/11/0506/08/6580811_114716856.shtml)
 
+### [看雪论坛 操作系统开发入门基础](https://bbs.pediy.com/thread-248745.htm)
+
+### [ne2000 网卡编程](https://www.docin.com/p-1251912432.html)
+
