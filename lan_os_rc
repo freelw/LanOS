@@ -1,2 +1,3 @@
 alias lan_make=`pwd`/tool/makeall.sh
 alias lan_clean=`pwd`/tool/makeclean.sh
+export lan_base_dir=`pwd`
