@@ -6,12 +6,11 @@
 #define PG_NUM 16
 
 #define LOW_MEM 0x100000
-#define MAP_NR(addr) (((addr)-LOW_MEM)>>12)
-#define invalidate() \
-__asm__("movl %%eax,%%cr3"::"a" (PAGE_DIR))
+#define MAP_NR(addr) (((addr)-LOW_MEM) >> 12)
+#define invalidate() __asm__("movl %%eax,%%cr3" ::"a"(PAGE_DIR))
 
 extern void mm_init();
 extern unsigned long get_free_page();
-extern int copy_page_tables(unsigned long from,unsigned long to,long size);
+extern int copy_page_tables(unsigned long from, unsigned long to, long size);
 
 #endif

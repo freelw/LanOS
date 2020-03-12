@@ -1,5 +1,2 @@
 extern void write();
-void lan_main()
-{
-	write();
-}
+void lan_main() { write(); }

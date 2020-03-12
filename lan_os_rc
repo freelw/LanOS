@@ -1,3 +1,4 @@
 alias lan_make=`pwd`/tool/makeall.sh
 alias lan_clean=`pwd`/tool/makeclean.sh
+alias lan_format_c="indent -i4 -ts8 -sob -l80  -ss -bs -bbb -bl -bli0 -nce -psl"
 export lan_base_dir=`pwd`

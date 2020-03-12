@@ -16,13 +16,13 @@ _syscall0(int, s_exit)
 int s_test_sys_call();
 int s_fork();
 int s_test_sys_call2();
-int s_print_str(char*);
+int s_print_str(char *);
 int s_print_num(int);
-int s_read_file_content(char*, char *);
-int s_exec(char*);
-int s_get_keyboad_buffer(char*);
+int s_read_file_content(char *, char *);
+int s_exec(char *);
+int s_get_keyboad_buffer(char *);
 int s_clean_keyboard();
-int s_print_shell(char*);
-int s_ls(char*);
+int s_print_shell(char *);
+int s_ls(char *);
 int s_exit();
 #endif
