@@ -23,5 +23,6 @@ int s_exec(char*);
 int s_get_keyboad_buffer(char*);
 int s_clean_keyboard();
 int s_print_shell(char*);
+int s_ls(char*);
 int s_exit();
 #endif
