@@ -51,7 +51,7 @@
 
 [详见这里](https://github.com/freelw/LanOS/blob/master/demos/exit_demo/bin/loop/lan_main.c)
 ### 最终demo链接
-[详见这里](https://github.com/freelw/LanOS/tree/master/demos/exit_demo)
+[详见这里](https://github.com/freelw/LanOS/tree/master/demos/common_header_demo)
 
 ### 历史demo顺序
 1. [asm_int_80](https://github.com/freelw/LanOS/tree/master/demos/asm_int_80)
@@ -71,3 +71,4 @@
 15. [shell_demo](https://github.com/freelw/LanOS/tree/master/demos/shell_demo)
 16. [ls_demo](https://github.com/freelw/LanOS/tree/master/demos/ls_demo)
 17. [exit_demo](https://github.com/freelw/LanOS/tree/master/demos/exit_demo)
+18. [exit_demo](https://github.com/freelw/LanOS/tree/master/demos/common_header_demo)
