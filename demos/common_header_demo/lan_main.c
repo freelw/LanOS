@@ -40,13 +40,13 @@ extern void init_keyboard();
 #define __NR_s_exec 7
 #define __NR_s_get_keyboad_buffer 8
 _syscall0(int, test_sys_call) _syscall0(int, fork1)
-    _syscall0(int, test_sys_call2) _syscall1(int, s_print_str, char *, msg)
-        _syscall1(int, s_print_num, int, num)
-            _syscall2(int, s_read_file_content, char *, file_name, char *,
-                      buffer) _syscall1(int, s_exec, char *, file_name)
-                _syscall1(int, s_get_keyboad_buffer, char *, buffer)
+_syscall0(int, test_sys_call2) _syscall1(int, s_print_str, char *, msg)
+_syscall1(int, s_print_num, int, num)
+_syscall2(int, s_read_file_content, char *, file_name, char *,buffer)
+_syscall1(int, s_exec, char *, file_name)
+_syscall1(int, s_get_keyboad_buffer, char *, buffer)
 
-                    void check_a20_valid() {
+void check_a20_valid() {
   unsigned char *p0 = 0x0;
   unsigned char *p1 = 0x100000;
   for (unsigned char i = 0; i < 10; ++i) {
