@@ -17,6 +17,16 @@
 * 大量参考linux0.12的设计思路建立demo，有助于之后阅读linux源码
 * 将尽可能多的linux中汇编实现的代码用c重新实现，提高可读性，降低学习成本
 
+## 超快速编译方法（依赖docker & 联网）
+### 执行一下命令拉取代码并编译
+
+	git clone https://github.com/freelw/LanOS.git
+	cd LanOS
+	./make_os.sh
+
+### 执行效果
+	
+
 ## 知识点目录
 
 * [如何编译和运行demo](https://github.com/freelw/LanOS/blob/master/doc/how_to_build.md)
