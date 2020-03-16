@@ -18,7 +18,7 @@
 * 将尽可能多的linux中汇编实现的代码用c重新实现，提高可读性，降低学习成本
 
 ## **超快速编译方法（依赖docker & 联网）**
-### 执行一下命令拉取代码并编译(首次执行make_os.sh会比较慢，因为要拉取docker编译镜像)
+### 执行以下命令拉取代码并编译(首次执行make_os.sh会比较慢，因为要拉取docker编译镜像)
 
 	git clone https://github.com/freelw/LanOS.git
 	cd LanOS
