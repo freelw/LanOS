@@ -17,15 +17,28 @@
 * 大量参考linux0.12的设计思路建立demo，有助于之后阅读linux源码
 * 将尽可能多的linux中汇编实现的代码用c重新实现，提高可读性，降低学习成本
 
-## 超快速编译方法（依赖docker & 联网）
-### 执行一下命令拉取代码并编译
+## **超快速编译方法（依赖docker & 联网）**
+### 执行一下命令拉取代码并编译(首次执行make_os.sh会比较慢，因为要拉取docker编译镜像)
 
 	git clone https://github.com/freelw/LanOS.git
 	cd LanOS
 	./make_os.sh
 
 ### 执行效果
-	
+
+	dantadeMacBook-Pro:yard danta$ git clone https://github.com/freelw/LanOS.git
+	Cloning into 'LanOS'...
+	remote: Enumerating objects: 517, done.
+	remote: Counting objects: 100% (517/517), done.
+	remote: Compressing objects: 100% (322/322), done.
+	remote: Total 1316 (delta 304), reused 379 (delta 181), pack-reused 799
+	Receiving objects: 100% (1316/1316), 2.78 MiB | 42.00 KiB/s, done.
+	Resolving deltas: 100% (788/788), done.
+	dantadeMacBook-Pro:yard danta$ cd LanOS
+	dantadeMacBook-Pro:LanOS danta$ ./make_os.sh
+	builing lan os...
+	cleaning temp files...
+	file [a.vfd] is our os image with a simple ramdisk filesystem.
 
 ## 知识点目录
 
