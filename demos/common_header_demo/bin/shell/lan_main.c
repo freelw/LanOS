@@ -7,6 +7,7 @@ void lan_main() {
   s_print_str("| welcome to lan_os 0.1! |");
   s_print_str("|                        |");
   s_print_str("--------------------------");
+  s_print_str("shell started.");
   char buffer0[256];
   char buffer1[256];
   for (int i = 0; i < 256; ++i) {

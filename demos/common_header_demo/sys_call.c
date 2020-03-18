@@ -78,11 +78,11 @@ char *get_file_buffer(int index, unsigned long *plength) {
   return file_buffer_start + 20 * 1024 * index;
 }
 
-void bread(unsigned long page, int Knum, int fs_index) {
+void bread(unsigned long page, int FourKnum, int fs_index) {
   unsigned long length = 0;
   char *f_start = get_file_buffer(fs_index, &length);
-  for (int i = 0; i < 1024; ++i) {
-    ((char *)page)[i] = (char *)(f_start + Knum * 1024)[i];
+  for (int i = 0; i < 4096; ++i) {
+    ((char *)page)[i] = (char *)(f_start + FourKnum * 4096)[i];
   }
 }
 

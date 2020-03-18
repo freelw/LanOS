@@ -50,8 +50,10 @@
 #define __NR_s_print_shell 10
 #define __NR_s_ls 11
 #define __NR_s_exit 12
-_syscall0(int, s_test_sys_call) _syscall0(int, s_fork)
-_syscall0(int, s_test_sys_call2) _syscall1(int, s_print_str, char*, msg)
+_syscall0(int, s_test_sys_call)
+_syscall0(int, s_fork)
+_syscall0(int, s_test_sys_call2)
+_syscall1(int, s_print_str, char*, msg)
 _syscall1(int, s_print_num, int, num)
 _syscall2(int, s_read_file_content, char*, file_name, char*, buffer)
 _syscall1(int, s_exec, char*, file_name)
