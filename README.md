@@ -96,3 +96,7 @@
 16. [ls_demo](https://github.com/freelw/LanOS/tree/master/demos/ls_demo)
 17. [exit_demo](https://github.com/freelw/LanOS/tree/master/demos/exit_demo)
 18. [common_header_demo](https://github.com/freelw/LanOS/tree/master/demos/common_header_demo)
+
+# b站文案
+
+1. [01 目标 & 准备](https://github.com/freelw/LanOS/blob/master/doc/target_and_prepare.md)
