@@ -1,5 +1,6 @@
 #include "lanstd.h"
 
+#define SHELL_VER "0.2"
 int equal_buffer(char *a, char *b, int len);
 void lan_main() {
   s_print_str("--------------------------");
@@ -7,6 +8,12 @@ void lan_main() {
   s_print_str("|                        |");
   s_print_crlf();
   s_print_str("| welcome to lan_os 0.1! |");
+  s_print_crlf();
+  s_print_str("|                        |");
+  s_print_crlf();
+  s_print_str("|  shell version is ");
+  s_print_str(SHELL_VER);
+  s_print_str("  |");
   s_print_crlf();
   s_print_str("|                        |");
   s_print_crlf();
