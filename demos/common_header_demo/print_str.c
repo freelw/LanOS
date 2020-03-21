@@ -2,7 +2,7 @@
 #define MAX_L 23
 #define SCREEN_LEN 2000
 extern char *screen_buff;
-extern int cur_l;
+extern int cur_l, cur_c;
 extern void write_char(char ch, int pos);
 
 void init_screen_buff() {
@@ -23,6 +23,19 @@ void validate_screen() {
 }
 
 void print_str(char *s) {
+  int y = cur_l;
+  int x = 0;
+  while (s[x] != 0) {
+    screen_buff[y * 80 + cur_c] = s[x];
+    x++;
+    cur_c++;
+  }
+  validate_screen();
+}
+
+void print_crlf() {
+  cur_l ++;
+  cur_c = 0;
   if (cur_l >= MAX_L) {
     cur_l = MAX_L - 1;
     for (int i = 0; i < cur_l; ++i) {
@@ -34,13 +47,6 @@ void print_str(char *s) {
       screen_buff[cur_l * 80 + j] = 0;
     }
   }
-  int y = cur_l;
-  int x = 0;
-  while (s[x] != 0) {
-    screen_buff[y * 80 + x] = s[x];
-    x++;
-  }
-  cur_l++;
   validate_screen();
 }
 

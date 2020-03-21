@@ -3,11 +3,17 @@
 int equal_buffer(char *a, char *b, int len);
 void lan_main() {
   s_print_str("--------------------------");
+  s_print_crlf();
   s_print_str("|                        |");
+  s_print_crlf();
   s_print_str("| welcome to lan_os 0.1! |");
+  s_print_crlf();
   s_print_str("|                        |");
+  s_print_crlf();
   s_print_str("--------------------------");
+  s_print_crlf();
   s_print_str("shell started.");
+  s_print_crlf();
   char buffer0[256];
   char buffer1[256];
   for (int i = 0; i < 256; ++i) {

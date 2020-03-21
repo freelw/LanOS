@@ -25,4 +25,5 @@ int s_clean_keyboard();
 int s_print_shell(char *);
 int s_ls(char *);
 int s_exit();
+int s_print_crlf();
 #endif

@@ -50,6 +50,7 @@
 #define __NR_s_print_shell 10
 #define __NR_s_ls 11
 #define __NR_s_exit 12
+#define __NR_s_print_crlf 13
 _syscall0(int, s_test_sys_call)
 _syscall0(int, s_fork)
 _syscall0(int, s_test_sys_call2)
@@ -62,3 +63,4 @@ _syscall0(int, s_clean_keyboard)
 _syscall1(int, s_print_shell, char*, buffer)
 _syscall1(int, s_ls, char*, buffer)
 _syscall0(int, s_exit)
+_syscall0(int, s_print_crlf)

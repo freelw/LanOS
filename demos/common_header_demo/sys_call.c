@@ -3,6 +3,7 @@
 typedef int (*sys_call)();
 extern void print_str(char *s);
 extern void print_num(int num);
+extern void print_crlf();
 extern void get_codes(char *buffer);
 extern void clean_keyboard_buffer();
 extern void print_shell_line(char *buffer);
@@ -110,6 +111,11 @@ int _sys_print_num(int num) {
   return 0;
 }
 
+int _sys_print_crlf() {
+  print_crlf();
+  return 0;
+}
+
 int _sys_exec(char *_u_file_name, unsigned long eip_pos) {
   char file_name[64];
   for (int i = 0; i < 64; ++i) {
@@ -171,6 +177,7 @@ extern void sys_clean_keyboard_code_buffer();
 extern void sys_print_shell_line();
 extern void sys_list_files();
 extern void sys_exit();
+extern void sys_print_crlf();
 
 extern sys_call sys_call_table[] = {
     _test_sys_call,
@@ -186,4 +193,5 @@ extern sys_call sys_call_table[] = {
     sys_print_shell_line,
     sys_list_files,
     sys_exit,
+    sys_print_crlf,
 };
