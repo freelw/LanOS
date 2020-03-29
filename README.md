@@ -47,6 +47,7 @@
 * [梳理linux0.12知识点系列 之 让汇编到C不再遥远](https://github.com/freelw/LanOS/tree/master/demos/protect_mode_demo)
 * [梳理linux0.12知识点系列 之 a20地址线](https://github.com/freelw/LanOS/tree/master/demos/a20_open)
 * [梳理linux0.12知识点系列 之 8259A的初始化和时钟中断](https://github.com/freelw/LanOS/tree/master/demos/init_8259a)
+* [8259A原理详细说明](https://blog.csdn.net/LiWang112358/article/details/103875658)
 * [网上相关资料整理](https://github.com/freelw/LanOS/blob/master/doc/questions.md)
 
 ## 血与泪
