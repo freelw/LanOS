@@ -1,98 +1,53 @@
-[BITS 32]
+[BITS 16]
+ORG 07c00h
+SYSSEG equ 01000h
+SYSLEN equ 17
+jmp 07c0h:(load_system-$)
 
-LATCH equ 11930
-SCRN_SEL equ 0x18
-TSS0_SEL equ 0x20
-LDT0_SEL equ 0x28
-TSS1_SEL equ 0x30
-LDT1_SEL equ 0x38
-global write_char
-extern lan_main
-start_up32:
-    mov dword eax, 0x10 ;这时候使用的0x10还是loader.asm中定义的,虽然boot.asm之后定义的0x10描述符与之完全相同
-    mov ds, ax
-    lss esp, [init_stack];接下来要使用call指令，所以这里要初始化好栈
-    call setup_gdt
-    call setup_idt
+load_system:
+    mov dx, 00000h
+    mov cx, 00002h
+    mov ax, SYSSEG
+    mov es, ax              ;es:bx 01000h:0h bios读取磁盘写入内存的目标位置
+    xor bx, bx
+    mov ax, 0200h+SYSLEN    ;ah 读扇区功能号2 al读扇区数量 17
+    int 013h
+    jnc ok_load
+    jmp $
 
-    mov eax, 0x10   ;加载完gdt之后重新加载所有的段寄存器，因为要更新段寄存器中段描述符的缓存（不可见部分）参见《linux内核完全剖析》94页
-    mov ds, ax
+ok_load:
+    cli
+    mov ax, SYSSEG          ;开始把010000h位置的数据拷贝到0h处
+    mov ds, ax              ;注意这时bios的代码就会被冲掉，无法再使用int 10h
+    xor ax, ax
     mov es, ax
-    mov fs, ax
-    mov gs, ax
-
-    lss esp, [init_stack];因为ds可能更新了（这个例子中实际上没有），所以要重新加载ss
-    push dword lan_main
-    ret
-
-setup_gdt:
-    lgdt [lgdt_48]
-    ret
-
-setup_idt:
-    lea edx, [ignore_int]
-    mov eax, dword 0x00080000
-    mov ax, dx
-    mov dx, 0x8e00
-    lea edi, [idt]
-    mov ecx, 256
-rp_idt:
-    mov dword [edi], eax
-    mov dword [edi+4], edx
-    add dword edi, 8
-    dec ecx
-    jne rp_idt
-    lidt [lidt_48]
-    ret
-
-write_char:
-    push gs
-    push dword ebx
-    mov ebx, SCRN_SEL
-    mov gs, bx
-    mov bx, [src_loc]
-    shl ebx, 1
-    push dword eax
-    mov eax, edi
-    mov byte [gs:ebx], al
-    pop dword eax
-    shr ebx, 1
-    inc dword ebx
-    cmp dword ebx, 2000
-    jb not_equ          ;jb : jump if below
-    mov dword ebx, 0
-not_equ:
-    mov dword [src_loc], ebx
-    pop dword ebx
-    pop gs
-    ret
-
-align 4
-ignore_int:
-    iret
-
-current: dd 0
-src_loc: dd 0
-
-align 4
-lidt_48:
-    dw 256*8-1
-    dd idt
-lgdt_48:
-    dw end_gdt-gdt-1
-    dd gdt
-
-align 8
-idt:
-    times 256 dq 0
+    mov cx, 0x1000
+    sub si, si
+    sub di, di
+    cld                     ;df = 0 rep movsw是正向的
+    rep movsw
+    mov ax, 0x0           ;重新恢复ds指向0x0
+    mov ds, ax
+    lgdt [gdt_48]           ;ds+gdt_48 因为第一句话ORG 07c00h 所以此时gdt_48这个常量是：07c00h+到文件首的偏移
+    mov ax, 0x0001
+    lmsw ax
+    jmp dword 8:0
 gdt:
-    dq 0x0000000000000000
-    dq 0x00c09a00000007ff   ;0x08 这两个段描述符和loader.asm中的代码段数据段是一样的
-    dq 0x00c09200000007ff   ;0x10
-    dq 0x00c0920b80000002   ;0x18 显存数据段
-end_gdt:
+    dw 0, 0, 0, 0           ;第一个描述符，没有用
+    dw 0x07ff               ;代码段 从0地址开始
+    dw 0x0000
+    dw 0x9a00
+    dw 0x00c0
+    dw 0x07ff               ;数据段 从0地址开始
+    dw 0x0000
+    dw 0x9200
+    dw 0x00c0
 
-    times 128 dd 0
-init_stack:         ;从这里开始是一个48位操作数
-    dd init_stack   ;32位代表初始的esp
-    dw 0x10         ;16位栈的段选择符，lss之后会加载到ss中
+
+gdt_48:
+    dw 0x7ff                ;2048/8=256个描述符
+    dw gdt, 0        ;基地址是从0x7c00开始的gdt位置
+
+;----------注意！所有的有效语句要写在这之前，并且总长出小于等于510字节----------
+    times 510 - ($-$$) db 0
+    dw 0xaa55
