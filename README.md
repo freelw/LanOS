@@ -103,3 +103,4 @@
 1. [01 目标 & 准备](https://github.com/freelw/LanOS/blob/master/doc/target_and_prepare.md)
 2. [02 两个方向的对比](https://github.com/freelw/LanOS/blob/master/doc/to_direction_compare.md)
 3. [03 控制二进制文件](https://github.com/freelw/LanOS/blob/master/doc/control_binary.md)
+4. [04 保护模式速成](https://github.com/freelw/LanOS/blob/master/doc/quick_protect_mode.md)
