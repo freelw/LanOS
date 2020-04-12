@@ -3,6 +3,9 @@
 	这个工程的目标是梳理《Linux源码剖析》的知识点并从0.12版本的源码中抠出部分代码构建一个
 	能用现代linux发行版方便编译的迷你系统，从而验证各个知识点
 
+# bilibili 视频教程
+* [欢迎光临](https://www.bilibili.com/video/BV1A7411o7J6/)
+
 ## 引用资源
 
 * [《Linux源码剖析》最新的电子版 ](http://www.oldlinux.org/download/CLK-5.0-WithCover.pdf)
