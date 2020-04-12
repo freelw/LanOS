@@ -8,7 +8,7 @@ link: header lan_main boot
 header:
 	nasm -felf64 -o header.o header.s 
 lan_main:
-	gcc -c lan_main.c
+	gcc -g -c lan_main.c
 boot:
 	nasm -o boot.bin boot.s -l boot.lst
 clean:
