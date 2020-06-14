@@ -99,10 +99,5 @@ void lan_main() {
       "2: \n\t"
       "jmp 2b \n\t"
       "1: \n\t" ::"a"(__NR_fork1));
-  if (fork1()) {
-    while (1)
-      ;
-  } else {
-    s_exec("lan_sh");
-  }
+  s_exec("lan_sh");
 }
