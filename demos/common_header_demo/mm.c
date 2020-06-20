@@ -4,7 +4,7 @@
 #define PAGEING_PAGES (63 * 1024 * 1024) / (4 * 1024)
 
 unsigned char mem_map[PAGEING_PAGES];
-#define RESERVE_PAGES 896
+#define RESERVE_PAGES 0
 
 extern void assign_cr3_cr0(unsigned long);
 extern void print_str(char *s);
