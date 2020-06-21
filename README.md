@@ -109,3 +109,4 @@
 4. [04 保护模式速成](https://github.com/freelw/LanOS/blob/master/doc/quick_protect_mode.md)
 5. [05 A20地址线](https://github.com/freelw/LanOS/blob/master/doc/a20.md)
 6. [06 8259A](https://github.com/freelw/LanOS/blob/master/doc/8259A.md)
+6. [07 mm](https://github.com/freelw/LanOS/blob/master/doc/mm.md)
