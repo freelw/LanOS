@@ -59,6 +59,9 @@
 * [fork+写时复制](https://github.com/freelw/LanOS/blob/master/demos/cp_on_write/readme.md)
 * [关于全局变量](https://github.com/freelw/LanOS/blob/master/demos/exit_demo/readme.md)
 
+## 其他说明
+* [如何编译自定义的二进制文件](https://github.com/freelw/LanOS/blob/master/demos/common_header_demo/bin/readme.md)
+
 ## Todo
 1. ~~print_str 实现~~ done 20200224
 2. ~~print_num 实现~~ done 20200224
