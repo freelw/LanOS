@@ -20,7 +20,7 @@ load_system:
 
 ok_load1:
     mov ax, 0200h+18    ;ah 读扇区功能号2 al读扇区数量 18
-    xor dh, 1
+    xor dh, 1           ;这两句是为了切换磁头 1->0 / 0->1
     and dh, 1
     int 013h
     mov ax, es
@@ -30,7 +30,7 @@ ok_load1:
     jmp $
 
 ok_load2:
-    test dh, dh
+    test dh, dh         ;如果是0号磁头刚刚读取完毕，则不增加磁道号
     jz dontaddch
     add ch, 1
 dontaddch:
@@ -58,7 +58,7 @@ ok_load:
     lmsw ax
     jmp dword 8:0
 index:
-    dw 63              ;这里63是极限 位置末尾是0x9fe00 接近显示缓冲区0xA0000
+    dw 63              ;这里63是极限 位置末尾是0x9fe00 接近显示缓冲区0xA0000 (63*18(扇区)+17(扇区))*512+0x10000=0x9fe00
 gdt:
     dw 0, 0, 0, 0           ;第一个描述符，没有用
     dw 0x07ff               ;代码段 从0地址开始
