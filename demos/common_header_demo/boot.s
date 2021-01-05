@@ -46,7 +46,7 @@ ok_load:
     mov ds, ax              ;注意这时bios的代码就会被冲掉，无法再使用int 10h
     xor ax, ax
     mov es, ax
-    mov cx, 0x3000          ;这时拷贝 0x3000*2(字节)/512=48(扇区)
+    mov cx, 0x3000          ;这时拷贝 0x3000*2(字节)/512=48(扇区) 48个扇区末端是0x6000 这里如果超过0x7c00就很危险了，因为可能覆盖掉第一个临时gdt
     sub si, si
     sub di, di
     cld                     ;df = 0 rep movsw是正向的
