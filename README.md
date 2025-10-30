@@ -44,6 +44,9 @@
 	cleaning temp files...
 	file [a.vfd] is our os image with a simple ramdisk filesystem.
 
+## qemu 启动命令
+	qemu-system-x86_64 -drive file=./a.vfd,index=0,if=floppy,format=raw -boot a
+
 ## 知识点目录
 
 * [如何编译和运行demo](https://github.com/freelw/LanOS/blob/master/doc/how_to_build.md)
