@@ -44,8 +44,10 @@
 	cleaning temp files...
 	file [a.vfd] is our os image with a simple ramdisk filesystem.
 
-## qemu 启动命令
-	qemu-system-x86_64 -drive file=./a.vfd,index=0,if=floppy,format=raw -boot a
+## linux 使用 qemu 启动, mac远程vnc连接调试
+	./start_qemu_vnc.sh
+	# mac 上
+	ssh -N -L 5901:localhost:5900 {username}@{server_ip}
 
 ## 知识点目录
 
