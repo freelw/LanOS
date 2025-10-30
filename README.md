@@ -8,7 +8,7 @@
 
 ## 引用资源
 
-* [《Linux源码剖析》最新的电子版 ](http://www.oldlinux.org/download/CLK-5.0-WithCover.pdf)
+* [《Linux源码剖析》最新的电子版 ](https://download.oldlinux.org/CLK-5.0-WithCover.pdf)
 * [ linux 0.1x源码 ](http://oldlinux.org/Linux.old/kernel/0.1x/)
 * [ oldlinux官网 ](http://www.oldlinux.org/)
 * 《ORANGE'S:一个操作系统的实现》

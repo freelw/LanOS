@@ -1,3 +1,9 @@
 # Mac DS_Store files
 .DS_Store
 a.vfd
+demos/common_header_demo/exit.o
+demos/common_header_demo/head.o
+demos/common_header_demo/intel_err_handle.o
+demos/common_header_demo/keyboard.o
+demos/common_header_demo/print_str.o
+demos/common_header_demo/fs_patch_tool/package-lock.json
